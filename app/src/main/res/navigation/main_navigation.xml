@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@+id/nav_home"
+    android:id="@+id/main_navigation">
+
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="com.kunpark.resource.view.main.agenda.CalendarAgendaFragment"
+        android:label="@string/agenda"
+        tools:layout="@layout/fragment_calendar_agenda" />
+
+    <fragment
+        android:id="@+id/nav_day"
+        android:name="com.kunpark.resource.view.main.day.CalendarDayFragment"
+        android:label="@string/day"
+        tools:layout="@layout/frgament_calendar_day" />
+
+    <fragment
+        android:id="@+id/nav_week"
+        android:name="com.kunpark.resource.view.main.week.CalendarWeekFragment"
+        android:label="@string/week"
+        tools:layout="@layout/fragment_calendar_week" />
+
+    <fragment
+        android:id="@+id/nav_month"
+        android:name="com.kunpark.resource.view.main.month.CalendarMonthFragment"
+        android:label="@string/month"
+        tools:layout="@layout/frgament_calendar_month" />
+</navigation>

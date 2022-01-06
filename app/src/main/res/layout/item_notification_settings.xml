@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/tvName"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:paddingLeft="15dp"
+    android:paddingRight="5dp"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp"
+    android:textSize="14sp"
+    android:textColor="@android:color/black"
+    android:gravity="center_vertical|left"
+    tools:text="PC Alerm"
+    android:layout_height="wrap_content">
+
+</TextView>

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "594552450601",
+    "project_id": "crewresource-64289",
+    "storage_bucket": "crewresource-64289.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:594552450601:android:b633af0f7771b15899b638",
+        "android_client_info": {
+          "package_name": "com.kunpark.resource"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "594552450601-9uv3bg0votbfi42ba120npuqrn7pm1kh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA3wQW80Qrm1abj5Kerzs3leAPPdjHLpws"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "594552450601-9uv3bg0votbfi42ba120npuqrn7pm1kh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

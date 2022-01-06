@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:height="25dp" android:width="25dp">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/colorPrimaryDark"/>
+            <corners android:radius="5dp"/>
+        </shape>
+    </item>
+
+    <item
+        android:gravity="center"
+        android:height="18dp"
+        android:width="18dp">
+        <bitmap
+            android:tint="@color/colorWhite"
+            android:src="@drawable/ic_notification"/>
+    </item>
+</layer-list>

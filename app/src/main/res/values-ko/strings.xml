@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="app_name">크루자원관리</string>
+<string name="loading_content">Please wait.</string>
+<string name="login">Đăng nhập</string>
+<string name="password">Mật khẩu</string>
+<string name="domain">ID Tổ chức (Công ty)</string>
+<string name="id">ID người dùng</string>
+<string name="require_domain">Vui lòng nhập ID công ty</string>
+<string name="require_id">Vui lòng nhập ID người dùng</string>
+<string name="require_pass">Vui lòng nhập mật khẩu</string>
+<string name="title_activity_test">TestActivity</string>
+<string name="navigation_drawer_open">Open navigation drawer</string>
+<string name="navigation_drawer_close">Close navigation drawer</string>
+<string name="nav_header_title">Android Studio</string>
+<string name="nav_header_subtitle">android.studio@android.com</string>
+<string name="nav_header_desc">Navigation header</string>
+<string name="action_settings">Settings</string>
+
+<string name="menu_home">Home</string>
+<string name="menu_gallery">Gallery</string>
+<string name="menu_slideshow">Slideshow</string>
+<string name="title_activity_main2">MainActivity</string>
+<string name="sun">Sun</string>
+<string name="mon">Mon</string>
+<string name="tue">Tue</string>
+<string name="wed">Wed</string>
+<string name="thu">Thu</string>
+<string name="fri">Fri</string>
+<string name="sat">Sat</string>
+    <string name="agenda">Agenda</string>
+    <string name="day">Day</string>
+    <string name="week">Week</string>
+    <string name="month">Month</string>
+    <string name="enter_title">Enter Title</string>
+    <string name="enter_content">Enter content</string>
+    <string name="date">Date</string>
+    <string name="special_day">Special Day</string>
+    <string name="daily">Daily</string>
+    <string name="weekly">Weekly</string>
+    <string name="notification">Notification</string>
+    <string name="none">None</string>
+    <string name="string_alarm">Alarm</string>
+    <string name="select_calendar">Select Resource</string>
+    <string name="schedule_div">Schedule Div</string>
+    <string name="share">Share</string>
+    <string name="attach">Attach</string>
+    <string name="setting">Setting</string>
+    <string name="my_profile">My Profile</string>
+    <string name="notification_settings">Notification Settings</string>
+    <string name="resource_setting">CrewResource Settings</string>
+    <string name="about_crewresource">About CrewResource</string>
+    <string name="logout">Logout</string>
+    <string name="allday">All Day</string>
+    <string name="today">Today</string>
+    <string name="add_calendar">Add Calendar</string>
+    <string name="monthly">Monthly</string>
+    <string name="calendar">Calendar</string>
+    <string name="Lunar">lunar</string>
+    <string name="intercalary_months">Intercalary Months</string>
+    <string name="start_end">Start / End</string>
+    <string name="time">Time</string>
+    <string name="alllongday">All Day Long</string>
+    <string name="frequency">Frequency</string>
+    <string name="infiniti_loop">Infinite Loop</string>
+    <string name="organization_chart">Sơ đồ tổ chức</string>
+    <string name="resource_list">Danh sách Resource</string>
+    <string name="please_choose_resource">Please choose resource</string>
+    <string name="please_choose_share">Please choose people to share</string>
+    <string name="no_data">No Data</string>
+    <string name="all_day">All Day</string>
+    <string name="resource">Resource</string>
+    <string name="writer">Writer</string>
+    <string name="delete_resource_successfully">Xóa Resource thành công!</string>
+    <string name="update_organization">Sơ đồ tổ chức có sự thay đổi. Bạn có muốn cập nhật lại?</string>
+    <string name="yes">Đồng ý</string>
+    <string name="no">Hủy</string>
+    <string name="annually">Annually</string>
+    <string name="if_holiday">If Holiday</string>
+    <string name="empty_title_add_resource">Please enter the title!</string>
+    <string name="empty_resource_add_resource">Please choose resource</string>
+    <string name="empty_share_add_resource">Please choose people to share this resource!</string>
+    <string name="no_loop">No Repeat</string>
+
+    <string-array name="daily_loop">
+        <item>Daily</item>
+        <item>2 Days</item>
+        <item>3 Days</item>
+        <item>4 Days</item>
+        <item>5 Days</item>
+        <item>6 Days</item>
+        <item>7 Days</item>
+        <item>8 Days</item>
+        <item>9 Days</item>
+        <item>10 Days</item>
+        <item>11 Days</item>
+        <item>12 Days</item>
+        <item>13 Days</item>
+        <item>14 Days</item>
+        <item>15 Days</item>
+        <item>16 Days</item>
+        <item>17 Days</item>
+        <item>18 Days</item>
+        <item>19 Days</item>
+        <item>20 Days</item>
+        <item>21 Days</item>
+        <item>22 Days</item>
+        <item>23 Days</item>
+        <item>24 Days</item>
+        <item>25 Days</item>
+        <item>26 Days</item>
+        <item>27 Days</item>
+        <item>28 Days</item>
+        <item>29 Days</item>
+        <item>30 Days</item>
+        <item>100 Days</item>
+        <item>1000 Days</item>
+    </string-array>
+
+    <string-array name="weekly_loop">
+        <item>Weekly</item>
+        <item>2 Weeks</item>
+        <item>3 Weeks</item>
+        <item>4 Weeks</item>
+        <item>5 Weeks</item>
+        <item>6 Weeks</item>
+        <item>7 Weeks</item>
+        <item>8 Weeks</item>
+        <item>9 Weeks</item>
+        <item>10 Weeks</item>
+        <item>11 Weeks</item>
+        <item>12 Weeks</item>
+        <item>13 Weeks</item>
+        <item>14 Weeks</item>
+        <item>15 Weeks</item>
+        <item>16 Weeks</item>
+        <item>17 Weeks</item>
+        <item>18 Weeks</item>
+        <item>19 Weeks</item>
+        <item>20 Weeks</item>
+        <item>21 Weeks</item>
+        <item>22 Weeks</item>
+        <item>23 Weeks</item>
+        <item>24 Weeks</item>
+        <item>25 Weeks</item>
+        <item>26 Weeks</item>
+        <item>27 Weeks</item>
+        <item>28 Weeks</item>
+        <item>29 Weeks</item>
+        <item>30 Weeks</item>
+        <item>31 Weeks</item>
+        <item>32 Weeks</item>
+        <item>33 Weeks</item>
+        <item>34 Weeks</item>
+        <item>35 Weeks</item>
+        <item>36 Weeks</item>
+        <item>37 Weeks</item>
+        <item>38 Weeks</item>
+        <item>39 Weeks</item>
+        <item>40 Weeks</item>
+        <item>41 Weeks</item>
+        <item>42 Weeks</item>
+        <item>43 Weeks</item>
+        <item>44 Weeks</item>
+        <item>45 Weeks</item>
+        <item>46 Weeks</item>
+        <item>47 Weeks</item>
+        <item>48 Weeks</item>
+        <item>49 Weeks</item>
+        <item>50 Weeks</item>
+        <item>51 Weeks</item>
+        <item>52 Weeks</item>
+        <item>53 Weeks</item>
+    </string-array>
+
+    <string-array name="monthly_loop">
+        <item>Monthly</item>
+        <item>2 Months</item>
+        <item>3 Months</item>
+        <item>4 Months</item>
+        <item>5 Months</item>
+        <item>6 Months</item>
+        <item>7 Months</item>
+        <item>8 Months</item>
+        <item>9 Months</item>
+        <item>10 Months</item>
+        <item>11 Months</item>
+    </string-array>
+
+    <string-array name="holiday_arr">
+        <item>Right Day</item>
+        <item>Previous Day</item>
+        <item>Next Day</item>
+    </string-array>
+</resources>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="NotificationSettings">
+        <attr name="isAdd" format="boolean"/>
+        <attr name="isDetail" format="boolean"/>
+    </declare-styleable>
+</resources>
