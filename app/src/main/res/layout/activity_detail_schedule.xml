@@ -208,11 +208,9 @@
                         tools:text="Anderson"
                         android:layout_marginTop="10dp"
                         android:textColor="@color/colorText"
-                        android:layout_marginRight="20dp"
-                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="@id/tvResourceTitle"
                         app:layout_constraintTop_toBottomOf="@id/tvResourceTitle"
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
                     <View
                         android:id="@+id/vLineResource"
@@ -249,12 +247,10 @@
                         android:id="@+id/tvShare"
                         tools:text="Dazone"
                         android:layout_marginTop="10dp"
-                        android:layout_marginRight="20dp"
-                        app:layout_constraintEnd_toEndOf="parent"
                         android:textColor="@color/colorText"
                         app:layout_constraintStart_toStartOf="@id/tvShareTitle"
                         app:layout_constraintTop_toBottomOf="@id/tvShareTitle"
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
                     <View
                         android:id="@+id/vLineShare"

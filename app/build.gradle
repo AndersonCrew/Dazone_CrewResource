@@ -9,7 +9,7 @@ android {
     buildToolsVersion '28.0.3'
     defaultConfig {
         applicationId "com.kunpark.resource"
-        minSdkVersion 21
+        minSdkVersion 16
         targetSdkVersion 28
         versionCode 4
         versionName "1.0.9"
@@ -29,10 +29,6 @@ android {
 
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
-    }
-
-    buildFeatures {
-        viewBinding true
     }
 }
 
@@ -54,7 +50,6 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
     implementation 'androidx.navigation:navigation-fragment-ktx:2.2.2'
     implementation 'androidx.navigation:navigation-ui-ktx:2.2.2'
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
@@ -110,6 +105,7 @@ dependencies {
     implementation 'com.squareup.retrofit2:adapter-rxjava3:2.9.0'
 
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
+
 }
 
 
