@@ -67,7 +67,7 @@ class CalendarDayFragment : BaseFragment() {
 
         val list: ArrayList<LocalDate> = arrayListOf()
         for(i in 0 until totalDay / 7) {
-            startLocalDate.plusWeeks(3)
+            startLocalDate = startLocalDate.plusWeeks(i.toLong())
             list.add(startLocalDate)
         }
 
