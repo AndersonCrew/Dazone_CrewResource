@@ -25,9 +25,10 @@ import com.kunpark.resource.utils.DazoneApplication
 import com.kunpark.resource.utils.TimeUtils
 import com.kunpark.resource.view.detail_schedule.DetailScheduleActivity
 import java.text.SimpleDateFormat
+import java.time.LocalDate
 import java.util.*
 
-class DayFragment(private val calendar: Calendar): BaseFragment() {
+class DayFragment(private val localDate: LocalDate): BaseFragment() {
     private var llTime: LinearLayout?= null
     private val viewModel: CalendarDayViewModel by viewModels()
     private var hasBindData = false
@@ -44,9 +45,7 @@ class DayFragment(private val calendar: Calendar): BaseFragment() {
 
     @SuppressLint("SimpleDateFormat")
     private fun initViewModel() {
-
-        val day = SimpleDateFormat(Constants.Format_api_datetime).format(calendar.time)
-        viewModel.getResourceDB(day)?.observe(requireActivity(), androidx.lifecycle.Observer {
+        viewModel.getResourceDB(localDate.toString())?.observe(requireActivity(), androidx.lifecycle.Observer {
             if(it != null) {
                 if(!hasBindData) {
                     hasBindData = true
@@ -100,7 +99,7 @@ class DayFragment(private val calendar: Calendar): BaseFragment() {
     @SuppressLint("SimpleDateFormat")
     private fun getAllResource(conditionSearch: ConditionSearch?) {
         val params = JsonObject()
-        val time =  SimpleDateFormat(Constants.Format_api_datetime).format(calendar.time)
+        val time =  localDate.toString()
 
         params.addProperty("sessionId", DazoneApplication.getInstance().mPref?.getString(Constants.ACCESS_TOKEN, ""))
         params.addProperty("timeZoneOffset", TimeUtils.getTimezoneOffsetInMinutes().toString())

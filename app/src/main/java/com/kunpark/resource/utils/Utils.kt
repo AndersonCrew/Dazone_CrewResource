@@ -90,11 +90,24 @@ object Utils {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun sundayForDate(current: LocalDate): LocalDate? {
         var current = current
-        val oneWeekAgo = current.minusWeeks(1)
-        while (current.isAfter(oneWeekAgo)) {
+        val nextWeek = current.plusDays(1)
+        while (current.isBefore(nextWeek)) {
             if (current.dayOfWeek == DayOfWeek.SUNDAY) return current
-            current = current.minusDays(1)
+            current = current.plusDays(1)
         }
+        return null
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun getDayOfSunday(current: LocalDate): LocalDate? {
+        for(i in 1 until 7) {
+            if(current.dayOfWeek == DayOfWeek.SUNDAY)
+                return current
+            else {
+                current.plusDays(1)
+            }
+        }
+
         return null
     }
 }

@@ -1,13 +1,17 @@
 package com.kunpark.resource.view.main.day
 
 import android.annotation.SuppressLint
+import android.icu.util.LocaleData
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager.widget.ViewPager
+import com.bumptech.glide.util.Util
 import com.kunpark.resource.R
 import com.kunpark.resource.base.BaseFragment
 import com.kunpark.resource.custom_view.VerticalViewPager
@@ -15,8 +19,11 @@ import com.kunpark.resource.event.Event
 import com.kunpark.resource.utils.Utils
 import com.kunpark.resource.view.main.CalendarDayPagerAdapter
 import com.kunpark.resource.view.main.CalendarMonthPagerAdapter
+import java.time.LocalDate
 import java.util.*
+import kotlin.collections.ArrayList
 
+@RequiresApi(Build.VERSION_CODES.O)
 class CalendarDayFragment : BaseFragment() {
 
     private var vpCalendar: VerticalViewPager?= null
@@ -31,11 +38,43 @@ class CalendarDayFragment : BaseFragment() {
         return root
     }
 
+
     @SuppressLint("SimpleDateFormat")
     private fun initView(root: View) {
+        val localDate = LocalDate.now()
+
+        var startLocalDate: LocalDate = localDate.minusDays((localDate.dayOfMonth - 1).toLong())
+        startLocalDate = startLocalDate.minusMonths((localDate.month.value - 1).toLong())
+        startLocalDate = startLocalDate.minusYears(100)
+
+        Utils.getDayOfSunday(startLocalDate)?.let {
+            startLocalDate = startLocalDate.plusDays((it.dayOfMonth - 1).toLong())
+        }
+
+
+
+        var totalDay = 0
+        for(i in 1 until 200) {
+            val currentLocalDate = LocalDate.now()
+            if(i < 100) {
+                currentLocalDate.minusYears(i.toLong())
+            } else {
+                currentLocalDate.plusYears(i.toLong())
+            }
+
+            totalDay += currentLocalDate.lengthOfYear()
+        }
+
+        val list: ArrayList<LocalDate> = arrayListOf()
+        for(i in 0 until totalDay / 7) {
+            startLocalDate.plusWeeks(3)
+            list.add(startLocalDate)
+        }
+
         vpCalendar = root.findViewById(R.id.vpCalendarDay)
+
         vpCalendar?.adapter =
-            CalendarDayPagerAdapter(
+            CalendarDayPagerAdapter(list,
                 parentFragmentManager
             )
         val cal = Calendar.getInstance()

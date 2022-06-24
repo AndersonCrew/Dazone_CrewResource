@@ -15,6 +15,7 @@ import java.text.ParseException
 import java.time.LocalDate
 import java.util.*
 import java.util.concurrent.TimeUnit
+import kotlin.collections.ArrayList
 
 class AgendaPagerAdapter(fragmentManager: FragmentManager): FragmentStatePagerAdapter(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
     override fun getItem(position: Int): Fragment {
@@ -88,25 +89,14 @@ class CalendarWeekPagerAdapter(fragmentManager: FragmentManager): FragmentStateP
     }
 }
 
-class CalendarDayPagerAdapter(fragmentManager: FragmentManager): FragmentStatePagerAdapter(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
+class CalendarDayPagerAdapter(private val list: ArrayList<LocalDate>, fragmentManager: FragmentManager): FragmentStatePagerAdapter(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
     override fun getItem(position: Int): Fragment {
-        val cal = Calendar.getInstance()
-        cal.set(Calendar.getInstance().get(Calendar.YEAR) - 100, 1, 1)
-        cal.add(Calendar.DATE, position)
-        return DayFragment(cal)
+        return DayFragment(list[position])
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun getCount(): Int {
-        val localDate = LocalDate.now()
-        val currentYear: Int = localDate.year
-        val currentMonth: Long = localDate.month.value.toLong()
-        var startDay = localDate.minusYears(100)
-        startDay = startDay.minusMonths(currentMonth - 1)
-        startDay = startDay.minusDays((startDay.lengthOfMonth() - 1).toLong())
 
-        val a = startDay.toString()
-
-        return 0
+        return list.size
     }
 }
