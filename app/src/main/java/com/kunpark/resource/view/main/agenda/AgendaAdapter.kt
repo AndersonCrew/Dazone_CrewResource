@@ -35,8 +35,9 @@ class AgendaAdapter(var listCalendarDto: List<CalendarDto>, private val itemClic
                     if(llResource?.childCount?: 0 <= 2) {
                         val textViewItem = TextView(itemView.context)
                         textViewItem.text = src.title
+                        textViewItem.maxLines = 1
                         textViewItem.setBackgroundColor(Color.parseColor(src.backgroundColor?: ""))
-                        textViewItem.gravity = Gravity.CENTER
+                        textViewItem.gravity = Gravity.LEFT and Gravity.TOP
                         val param = LinearLayout.LayoutParams(
                             LinearLayout.LayoutParams.MATCH_PARENT,
                             0,

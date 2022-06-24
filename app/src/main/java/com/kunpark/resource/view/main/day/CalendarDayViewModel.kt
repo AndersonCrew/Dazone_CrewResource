@@ -22,7 +22,6 @@ class CalendarDayViewModel : BaseViewModel() {
 
     private val repository = CalendarDayRepository()
 
-
     fun getResourceDB(day: String): LiveData<CalendarDay>? {
         return repository.getResourceDBByDay(day)
     }

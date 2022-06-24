@@ -1,14 +1,18 @@
 package com.kunpark.resource.view.main
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import com.kunpark.resource.utils.Config
+import com.kunpark.resource.utils.checkNamNhuan
 import com.kunpark.resource.view.main.agenda.AgendaFragment
 import com.kunpark.resource.view.main.day.DayFragment
 import com.kunpark.resource.view.main.month.MonthFragment
 import com.kunpark.resource.view.main.week.WeekFragment
 import java.text.ParseException
+import java.time.LocalDate
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -50,31 +54,37 @@ class CalendarMonthPagerAdapter(fragmentManager: FragmentManager): FragmentState
 class CalendarWeekPagerAdapter(fragmentManager: FragmentManager): FragmentStatePagerAdapter(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
     override fun getItem(position: Int): Fragment {
         val cal = Calendar.getInstance()
-        cal.set(Calendar.getInstance().get(Calendar.YEAR) - 100, 1, 1)
-        cal.add(Calendar.DATE, position)
+
+        val year = when {
+            position < count/2 -> {
+                cal.get(Calendar.YEAR) - 100 + position / 48
+            }
+
+            position > count/2 -> {
+                cal.get(Calendar.YEAR)  - 100 + position / 48
+            }
+            else -> cal.get(Calendar.YEAR)
+        }
         return WeekFragment(cal)
     }
 
     override fun getCount(): Int {
         val cal = Calendar.getInstance()
-        val startCal = Calendar.getInstance()
-        val endCal = Calendar.getInstance()
+        val currentYear = cal.get(Calendar.YEAR)
+        var totalDay = 0
 
-        startCal.set(cal.get(Calendar.YEAR) - 100, 1, 1)
-        endCal.set(cal.get(Calendar.YEAR) + 100, 12, 1)
-        val countDayOfEndCal = endCal.getActualMaximum(Calendar.DAY_OF_MONTH)
-        endCal.set(Calendar.DAY_OF_MONTH, countDayOfEndCal)
+        cal.set(Calendar.YEAR, 2022)
+        cal.set(Calendar.MONTH, 6)
+        cal.set(Calendar.WEEK_OF_MONTH, 2)
 
-        try {
-            val date1: Date = startCal.time
-            val date2: Date = endCal.time
-            val diff = date2.time - date1.time
-            val count = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS)
-            return count.toInt() / 7
-        } catch (e: ParseException) {
-            e.printStackTrace()
+
+        for(i in currentYear - 100 until currentYear + 100) {
+            totalDay += if(checkNamNhuan(i)) {
+                366
+            } else 365
         }
-        return 0
+
+        return totalDay / 7
     }
 }
 
@@ -86,25 +96,17 @@ class CalendarDayPagerAdapter(fragmentManager: FragmentManager): FragmentStatePa
         return DayFragment(cal)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun getCount(): Int {
-        val cal = Calendar.getInstance()
-        val startCal = Calendar.getInstance()
-        val endCal = Calendar.getInstance()
+        val localDate = LocalDate.now()
+        val currentYear: Int = localDate.year
+        val currentMonth: Long = localDate.month.value.toLong()
+        var startDay = localDate.minusYears(100)
+        startDay = startDay.minusMonths(currentMonth - 1)
+        startDay = startDay.minusDays((startDay.lengthOfMonth() - 1).toLong())
 
-        startCal.set(cal.get(Calendar.YEAR) - 100, 1, 1)
-        endCal.set(cal.get(Calendar.YEAR) + 100, 12, 1)
-        val countDayOfEndCal = endCal.getActualMaximum(Calendar.DAY_OF_MONTH)
-        endCal.set(Calendar.DAY_OF_MONTH, countDayOfEndCal)
+        val a = startDay.toString()
 
-        try {
-            val date1: Date = startCal.time
-            val date2: Date = endCal.time
-            val diff = date2.time - date1.time
-            val count = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS)
-            return count.toInt()
-        } catch (e: ParseException) {
-            e.printStackTrace()
-        }
         return 0
     }
 }

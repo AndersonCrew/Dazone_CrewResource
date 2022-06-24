@@ -15,7 +15,7 @@ import com.kunpark.resource.model.TimesNotification
 class NotificationSettingAdapter(context: Context, @LayoutRes private val layoutResource: Int, private val listScheduleNotifications: List<Any>):
         ArrayAdapter<Any>(context, layoutResource, listScheduleNotifications) {
 
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         return createViewFromResource(position, convertView, parent)
     }
 

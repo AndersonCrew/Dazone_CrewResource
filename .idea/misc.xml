@@ -3,10 +3,24 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="app/src/main/res/layout/app_bar_main.xml" value="0.21197916666666666" />
+        <entry key="app/src/main/res/layout/activity_add_schedule.xml" value="0.37604166666666666" />
+        <entry key="app/src/main/res/layout/activity_detail_schedule.xml" value="0.37604166666666666" />
+        <entry key="app/src/main/res/layout/activity_setting.xml" value="0.37604166666666666" />
+        <entry key="app/src/main/res/layout/app_bar_main.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/dialog_confirm.xml" value="2.5785714285714287" />
+        <entry key="app/src/main/res/layout/dialog_multiple_resource.xml" value="0.37604166666666666" />
+        <entry key="app/src/main/res/layout/fragment_agenda.xml" value="0.37604166666666666" />
+        <entry key="app/src/main/res/layout/fragment_calendar_agenda.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_calendar_week.xml" value="0.37604166666666666" />
+        <entry key="app/src/main/res/layout/fragment_special_day.xml" value="0.37604166666666666" />
+        <entry key="app/src/main/res/layout/frgament_calendar_day.xml" value="0.37604166666666666" />
+        <entry key="app/src/main/res/layout/frgament_calendar_month.xml" value="0.37604166666666666" />
+        <entry key="app/src/main/res/layout/item_day.xml" value="0.37604166666666666" />
+        <entry key="app/src/main/res/layout/item_month_calendar.xml" value="0.37604166666666666" />
       </map>
     </option>
   </component>
+  <component name="ExternalStorageConfigurationManager" enabled="true" />
   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>

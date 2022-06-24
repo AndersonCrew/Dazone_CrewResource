@@ -1,8 +1,12 @@
 package com.kunpark.resource.utils
 
 import android.annotation.SuppressLint
+import android.os.Build
+import androidx.annotation.RequiresApi
 import java.text.ParseException
 import java.text.SimpleDateFormat
+import java.time.DayOfWeek
+import java.time.LocalDate
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -69,5 +73,28 @@ object Utils {
         cal.set(Calendar.getInstance().get(Calendar.YEAR) - 100, 1, 1)
         cal.add(Calendar.DATE, position)
         return SimpleDateFormat("dd/MM/yyyy").format(cal.time)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun daysInWeekArray(selectedDate: LocalDate): ArrayList<LocalDate?>? {
+        val days = ArrayList<LocalDate?>()
+        var current = sundayForDate(selectedDate)
+        val endDate = current!!.plusWeeks(1)
+        while (current!!.isBefore(endDate)) {
+            days.add(current)
+            current = current.plusDays(1)
+        }
+        return days
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun sundayForDate(current: LocalDate): LocalDate? {
+        var current = current
+        val oneWeekAgo = current.minusWeeks(1)
+        while (current.isAfter(oneWeekAgo)) {
+            if (current.dayOfWeek == DayOfWeek.SUNDAY) return current
+            current = current.minusDays(1)
+        }
+        return null
     }
 }

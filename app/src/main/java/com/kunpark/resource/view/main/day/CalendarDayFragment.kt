@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager.widget.ViewPager
 import com.kunpark.resource.R
 import com.kunpark.resource.base.BaseFragment
+import com.kunpark.resource.custom_view.VerticalViewPager
 import com.kunpark.resource.event.Event
 import com.kunpark.resource.utils.Utils
 import com.kunpark.resource.view.main.CalendarDayPagerAdapter
@@ -18,7 +19,7 @@ import java.util.*
 
 class CalendarDayFragment : BaseFragment() {
 
-    private var vpCalendar: ViewPager?= null
+    private var vpCalendar: VerticalViewPager?= null
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

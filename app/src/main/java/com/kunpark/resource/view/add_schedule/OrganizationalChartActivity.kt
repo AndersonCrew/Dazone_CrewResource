@@ -7,6 +7,7 @@ import com.google.gson.JsonObject
 import com.kunpark.resource.R
 import com.kunpark.resource.base.BaseActivity
 import com.kunpark.resource.model.Organization
+import com.kunpark.resource.model.Resource
 import com.kunpark.resource.utils.Constants
 import com.kunpark.resource.utils.DazoneApplication
 import com.kunpark.resource.utils.TimeUtils
@@ -17,6 +18,7 @@ import kotlin.collections.ArrayList
 
 class OrganizationalChartActivity: BaseActivity() {
     private val viewModel: UtilsViewModel by viewModels()
+    private var resource: Resource?= null
     override fun initView() {
 
     }

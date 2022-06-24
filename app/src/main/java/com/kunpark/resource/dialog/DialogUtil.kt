@@ -1,5 +1,6 @@
 package com.kunpark.resource.dialog
 
+import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
 import android.graphics.Color
@@ -10,7 +11,6 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.kunpark.resource.R
 import com.kunpark.resource.base.BaseActivity
-import com.kunpark.resource.model.AgendaItemType
 import com.kunpark.resource.model.CalendarDto
 import com.kunpark.resource.view.detail_schedule.DetailScheduleActivity
 
@@ -55,5 +55,20 @@ class DialogUtil (private val context: Context){
         }
 
         return dialog
+    }
+
+    fun showDialogConfirm(title: String, listener: () -> Unit) {
+        val alertDialog: AlertDialog.Builder = AlertDialog.Builder(context)
+        alertDialog.setTitle(title)
+        alertDialog.setCancelable(false)
+        alertDialog.setMessage(title)
+        alertDialog.setPositiveButton(R.string.yes) { dialog, which ->
+            listener.invoke()
+        }
+
+        alertDialog.setNegativeButton(R.string.cancel) { dialog, which ->
+            dialog.dismiss()
+        }
+        alertDialog.show()
     }
 }

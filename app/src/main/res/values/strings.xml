@@ -71,4 +71,7 @@
     <string name="all_day">All Day</string>
     <string name="resource">Resource</string>
     <string name="writer">Writer</string>
+    <string name="yes">Ok</string>
+    <string name="cancel">Cancel</string>
+    <string name="str_logout">Do you want to logout?</string>
 </resources>

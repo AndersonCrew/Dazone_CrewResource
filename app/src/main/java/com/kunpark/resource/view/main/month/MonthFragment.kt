@@ -1,6 +1,7 @@
 package com.kunpark.resource.view.main.month
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -18,6 +19,7 @@ import com.kunpark.resource.utils.Config
 import com.kunpark.resource.utils.Constants
 import com.kunpark.resource.utils.DazoneApplication
 import com.kunpark.resource.utils.TimeUtils
+import com.kunpark.resource.view.detail_schedule.DetailScheduleActivity
 import com.kunpark.resource.view.main.agenda.AgendaAdapter
 import com.kunpark.resource.view.main.agenda.CalendarAgendaViewModel
 import java.text.SimpleDateFormat
@@ -42,7 +44,12 @@ class MonthFragment(private val calendar: Calendar): BaseFragment(){
 
     @SuppressLint("SimpleDateFormat")
     private fun initViewModel() {
-        adapter = CalendarMonthAdapter(arrayListOf())
+        adapter = CalendarMonthAdapter(arrayListOf()) {
+            val intent = Intent(requireContext(), DetailScheduleActivity::class.java)
+            intent.putExtra(Constants.RESOURCE, it)
+            requireActivity().startActivity(intent)
+        }
+
         rvCalendarMonth?.adapter = adapter
 
         val month = SimpleDateFormat(Constants.MM_YYYY).format(calendar.time)

@@ -18,7 +18,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class CalendarMonthAdapter(var listResource: ArrayList<CalendarDto>): RecyclerView.Adapter<CalendarMonthAdapter.CalendarMonthViewHolder>() {
+class CalendarMonthAdapter(var listResource: ArrayList<CalendarDto>, private val listener: (Resource) -> Unit): RecyclerView.Adapter<CalendarMonthAdapter.CalendarMonthViewHolder>() {
 
     class CalendarMonthViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         private var tvDay: TextView?= null
@@ -32,7 +32,7 @@ class CalendarMonthAdapter(var listResource: ArrayList<CalendarDto>): RecyclerVi
         }
 
         @SuppressLint("SetTextI18n", "SimpleDateFormat")
-        fun bind(calendarDTO: CalendarDto) {
+        fun bind(calendarDTO: CalendarDto, listener: (Resource) -> Unit) {
             val day = if(calendarDTO.day?: 0 < 10) "0${calendarDTO.day?:0}" else calendarDTO.day?: 0
             tvDay?.text = day.toString()
             tvStrDay?.text = "Thu"
@@ -64,6 +64,10 @@ class CalendarMonthAdapter(var listResource: ArrayList<CalendarDto>): RecyclerVi
                 tvContent?.text = resource.title?: ""
                 tvTime?.text = "${resource.startTime} - ${resource.endTime}"
                 llBackground?.setBackgroundColor(Color.parseColor(resource.backgroundColor?: ""))
+
+                view.setOnClickListener {
+                    listener.invoke(resource)
+                }
                 llListResource?.addView(view)
             }
         }
@@ -87,7 +91,7 @@ class CalendarMonthAdapter(var listResource: ArrayList<CalendarDto>): RecyclerVi
     override fun onBindViewHolder(holder: CalendarMonthViewHolder, position: Int) {
         if(!listResource.isNullOrEmpty()) {
             val resource = listResource[position]
-            holder.bind(resource)
+            holder.bind(resource, listener)
         }
     }
 }

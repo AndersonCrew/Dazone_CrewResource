@@ -49,7 +49,7 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <com.kunpark.resource.custom_view.SwipeDisabledViewPager
+    <androidx.viewpager.widget.ViewPager
         android:id="@+id/vpMain"
         android:layout_width="match_parent"
         android:layout_height="0dp"

@@ -1,6 +1,7 @@
 package com.kunpark.resource.view.main.day
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
@@ -22,6 +23,7 @@ import com.kunpark.resource.model.ConditionSearch
 import com.kunpark.resource.utils.Constants
 import com.kunpark.resource.utils.DazoneApplication
 import com.kunpark.resource.utils.TimeUtils
+import com.kunpark.resource.view.detail_schedule.DetailScheduleActivity
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -81,6 +83,12 @@ class DayFragment(private val calendar: Calendar): BaseFragment() {
                         tvContent.setBackgroundColor(Color.parseColor(resource.backgroundColor))
 
                         view.layoutParams = param
+
+                        view.setOnClickListener {
+                            val intent = Intent(requireContext(), DetailScheduleActivity::class.java)
+                            intent.putExtra(Constants.RESOURCE, resource)
+                            requireActivity().startActivity(intent)
+                        }
 
                         llTimeCalendar?.addView(view)
                     }
