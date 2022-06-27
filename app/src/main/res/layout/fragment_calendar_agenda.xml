@@ -78,7 +78,7 @@
             android:layout_height="match_parent"/>
     </LinearLayout>
 
-    <com.mohitdev.verticalviewpager.VerticalViewPager
+    <com.prabhat1707.verticalpager.VerticalViewPager
         android:id="@+id/vpCalendar"
         android:orientation="vertical"
         app:layout_constraintTop_toBottomOf="@id/llDay"

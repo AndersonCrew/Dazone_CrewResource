@@ -1,6 +1,8 @@
 package com.kunpark.resource.view.main.week
 
 import android.annotation.SuppressLint
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
@@ -15,9 +17,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.collections.ArrayList
 
+@RequiresApi(Build.VERSION_CODES.O)
 class CalendarWeekViewModel : BaseViewModel() {
 
     private val repository = CalendarWeekRepository()
@@ -61,12 +65,33 @@ class CalendarWeekViewModel : BaseViewModel() {
         }
     }
 
+
     @SuppressLint("SimpleDateFormat")
     private fun checkAddListResource(list: List<Resource>, localDate: LocalDate) {
         uiScope.launch(Dispatchers.IO) {
+            val listCalendarDto: ArrayList<CalendarDto> = arrayListOf()
+            for(i in 0 until 7) {
+                val calendarDto = CalendarDto()
+                val resourcesI: ArrayList<Resource> = arrayListOf()
+                val localDateI : LocalDate = localDate.plusDays(i.toLong())
+
+                for(resource in list) {
+                    if(resource.startStr == localDateI.format(DateTimeFormatter.ofPattern(Constants.YY_MM_DD)) && !resourcesI.contains(resource)) {
+                        resourcesI.add(resource)
+                    }
+                }
+
+                if(!resourcesI.isNullOrEmpty()) {
+                    calendarDto.timeString = localDateI.format(DateTimeFormatter.ofPattern(Constants.YY_MM_DD))
+                    calendarDto.listResource.clear()
+                    calendarDto.listResource.addAll(resourcesI)
+                    listCalendarDto.add(calendarDto)
+                }
+            }
 
 
-
+            val calendarWeek = CalendarWeek(localDate.format(DateTimeFormatter.ofPattern(Constants.YY_MM_DD)), listCalendarDto)
+            repository.saveResourceList(calendarWeek)
         }
     }
 }

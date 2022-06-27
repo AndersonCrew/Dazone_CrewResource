@@ -17,7 +17,7 @@ import com.kunpark.resource.base.BaseFragment
 import com.kunpark.resource.event.Event
 import com.kunpark.resource.utils.Utils
 import com.kunpark.resource.view.main.CalendarDayPagerAdapter
-import com.mohitdev.verticalviewpager.VerticalViewPager
+import com.prabhat1707.verticalpager.VerticalViewPager
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -80,7 +80,7 @@ class CalendarDayFragment : BaseFragment() {
             )
 
         vpCalendar?.currentItem = getCurrentPosition(list)
-        vpCalendar?.offscreenPageLimit = 1
+        vpCalendar?.offscreenPageLimit = 2
         Event.onPageDayChange(getStrLocalDate(list[getCurrentPosition(list)]))
 
         vpCalendar?.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {

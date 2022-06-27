@@ -1,6 +1,8 @@
 package com.kunpark.resource.view.main.week
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
@@ -8,28 +10,36 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.annotation.RequiresApi
+import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
+import androidx.core.view.children
+import androidx.core.view.contains
 import androidx.fragment.app.viewModels
 import com.google.gson.JsonObject
 import com.kunpark.resource.R
 import com.kunpark.resource.base.BaseFragment
+import com.kunpark.resource.model.CalendarDto
+import com.kunpark.resource.model.CalendarWeek
 import com.kunpark.resource.model.ConditionSearch
+import com.kunpark.resource.model.Resource
 import com.kunpark.resource.utils.Constants
 import com.kunpark.resource.utils.DazoneApplication
 import com.kunpark.resource.utils.TimeUtils
+import com.kunpark.resource.view.detail_schedule.DetailScheduleActivity
 import com.kunpark.resource.view.main.day.CalendarDayViewModel
 import kotlinx.android.synthetic.main.fragment_daily.*
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.*
+import kotlin.collections.ArrayList
 
 @RequiresApi(Build.VERSION_CODES.O)
 class WeekFragment(private val localDate: LocalDate): BaseFragment() {
 
-    private var llAllDay: LinearLayout?= null
     private var llTime: LinearLayout?= null
     private var tv1: TextView?= null
     private var tv2: TextView?= null
@@ -46,13 +56,15 @@ class WeekFragment(private val localDate: LocalDate): BaseFragment() {
     ): View? {
         val root = inflater.inflate(R.layout.fragment_week_resource, container, false)
         initView(root)
-        initViewModel()
         return root
     }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        initViewModel(context)
+    }
 
     private fun initView(view: View) {
-        llAllDay = view.findViewById(R.id.llAllDay)
         llTime = view.findViewById(R.id.llTime)
         tv1 = view.findViewById(R.id.tv1)
         tv2 = view.findViewById(R.id.tv2)
@@ -62,51 +74,37 @@ class WeekFragment(private val localDate: LocalDate): BaseFragment() {
         tv6 = view.findViewById(R.id.tv6)
         tv7 = view.findViewById(R.id.tv7)
 
-        val tvAllDay = TextView(requireContext())
-        tvAllDay.text = "All Day"
-        val param = LinearLayout.LayoutParams(0,LinearLayout.LayoutParams.MATCH_PARENT, 1f)
-        tvAllDay.layoutParams = param
-        tvAllDay.textSize = 13f
-        tvAllDay.setBackgroundResource(R.drawable.bg_allday)
-        tvAllDay.setTextColor(ContextCompat.getColor(requireContext(), R.color.colorText))
-        tvAllDay.gravity = Gravity.CENTER
-        llAllDay?.addView(tvAllDay)
-
-        for(i in 1 until 8) {
-            val tvDate = TextView(requireContext())
-            tvDate.text = ""
-            tvDate.id = i
-            val param = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1f)
-            tvDate.layoutParams = param
-            tvDate.textSize = 13f
-            tvDate.setBackgroundResource(R.drawable.bg_allday)
-            tvDate.setTextColor(ContextCompat.getColor(requireContext(), R.color.colorText))
-            tvDate.gravity = Gravity.CENTER
-            llAllDay?.addView(tvDate)
-        }
-
-        for(i in 0 until 25) {
+        for(i in 0 until 8) {
             val llTimeWeek = LinearLayout(requireContext())
-            for(j in 0 until 8) {
-                val tvDate = TextView(requireContext())
-                tvDate.id = j
-                val param = LinearLayout.LayoutParams(0, 140, 1f)
-                tvDate.layoutParams = param
-                tvDate.textSize = 13f
-                tvDate.setBackgroundResource(R.drawable.bg_allday_week)
-                tvDate.setTextColor(ContextCompat.getColor(requireContext(), R.color.colorText))
-                tvDate.gravity = Gravity.CENTER
-                if(j == 0) {
-                    val time = if(i <  10) "0$i" else i
-                    tvDate.text = "$time:00"
+            llTimeWeek.id = i
+            llTimeWeek.orientation = LinearLayout.VERTICAL
+            llTimeWeek.layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1f)
+            for(j in -1 until 24) {
+                if(i == 0) {
+                    val tvDate = TextView(requireContext())
+                    tvDate.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 140)
+                    tvDate.textSize = 13f
+                    tvDate.setBackgroundResource(if(j == -1) R.drawable.bg_allday else R.drawable.bg_allday_week)
+                    tvDate.setTextColor(ContextCompat.getColor(requireContext(), R.color.colorText))
+                    tvDate.gravity = Gravity.CENTER
+                    if(j == -1) {
+                        tvDate.text = getString(R.string.all_day)
+                    } else {
+                        val time = if(j <  10) "0$j" else j
+                        tvDate.text = "$time:00"
+                    }
+                    llTimeWeek.addView(tvDate)
                 } else {
-                    tvDate.text = ""
+                    val llChild = LinearLayout(requireContext())
+                    llChild.id = j
+                    llChild.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 140)
+                    llChild.orientation = LinearLayout.VERTICAL
+                    llChild.gravity = Gravity.CENTER
+                    llChild.setBackgroundResource(if(j == -1) R.drawable.bg_allday else R.drawable.bg_allday_week)
+                    llTimeWeek.addView(llChild)
                 }
-
-                llTimeWeek.addView(tvDate)
             }
 
-            llTimeWeek.id = i
             llTime?.addView(llTimeWeek)
         }
 
@@ -146,11 +144,11 @@ class WeekFragment(private val localDate: LocalDate): BaseFragment() {
     }
 
     private var hasCallRefreshData = false
-    private fun initViewModel() {
+    private fun initViewModel(context: Context) {
         val firstDay = localDate.format(DateTimeFormatter.ofPattern(Constants.Format_api_datetime))
         viewModel.getResourceDB(firstDay)?.observe(requireActivity(), androidx.lifecycle.Observer {
             if(it != null) {
-                //bindData(it, context)
+                bindData(it, context)
             }
 
             if(!hasCallRefreshData) {
@@ -158,6 +156,70 @@ class WeekFragment(private val localDate: LocalDate): BaseFragment() {
                 getAllResource(null)
             }
         })
+    }
+
+    private fun bindData(it: CalendarWeek, context: Context) {
+        if(!it.list.isNullOrEmpty()) {
+            for(i in 0 until 7) {
+                val localDateI: LocalDate = localDate.plusDays(i.toLong())
+                for(calendarDto in it.list!!) {
+                    if(localDateI.format(DateTimeFormatter.ofPattern(Constants.YY_MM_DD)) == calendarDto.timeString) {
+                        bindingDataChild(calendarDto, i + 1, context)
+                        break
+                    }
+                }
+            }
+        }
+    }
+
+    private fun bindingDataChild(calendarDto: CalendarDto, i: Int, context: Context) {
+        llTime?.children?.find { view -> view.id == i }?.let { llChild ->
+            removeAllView(llChild)
+            val listCheck: ArrayList<Resource> = arrayListOf()
+            for(resource in calendarDto.listResource) {
+                var startTime = resource.startTime?.split(":")?.get(0)?.toInt()?: 0
+                var endTime = resource.endTime?.split(":")?.get(0)?.toInt()?: 0
+
+                for(child in (llChild as LinearLayout).children) {
+                    if(child.id in startTime..endTime && !listCheck.contains(resource)) {
+                        val view = CardView(context)
+                        val tvContent = TextView(context)
+                        tvContent.gravity = Gravity.CENTER
+                        tvContent.setPadding(10, 5, 10, 5)
+                        tvContent.textSize = 9f
+                        tvContent.maxLines = 3
+                        view.addView(tvContent)
+                        val param = LinearLayout.LayoutParams(
+                            FrameLayout.LayoutParams.MATCH_PARENT,
+                            0, 1f
+                        )
+
+                        tvContent.text = resource.title?: ""
+                        tvContent.setTextColor(context.getColor(R.color.colorWhite))
+                        tvContent.setBackgroundColor(Color.parseColor(resource.backgroundColor))
+
+                        view.layoutParams = param
+
+                        view.setOnClickListener {
+                            val intent = Intent(requireContext(), DetailScheduleActivity::class.java)
+                            intent.putExtra(Constants.RESOURCE, resource)
+                            requireActivity().startActivity(intent)
+                        }
+
+                        if(!(child as LinearLayout).contains(view)) {
+                            child.addView(view)
+                            listCheck.add(resource)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun removeAllView(llChild: View) {
+        for(childLinear in (llChild as LinearLayout).children) {
+            (childLinear as LinearLayout).removeAllViews()
+        }
     }
 
     @SuppressLint("SimpleDateFormat")

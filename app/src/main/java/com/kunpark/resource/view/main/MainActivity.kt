@@ -95,7 +95,7 @@ class MainActivity : BaseActivity() {
 
         tvTitle?.text = SimpleDateFormat(Constants.MM_YYYY).format(Calendar.getInstance().time)
         vpMain?.adapter = MainAdapter(supportFragmentManager)
-        vpMain?.offscreenPageLimit = 1
+        vpMain?.offscreenPageLimit = 4
         vpMain?.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrollStateChanged(state: Int) {
 

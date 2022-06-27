@@ -104,7 +104,7 @@ dependencies {
     implementation 'com.squareup.retrofit2:adapter-rxjava3:2.9.0'
 
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
-    implementation 'com.mohitdev:verticalviewpager:0.0.2'
+    implementation 'com.github.prabhat1707:VerticalViewPager:1.0'
 
 }
 

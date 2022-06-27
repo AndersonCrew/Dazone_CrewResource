@@ -7,7 +7,7 @@
     android:background="@android:color/white"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <com.mohitdev.verticalviewpager.VerticalViewPager
+    <com.prabhat1707.verticalpager.VerticalViewPager
         android:id="@+id/vpCalendarWeek"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>

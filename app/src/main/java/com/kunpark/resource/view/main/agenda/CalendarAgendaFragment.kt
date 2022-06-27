@@ -10,7 +10,7 @@ import com.kunpark.resource.base.BaseFragment
 import com.kunpark.resource.event.Event
 import com.kunpark.resource.utils.Utils
 import com.kunpark.resource.view.main.AgendaPagerAdapter
-import com.mohitdev.verticalviewpager.VerticalViewPager
+import com.prabhat1707.verticalpager.VerticalViewPager
 import java.util.*
 
 class CalendarAgendaFragment : BaseFragment() {
@@ -33,7 +33,7 @@ class CalendarAgendaFragment : BaseFragment() {
         )
         val cal = Calendar.getInstance()
         vpCalendar?.currentItem = Utils.getPositionAgendaFromCalendar(cal)
-        vpCalendar?.offscreenPageLimit = 1
+        vpCalendar?.offscreenPageLimit = 2
 
         vpCalendar?.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrollStateChanged(state: Int) {

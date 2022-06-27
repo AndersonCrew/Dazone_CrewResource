@@ -11,9 +11,8 @@ import com.kunpark.resource.R
 import com.kunpark.resource.base.BaseFragment
 import com.kunpark.resource.event.Event
 import com.kunpark.resource.utils.Utils
-import com.kunpark.resource.view.main.CalendarMonthPagerAdapter
 import com.kunpark.resource.view.main.CalendarWeekPagerAdapter
-import com.mohitdev.verticalviewpager.VerticalViewPager
+import com.prabhat1707.verticalpager.VerticalViewPager
 import java.time.LocalDate
 import java.util.*
 
@@ -78,7 +77,7 @@ class CalendarWeekFragment : BaseFragment() {
             )
 
         vpCalendar?.currentItem = getCurrentPosition(list)
-        vpCalendar?.offscreenPageLimit = 1
+        vpCalendar?.offscreenPageLimit = 2
 
 
 
