@@ -5,14 +5,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.viewModels
 import androidx.viewpager.widget.ViewPager
 import com.kunpark.resource.R
 import com.kunpark.resource.base.BaseFragment
-import com.kunpark.resource.custom_view.VerticalViewPager
 import com.kunpark.resource.event.Event
 import com.kunpark.resource.utils.Utils
 import com.kunpark.resource.view.main.CalendarMonthPagerAdapter
+import com.mohitdev.verticalviewpager.VerticalViewPager
 import java.util.*
 
 class CalendarMonthFragment : BaseFragment() {

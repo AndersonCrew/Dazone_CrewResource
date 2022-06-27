@@ -7,7 +7,7 @@
     android:background="@android:color/white"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-   <com.kunpark.resource.custom_view.VerticalViewPager
+   <com.mohitdev.verticalviewpager.VerticalViewPager
        android:id="@+id/vpCalendarDay"
        android:layout_width="match_parent"
        android:layout_height="match_parent"/>

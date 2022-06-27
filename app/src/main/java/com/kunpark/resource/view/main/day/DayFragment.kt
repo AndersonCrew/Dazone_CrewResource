@@ -1,8 +1,10 @@
 package com.kunpark.resource.view.main.day
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.view.Gravity
@@ -12,6 +14,7 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.cardview.widget.CardView
 import androidx.core.view.children
 import androidx.fragment.app.viewModels
@@ -24,14 +27,17 @@ import com.kunpark.resource.utils.Constants
 import com.kunpark.resource.utils.DazoneApplication
 import com.kunpark.resource.utils.TimeUtils
 import com.kunpark.resource.view.detail_schedule.DetailScheduleActivity
+import kotlinx.android.synthetic.main.fragment_day_resource.*
 import java.text.SimpleDateFormat
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.*
 
+@RequiresApi(Build.VERSION_CODES.O)
 class DayFragment(private val localDate: LocalDate): BaseFragment() {
     private var llTime: LinearLayout?= null
     private val viewModel: CalendarDayViewModel by viewModels()
-    private var hasBindData = false
+    private var hasCallRefreshData = false
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -39,57 +45,69 @@ class DayFragment(private val localDate: LocalDate): BaseFragment() {
     ): View? {
         val root = inflater.inflate(R.layout.fragment_day_resource, container, false)
         initView(root)
-        initViewModel()
         return root
     }
 
-    @SuppressLint("SimpleDateFormat")
-    private fun initViewModel() {
-        viewModel.getResourceDB(localDate.toString())?.observe(requireActivity(), androidx.lifecycle.Observer {
-            if(it != null) {
-                if(!hasBindData) {
-                    hasBindData = true
-                    bindData(it)
-                }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-            } else {
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        initViewModel(context)
+    }
+    @SuppressLint("SimpleDateFormat")
+    private fun initViewModel(context: Context) {
+
+        val day = localDate.format(DateTimeFormatter.ofPattern(Constants.Format_api_datetime))
+        viewModel.getResourceDB(day)?.observe(requireActivity(), androidx.lifecycle.Observer {
+            if(it != null) {
+                bindData(it, context)
+            }
+
+            if(!hasCallRefreshData) {
+                hasCallRefreshData = true
                 getAllResource(null)
             }
         })
     }
 
-    private fun bindData(it: CalendarDay) {
+    private fun bindData(it: CalendarDay, context: Context) {
         if(!it.list.isNullOrEmpty()) {
             for(calendarDto in it.list!!) {
-                val time = Integer.parseInt(calendarDto.timeString)
-                val llChild = llTime?.children?.find { view -> view.id == time }
-                if(llChild != null && !calendarDto.listResource.isNullOrEmpty()) {
-                    val llTimeCalendar: LinearLayout? = llChild.findViewById(R.id.llTime)
-                    llTimeCalendar?.removeAllViews()
-                    for(resource in calendarDto.listResource) {
-                        val view = CardView(requireContext())
-                        val tvContent = TextView(requireContext())
-                        tvContent.gravity = Gravity.CENTER
-                        tvContent.textSize = 13f
-                        view.addView(tvContent)
-                        val param = FrameLayout.LayoutParams(
-                            FrameLayout.LayoutParams.WRAP_CONTENT,
-                            FrameLayout.LayoutParams.MATCH_PARENT
-                        )
+                calendarDto.timeString?.let {
+                    val time = Integer.parseInt(it)
+                    val llChild = llTime?.children?.find { view -> view.id == time }
+                    if(llChild != null && !calendarDto.listResource.isNullOrEmpty()) {
+                        val llTimeCalendar: LinearLayout? = llChild.findViewById(R.id.llTime)
+                        llTimeCalendar?.removeAllViews()
+                        for(resource in calendarDto.listResource) {
+                            val view = CardView(context)
+                            val tvContent = TextView(context)
+                            tvContent.gravity = Gravity.CENTER
+                            tvContent.setPadding(10, 5, 10, 5)
+                            tvContent.textSize = 13f
+                            view.addView(tvContent)
+                            val param = FrameLayout.LayoutParams(
+                                FrameLayout.LayoutParams.WRAP_CONTENT,
+                                FrameLayout.LayoutParams.MATCH_PARENT
+                            )
 
-                        param.leftMargin = 10
-                        tvContent.text = resource.title?: ""
-                        tvContent.setBackgroundColor(Color.parseColor(resource.backgroundColor))
+                            param.leftMargin = 10
+                            tvContent.text = resource.title?: ""
+                            tvContent.setBackgroundColor(Color.parseColor(resource.backgroundColor))
 
-                        view.layoutParams = param
+                            view.layoutParams = param
 
-                        view.setOnClickListener {
-                            val intent = Intent(requireContext(), DetailScheduleActivity::class.java)
-                            intent.putExtra(Constants.RESOURCE, resource)
-                            requireActivity().startActivity(intent)
+                            view.setOnClickListener {
+                                val intent = Intent(requireContext(), DetailScheduleActivity::class.java)
+                                intent.putExtra(Constants.RESOURCE, resource)
+                                requireActivity().startActivity(intent)
+                            }
+
+                            llTimeCalendar?.addView(view)
                         }
-
-                        llTimeCalendar?.addView(view)
                     }
                 }
             }
@@ -99,7 +117,7 @@ class DayFragment(private val localDate: LocalDate): BaseFragment() {
     @SuppressLint("SimpleDateFormat")
     private fun getAllResource(conditionSearch: ConditionSearch?) {
         val params = JsonObject()
-        val time =  localDate.toString()
+        val time =  localDate.format(DateTimeFormatter.ofPattern(Constants.Format_api_datetime))
 
         params.addProperty("sessionId", DazoneApplication.getInstance().mPref?.getString(Constants.ACCESS_TOKEN, ""))
         params.addProperty("timeZoneOffset", TimeUtils.getTimezoneOffsetInMinutes().toString())
@@ -107,18 +125,26 @@ class DayFragment(private val localDate: LocalDate): BaseFragment() {
         params.addProperty("startDate", time)
         params.addProperty("endDate", time)
         params.addProperty("rsvnStatus", conditionSearch?.key?: "ALL")
-        viewModel.getAllResource(params, time)
+        viewModel.getAllResource(params, localDate)
     }
 
     @SuppressLint("SimpleDateFormat")
     private fun initView(root: View?) {
         llTime = root?.findViewById(R.id.llTime)
 
-        for(i in 0 until 24) {
+        for(i in -1 until 24) {
             val view = LayoutInflater.from(requireContext()).inflate(R.layout.item_hour, null)
             val tvTime: TextView? = view?.findViewById(R.id.tvTime)
-            val time = if(i <  10) "0$i" else i
-            tvTime?.text = "$time:00"
+            val llTimeChild: LinearLayout? = view?.findViewById(R.id.llTime)
+            if(i == -1) {
+                tvTime?.text = getString(R.string.allday)
+                tvTime?.setBackgroundResource(R.color.colorGrayBackground)
+                llTimeChild?.setBackgroundResource(R.color.colorGrayBackground)
+            } else {
+                val time = if(i <  10) "0$i" else i
+                tvTime?.text = "$time:00"
+            }
+
             view.id = i
             llTime?.addView(view)
         }

@@ -31,6 +31,7 @@
     <HorizontalScrollView
         android:id="@+id/scrollTime"
         android:scrollbars="none"
+        android:fillViewport="true"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toEndOf="@id/vAllDay"
         app:layout_constraintEnd_toEndOf="parent"

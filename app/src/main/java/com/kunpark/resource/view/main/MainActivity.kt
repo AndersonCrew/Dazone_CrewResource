@@ -12,6 +12,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import androidx.viewpager.widget.ViewPager
 import com.bumptech.glide.Glide
 import com.google.gson.JsonObject
 import com.kunpark.resource.R
@@ -23,6 +24,7 @@ import com.kunpark.resource.model.User
 import com.kunpark.resource.utils.Constants
 import com.kunpark.resource.utils.DazoneApplication
 import com.kunpark.resource.utils.TimeUtils
+import com.kunpark.resource.utils.Utils
 import com.kunpark.resource.view.add_schedule.AddScheduleActivity
 import com.kunpark.resource.view.settings.SettingActivity
 import de.hdodenhof.circleimageview.CircleImageView
@@ -93,7 +95,25 @@ class MainActivity : BaseActivity() {
 
         tvTitle?.text = SimpleDateFormat(Constants.MM_YYYY).format(Calendar.getInstance().time)
         vpMain?.adapter = MainAdapter(supportFragmentManager)
-        vpMain?.offscreenPageLimit = 4
+        vpMain?.offscreenPageLimit = 1
+        vpMain?.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+            override fun onPageScrollStateChanged(state: Int) {
+
+            }
+
+            override fun onPageScrolled(
+                position: Int,
+                positionOffset: Float,
+                positionOffsetPixels: Int
+            ) {
+
+            }
+
+            override fun onPageSelected(position: Int) {
+                Event.onPageMainChanged(position)
+            }
+
+        })
     }
 
     override fun initViewModel() {
@@ -126,7 +146,6 @@ class MainActivity : BaseActivity() {
     private fun openCalendar(type: CalendarType, cal : Calendar?) {
         currentConditionType = type
         vpMain?.currentItem = CalendarType.getType(type)?: 0
-        Event.onMoveToday()
         drawerLayout.closeDrawer(GravityCompat.START)
     }
 
@@ -176,6 +195,10 @@ class MainActivity : BaseActivity() {
             val cal = Calendar.getInstance()
             cal.time = SimpleDateFormat("dd/MM/yyyy").parse(strDay)
             tvTitle?.text = CalendarType.getStrDate(currentConditionType, cal?: Calendar.getInstance())
+        }
+
+        it[Event.PAGE_WEEK_CHANGE]?.let {
+            tvTitle?.text = it.toString()
         }
     }
 }

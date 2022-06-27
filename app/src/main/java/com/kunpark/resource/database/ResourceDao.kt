@@ -5,6 +5,7 @@ import androidx.room.*
 import com.kunpark.resource.model.CalendarAgenda
 import com.kunpark.resource.model.CalendarDay
 import com.kunpark.resource.model.CalendarMonth
+import com.kunpark.resource.model.CalendarWeek
 
 @Dao
 interface ResourceDao {
@@ -17,6 +18,9 @@ interface ResourceDao {
     @Query("SELECT * FROM RESOURCE_DAY WHERE dayList = :day")
     fun getDataDay(day: String): LiveData<CalendarDay>
 
+    @Query("SELECT * FROM RESOURCE_WEEK WHERE firstDay = :day")
+    fun getDataWeek(day: String): LiveData<CalendarWeek>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun saveCalendarAgenda(listCalendar: CalendarAgenda)
 
@@ -25,4 +29,7 @@ interface ResourceDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun saveCalendarDay(listCalendar: CalendarDay)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun saveCalendarWeek(listCalendar: CalendarWeek)
 }

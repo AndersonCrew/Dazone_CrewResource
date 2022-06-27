@@ -14,12 +14,12 @@ import androidx.viewpager.widget.ViewPager
 import com.bumptech.glide.util.Util
 import com.kunpark.resource.R
 import com.kunpark.resource.base.BaseFragment
-import com.kunpark.resource.custom_view.VerticalViewPager
 import com.kunpark.resource.event.Event
 import com.kunpark.resource.utils.Utils
 import com.kunpark.resource.view.main.CalendarDayPagerAdapter
-import com.kunpark.resource.view.main.CalendarMonthPagerAdapter
+import com.mohitdev.verticalviewpager.VerticalViewPager
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -27,6 +27,7 @@ import kotlin.collections.ArrayList
 class CalendarDayFragment : BaseFragment() {
 
     private var vpCalendar: VerticalViewPager?= null
+    private lateinit var list: ArrayList<LocalDate>
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -65,9 +66,9 @@ class CalendarDayFragment : BaseFragment() {
             totalDay += currentLocalDate.lengthOfYear()
         }
 
-        val list: ArrayList<LocalDate> = arrayListOf()
-        for(i in 0 until totalDay / 7) {
-            startLocalDate = startLocalDate.plusWeeks(i.toLong())
+        list = arrayListOf()
+        for(i in 0 until totalDay) {
+            startLocalDate = startLocalDate.plusDays(1L)
             list.add(startLocalDate)
         }
 
@@ -77,9 +78,10 @@ class CalendarDayFragment : BaseFragment() {
             CalendarDayPagerAdapter(list,
                 parentFragmentManager
             )
-        val cal = Calendar.getInstance()
-        vpCalendar?.currentItem = Utils.getPositionDayFromCalendar(cal)
+
+        vpCalendar?.currentItem = getCurrentPosition(list)
         vpCalendar?.offscreenPageLimit = 1
+        Event.onPageDayChange(getStrLocalDate(list[getCurrentPosition(list)]))
 
         vpCalendar?.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrollStateChanged(state: Int) {
@@ -95,18 +97,37 @@ class CalendarDayFragment : BaseFragment() {
             }
 
             override fun onPageSelected(position: Int) {
-                Event.onPageDayChange(Utils.getStrDateFromPositionDay(position))
+                Event.onPageDayChange(getStrLocalDate(list[position]))
             }
 
         })
+    }
+
+    private fun getStrLocalDate(localDate: LocalDate): String {
+        return localDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+    }
+
+    private fun getCurrentPosition(list: java.util.ArrayList<LocalDate>): Int  {
+        val localDate = LocalDate.now()
+        if(list.contains(list.find { it.isEqual(localDate)})) {
+            return list.indexOf(list.find { it.isEqual(localDate)})
+        }
+
+        return 0
     }
 
     override fun onEventReceive(it: Map<String, Any?>) {
         super.onEventReceive(it)
 
         it[Event.MOVE_TODAY]?.let {
-            vpCalendar?.currentItem = Utils.getPositionDayFromCalendar(Calendar.getInstance())
-            Event.onPageDayChange(Utils.getStrDateFromPositionDay(vpCalendar?.currentItem?: 0))
+            if(isResumed && !list.isNullOrEmpty()) {
+                vpCalendar?.currentItem = getCurrentPosition(list)
+                Event.onPageDayChange(getStrLocalDate(list[getCurrentPosition(list)]))
+            }
+        }
+
+        it[Event.ON_PAGE_MAIN_CHANGED]?.let {
+            Event.onPageDayChange(getStrLocalDate(list[getCurrentPosition(list)]))
         }
     }
 }

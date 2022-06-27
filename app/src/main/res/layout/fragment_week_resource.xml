@@ -15,7 +15,77 @@
         app:layout_constraintTop_toTopOf="parent"
         android:layout_width="match_parent"
         android:background="@color/colorPrimaryDark"
-        android:layout_height="40dp"/>
+        android:layout_height="40dp">
+        <TextView
+            android:id="@+id/tv1"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            tools:text="1"
+            android:gravity="center_horizontal|bottom"
+            android:textSize="14sp"
+            android:textColor="@android:color/white"
+            android:layout_height="match_parent"/>
+
+        <TextView
+            android:id="@+id/tv2"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            tools:text="2"
+            android:gravity="center_horizontal|bottom"
+            android:textSize="14sp"
+            android:textColor="@android:color/white"
+            android:layout_height="match_parent"/>
+
+        <TextView
+            android:id="@+id/tv3"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            tools:text="3"
+            android:gravity="center_horizontal|bottom"
+            android:textSize="14sp"
+            android:textColor="@android:color/white"
+            android:layout_height="match_parent"/>
+
+        <TextView
+            android:id="@+id/tv4"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            tools:text="4"
+            android:gravity="center_horizontal|bottom"
+            android:textSize="14sp"
+            android:textColor="@android:color/white"
+            android:layout_height="match_parent"/>
+
+        <TextView
+            android:id="@+id/tv5"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            tools:text="5"
+            android:gravity="center_horizontal|bottom"
+            android:textSize="14sp"
+            android:textColor="@android:color/white"
+            android:layout_height="match_parent"/>
+
+        <TextView
+            android:id="@+id/tv6"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            tools:text="6"
+            android:gravity="center_horizontal|bottom"
+            android:textSize="14sp"
+            android:textColor="@android:color/white"
+            android:layout_height="match_parent"/>
+
+        <TextView
+            android:id="@+id/tv7"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            tools:text="7"
+            android:gravity="center_horizontal|bottom"
+            android:textSize="14sp"
+            android:textColor="@android:color/white"
+            android:layout_height="match_parent"/>
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/llDay"
@@ -98,6 +168,7 @@
         android:scrollbars="none"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/llAllDay">
+
         <LinearLayout
             android:id="@+id/llTime"
             android:orientation="vertical"

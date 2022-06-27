@@ -11,11 +11,10 @@ import com.kunpark.resource.view.main.agenda.AgendaFragment
 import com.kunpark.resource.view.main.day.DayFragment
 import com.kunpark.resource.view.main.month.MonthFragment
 import com.kunpark.resource.view.main.week.WeekFragment
-import java.text.ParseException
 import java.time.LocalDate
 import java.util.*
-import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
+
 
 class AgendaPagerAdapter(fragmentManager: FragmentManager): FragmentStatePagerAdapter(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
     override fun getItem(position: Int): Fragment {
@@ -52,46 +51,22 @@ class CalendarMonthPagerAdapter(fragmentManager: FragmentManager): FragmentState
     }
 }
 
-class CalendarWeekPagerAdapter(fragmentManager: FragmentManager): FragmentStatePagerAdapter(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
-    override fun getItem(position: Int): Fragment {
-        val cal = Calendar.getInstance()
-
-        val year = when {
-            position < count/2 -> {
-                cal.get(Calendar.YEAR) - 100 + position / 48
-            }
-
-            position > count/2 -> {
-                cal.get(Calendar.YEAR)  - 100 + position / 48
-            }
-            else -> cal.get(Calendar.YEAR)
-        }
-        return WeekFragment(cal)
-    }
-
-    override fun getCount(): Int {
-        val cal = Calendar.getInstance()
-        val currentYear = cal.get(Calendar.YEAR)
-        var totalDay = 0
-
-        cal.set(Calendar.YEAR, 2022)
-        cal.set(Calendar.MONTH, 6)
-        cal.set(Calendar.WEEK_OF_MONTH, 2)
-
-
-        for(i in currentYear - 100 until currentYear + 100) {
-            totalDay += if(checkNamNhuan(i)) {
-                366
-            } else 365
-        }
-
-        return totalDay / 7
-    }
-}
-
+@RequiresApi(Build.VERSION_CODES.O)
 class CalendarDayPagerAdapter(private val list: ArrayList<LocalDate>, fragmentManager: FragmentManager): FragmentStatePagerAdapter(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
     override fun getItem(position: Int): Fragment {
         return DayFragment(list[position])
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    override fun getCount(): Int {
+        return list.size
+    }
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+class CalendarWeekPagerAdapter(private val list: ArrayList<LocalDate>, fragmentManager: FragmentManager): FragmentStatePagerAdapter(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
+    override fun getItem(position: Int): Fragment {
+        return WeekFragment(list[position])
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
