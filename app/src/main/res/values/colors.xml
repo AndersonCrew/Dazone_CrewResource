@@ -8,6 +8,7 @@
     <color name="colorBlack">#000000</color>
     <color name="colorGray">#C1C1C1</color>
     <color name="colorBgOption">#E3E3E3</color>
-    <color name="colorGrayBackground">#D7D3D3D3</color>
+    <color name="colorGrayBackground">#D7E2E2E2</color>
     <color name="colorText">#3A3A3A</color>
+    <color name="colorTabUnSelected">#F1F1F1</color>
 </resources>

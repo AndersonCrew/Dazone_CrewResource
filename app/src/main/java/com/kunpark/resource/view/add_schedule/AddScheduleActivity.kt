@@ -4,9 +4,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.LinearLayout
+import android.widget.TableLayout
 import androidx.activity.viewModels
-import androidx.lifecycle.Observer
-import androidx.viewpager.widget.ViewPager
 import com.google.gson.JsonObject
 import com.kunpark.resource.R
 import com.kunpark.resource.base.BaseActivity
@@ -31,39 +30,18 @@ class AddScheduleActivity : BaseActivity() {
             }
         }
 
-        tvSpecialDay?.setOnClickListener { changeTab(0) }
-        tvDaily?.setOnClickListener { changeTab(1) }
-        tvWeekly?.setOnClickListener { changeTab(2) }
-        tvMonthly?.setOnClickListener { changeTab(3) }
-
-        changeTab(0)
-
         imgBack?.setOnClickListener { onBackPressed() }
         vpTab?.adapter = TabAddResource(supportFragmentManager)
         vpTab?.measure(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-        vpTab?.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-            override fun onPageScrollStateChanged(state: Int) {
-
-            }
-
-            override fun onPageScrolled(
-                position: Int,
-                positionOffset: Float,
-                positionOffsetPixels: Int
-            ) {
-
-            }
-
-            override fun onPageSelected(position: Int) {
-                changeTab(position)
-            }
-
-        })
+        tabLayout?.addTab(tabLayout.newTab())
+        tabLayout?.setupWithViewPager(vpTab)
 
         tvResource?.setOnClickListener {
             val intent = Intent(this, OrganizationalChartActivity::class.java)
             startActivityForResult(intent, Constants.REQUEST_CODE_ORGANIZATION)
         }
+
+
     }
 
     override fun initView() {
@@ -78,17 +56,6 @@ class AddScheduleActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_schedule)
         lifecycle.addObserver(notificationSetting)
-    }
-
-    private fun changeTab(tab: Int) {
-       tvSpecialDay?.setBackgroundResource(if(tab == 0) R.drawable.bg_date_type_choosen else R.color.colorWhite)
-       tvDaily?.setBackgroundResource(if(tab == 1) R.drawable.bg_date_type_choosen else R.color.colorWhite)
-       tvWeekly?.setBackgroundResource(if(tab == 2) R.drawable.bg_date_type_choosen else R.color.colorWhite)
-        tvMonthly?.setBackgroundResource(if(tab == 3) R.drawable.bg_date_type_choosen else R.color.colorWhite)
-
-        if(tab != vpTab?.currentItem) {
-            vpTab?.currentItem = tab
-        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

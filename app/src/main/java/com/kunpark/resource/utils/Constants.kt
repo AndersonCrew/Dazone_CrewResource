@@ -12,6 +12,7 @@ object Constants {
     const val MM_YYYY = "MM-yyyy"
     const val DD_MM_YYYY = "dd-MM-yyyy"
     const val YY_MM_DD = "yyyy-MM-dd"
+    const val YY_MM_DD_SHOW = "yyyy/MM/dd"
     const val Format_api_datetime = "yyyy-MM-dd"
 
     const val DEVICES_NOTIFICATION = "DEVICES_NOTIFICATION"

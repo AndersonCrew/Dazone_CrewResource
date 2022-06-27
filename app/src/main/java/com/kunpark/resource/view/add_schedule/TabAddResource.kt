@@ -32,4 +32,14 @@ class TabAddResource(fr: FragmentManager): FragmentStatePagerAdapter(fr, BEHAVIO
     override fun getCount(): Int {
         return 4
     }
+
+    override fun getPageTitle(position: Int): CharSequence? {
+        return when (position) {
+            0 -> "Special Day"
+            1 -> "Daily"
+            2 -> "Weekly"
+            else -> "Monthly"
+        }
+        return null
+    }
 }

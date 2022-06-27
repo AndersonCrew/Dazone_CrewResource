@@ -3,9 +3,7 @@ package com.kunpark.resource.view.add_schedule
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
+import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
@@ -14,41 +12,52 @@ import com.kunpark.resource.model.Organization
 
 class OrganizationAdapter(
     private val list: List<Organization>,
-    private val itemClick: (organization: Organization) -> Unit
+    private val onChosen: (Organization) -> Unit
 ) : RecyclerView.Adapter<OrganizationAdapter.OrganizationViewHolder>() {
 
     class OrganizationViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private var llParent: ConstraintLayout? = null
-        private var tvTitle: TextView? = null
-        private var rvChild: RecyclerView? = null
-        private var imgIcon: ImageView? = null
+         var llParent: ConstraintLayout? = null
+         var tvTitle: TextView? = null
+         var rvChild: RecyclerView? = null
+         var imgIcon: ImageView? = null
+         var ckChoose: CheckBox? = null
 
         init {
             llParent = itemView.findViewById(R.id.llParent)
             tvTitle = itemView.findViewById(R.id.tvTitle)
             rvChild = itemView.findViewById(R.id.rvChild)
             imgIcon = itemView.findViewById(R.id.imgIcon)
+            ckChoose = itemView.findViewById(R.id.ckChoose)
         }
+    }
 
-        fun bind(organization: Organization, itemClick: (organization: Organization) -> Unit) {
-            if (organization.resourceTrees.isNullOrEmpty()) {
-                rvChild?.visibility = View.GONE
-            } else {
-                val adapter = OrganizationAdapter(organization.resourceTrees, itemClick)
-                rvChild?.adapter = adapter
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OrganizationViewHolder {
+        return OrganizationViewHolder(
+            LayoutInflater.from(parent.context).inflate(R.layout.item_resource_list, parent, false)
+        )
+    }
+
+    override fun getItemCount(): Int {
+        return list.size
+    }
+
+    override fun onBindViewHolder(holder: OrganizationViewHolder, position: Int) {
+        if (!list.isNullOrEmpty()) {
+            val organization = list[position]
+            if (!organization.resourceTrees.isNullOrEmpty()) {
+                holder.rvChild?.adapter = OrganizationAdapter(organization.resourceTrees) {
+                    onChosen.invoke(it)
+                }
             }
 
-            tvTitle?.text = organization.title ?: "-"
+            //holder.ckChoose?.visibility = if(organization.resourceTrees.isNullOrEmpty() && organization.parentID?: "" != "#") View.VISIBLE else View.GONE
+            holder.ckChoose?.visibility = View.GONE
 
-            llParent?.setOnClickListener {
-                if(organization.parentID?: "" == "#") {
-                    if (rvChild?.visibility == View.VISIBLE) {
-                        rvChild?.visibility = View.GONE
-                    } else {
-                        rvChild?.visibility = View.VISIBLE
-                    }
-                } else {
-                    itemClick.invoke(organization)
+            holder.tvTitle?.text = organization.title ?: "-"
+
+            holder.itemView.setOnClickListener {
+                if(organization.resourceTrees.isNullOrEmpty() && organization.parentID?: "" != "#") {
+                    onChosen.invoke(organization)
                 }
             }
 
@@ -68,29 +77,15 @@ class OrganizationAdapter(
                         icon = R.drawable.ic_organization
                         colorIcon = R.color.colorGray
                     }
-
-
                 }
             }
 
-            imgIcon?.setImageResource(icon)
-            imgIcon?.setColorFilter(ContextCompat.getColor(itemView.context, colorIcon), android.graphics.PorterDuff.Mode.MULTIPLY)
+            holder.imgIcon?.setImageResource(icon)
+            holder.imgIcon?.setColorFilter(ContextCompat.getColor( holder.itemView.context, colorIcon), android.graphics.PorterDuff.Mode.MULTIPLY)
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OrganizationViewHolder {
-        return OrganizationViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.item_resource_list, parent, false)
-        )
-    }
-
-    override fun getItemCount(): Int {
-        return list.size
-    }
-
-    override fun onBindViewHolder(holder: OrganizationViewHolder, position: Int) {
-        if (!list.isNullOrEmpty()) {
-            holder.bind(list[position], itemClick)
-        }
+    fun getOrganizationChosen(): Organization? {
+        return list.findLast { it.isChosen }
     }
 }

@@ -18,7 +18,7 @@ import kotlin.collections.ArrayList
 
 class OrganizationalChartActivity: BaseActivity() {
     private val viewModel: UtilsViewModel by viewModels()
-    private var resource: Resource?= null
+    private lateinit var adapter: OrganizationAdapter
     override fun initView() {
 
     }
@@ -41,15 +41,21 @@ class OrganizationalChartActivity: BaseActivity() {
                 viewModel.getOrganizationFromServer(params)
             }
         })
+
+        icCheck?.setOnClickListener {
+            val organization = adapter.getOrganizationChosen()
+        }
     }
 
     private fun setUpRecyclerView(list: List<Organization>) {
-        rvOrganization?.adapter = OrganizationAdapter(list, itemClick = {organization ->
-            val intent = Intent()
-            intent.putExtra(Constants.ORGANIZATION, organization)
-            setResult(Constants.REQUEST_CODE_ORGANIZATION, intent)
-            finish()
-        })
+        adapter = OrganizationAdapter(list) {
+                val intent = Intent()
+                intent.putExtra(Constants.ORGANIZATION, it)
+                setResult(Constants.REQUEST_CODE_ORGANIZATION, intent)
+                finish()
+            }
+
+        rvOrganization?.adapter = adapter
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

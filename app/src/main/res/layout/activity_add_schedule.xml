@@ -52,6 +52,7 @@
                 android:id="@+id/etTitle"
                 app:layout_constraintTop_toTopOf="parent"
                 android:hint="@string/enter_title"
+                android:textSize="14sp"
                 style="@style/EditTextNormalSize"
                 android:layout_marginTop="20dp"
                 android:layout_marginLeft="20dp"
@@ -67,6 +68,7 @@
                 app:layout_constraintStart_toEndOf="@id/etTitle"
                 android:src="@drawable/ic_drop_down"
                 android:layout_width="30dp"
+                android:scrollbarSize="14sp"
                 android:layout_height="0dp"
                 app:tint="@color/colorBlack" />
 
@@ -98,8 +100,8 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="20dp"
                 android:src="@drawable/ic_date"
-                android:layout_width="22dp"
-                android:layout_height="22dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 app:tint="@color/colorPrimary" />
 
             <TextView
@@ -108,59 +110,29 @@
                 app:layout_constraintBottom_toBottomOf="@id/imgDate"
                 app:layout_constraintStart_toEndOf="@id/imgDate"
                 android:text="@string/date"
+                android:textSize="14sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
-            <LinearLayout
-                android:id="@+id/llTab"
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tabLayout"
                 app:layout_constraintTop_toBottomOf="@id/imgDate"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 android:layout_marginTop="10dp"
+                app:tabTextColor="@color/colorText"
+                app:tabSelectedTextColor="@color/colorText"
+                app:tabTextAppearance="@style/MyTabLayoutTextAppearance"
+                app:tabBackground="@drawable/tab_color_selector"
+                app:tabIndicatorColor="@color/colorPrimaryDark"
                 android:layout_width="match_parent"
-                android:layout_height="40dp">
-                <TextView
-                    android:id="@+id/tvSpecialDay"
-                    android:gravity="center"
-                    android:background="@drawable/bg_date_type_not_choosen"
-                    android:textColor="@color/colorBlack"
-                    android:text="@string/special_day"
-                    android:layout_weight="1"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"/>
+                android:layout_height="40dp"/>
 
-                <TextView
-                    android:id="@+id/tvDaily"
-                    android:gravity="center"
-                    android:textColor="@color/colorBlack"
-                    android:text="@string/daily"
-                    android:layout_weight="1"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"/>
-
-                <TextView
-                    android:id="@+id/tvWeekly"
-                    android:gravity="center"
-                    android:textColor="@color/colorBlack"
-                    android:text="@string/weekly"
-                    android:layout_weight="1"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"/>
-
-                <TextView
-                    android:id="@+id/tvMonthly"
-                    android:gravity="center"
-                    android:textColor="@color/colorBlack"
-                    android:text="@string/monthly"
-                    android:layout_weight="1"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"/>
-            </LinearLayout>
 
             <com.kunpark.resource.custom_view.WrapContentViewPager
                 android:id="@+id/vpTab"
                 android:padding="20dp"
-                app:layout_constraintTop_toBottomOf="@id/llTab"
+                app:layout_constraintTop_toBottomOf="@id/tabLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
@@ -193,13 +165,14 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="20dp"
                 android:src="@drawable/ic_date"
-                android:layout_width="22dp"
-                android:layout_height="22dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 app:tint="@color/colorPrimary" />
 
             <TextView
                 android:id="@+id/tvSelectCalendar"
                 android:layout_marginLeft="10dp"
+                android:textSize="14sp"
                 android:textColor="@color/colorBlack"
                 app:layout_constraintBottom_toBottomOf="@id/imgSelectCalendar"
                 app:layout_constraintStart_toEndOf="@id/imgSelectCalendar"
@@ -214,6 +187,7 @@
                 android:layout_marginTop="10dp"
                 android:textColor="@color/colorText"
                 android:hint="@string/please_choose_resource"
+                android:textSize="14sp"
                 app:layout_constraintStart_toStartOf="@id/tvSelectCalendar"
                 app:layout_constraintTop_toBottomOf="@id/tvSelectCalendar"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -249,6 +223,7 @@
                 app:layout_constraintBottom_toBottomOf="@id/imgShare"
                 app:layout_constraintStart_toEndOf="@id/imgShare"
                 android:text="@string/share"
+                android:textSize="14sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
@@ -262,6 +237,7 @@
                 app:layout_constraintTop_toBottomOf="@id/tvShare"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_width="0dp"
+                android:textSize="14sp"
                 android:layout_height="wrap_content"/>
 
             <ImageView

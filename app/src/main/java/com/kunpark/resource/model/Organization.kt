@@ -22,7 +22,9 @@ class Organization(
 
     @SerializedName("ResourceTrees")
     @ColumnInfo(name = "resourceTrees")
-    var resourceTrees: ArrayList<Organization> = arrayListOf()
+    var resourceTrees: ArrayList<Organization> = arrayListOf(),
+
+    var isChosen: Boolean = false
 
 
 ): Serializable {

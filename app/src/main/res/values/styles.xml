@@ -49,4 +49,9 @@
 
     <style name="Theme.MyApplication.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="MyTabLayoutTextAppearance" parent="TextAppearance.AppCompat.Widget.ActionBar.Title.Inverse">
+        <item name="android:textSize">13sp</item>
+        <item name="android:textColor">@color/colorText</item>
+    </style>
+
 </resources>
