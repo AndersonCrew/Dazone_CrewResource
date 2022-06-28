@@ -20,7 +20,6 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-@RequiresApi(Build.VERSION_CODES.O)
 class CalendarDayViewModel : BaseViewModel() {
 
     private val repository = CalendarDayRepository()
