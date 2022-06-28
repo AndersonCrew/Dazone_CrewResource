@@ -16,12 +16,9 @@ import com.kunpark.resource.utils.Constants
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.collections.ArrayList
 
-@RequiresApi(Build.VERSION_CODES.O)
 class CalendarWeekViewModel : BaseViewModel() {
 
     private val repository = CalendarWeekRepository()
@@ -30,7 +27,7 @@ class CalendarWeekViewModel : BaseViewModel() {
         return repository.getResourceDBByDay(day)
     }
 
-    fun getAllResource(params: JsonObject, localDate: LocalDate) = viewModelScope.launch(Dispatchers.IO) {
+    fun getAllResource(params: JsonObject, calendar: Calendar) = viewModelScope.launch(Dispatchers.IO) {
         when (val result = repository.getResourceDataFromServer(params)) {
             is Result.Success -> {
                 val body: LinkedTreeMap<String, Any> =
@@ -48,7 +45,7 @@ class CalendarWeekViewModel : BaseViewModel() {
                     )
 
                     if (!list.isNullOrEmpty()) {
-                        checkAddListResource(list, localDate)
+                        checkAddListResource(list, calendar)
                     }
                 } else {
                     val error: LinkedTreeMap<String, Any> =
@@ -67,22 +64,24 @@ class CalendarWeekViewModel : BaseViewModel() {
 
 
     @SuppressLint("SimpleDateFormat")
-    private fun checkAddListResource(list: List<Resource>, localDate: LocalDate) {
+    private fun checkAddListResource(list: List<Resource>, calendar: Calendar) {
         uiScope.launch(Dispatchers.IO) {
             val listCalendarDto: ArrayList<CalendarDto> = arrayListOf()
             for(i in 0 until 7) {
                 val calendarDto = CalendarDto()
                 val resourcesI: ArrayList<Resource> = arrayListOf()
-                val localDateI : LocalDate = localDate.plusDays(i.toLong())
+                val cal = Calendar.getInstance()
+                cal.time = calendar.time
+                cal.add(Calendar.DAY_OF_MONTH, i)
 
                 for(resource in list) {
-                    if(resource.startStr == localDateI.format(DateTimeFormatter.ofPattern(Constants.YY_MM_DD)) && !resourcesI.contains(resource)) {
+                    if(resource.startStr == SimpleDateFormat(Constants.YY_MM_DD).format(cal.time) && !resourcesI.contains(resource)) {
                         resourcesI.add(resource)
                     }
                 }
 
                 if(!resourcesI.isNullOrEmpty()) {
-                    calendarDto.timeString = localDateI.format(DateTimeFormatter.ofPattern(Constants.YY_MM_DD))
+                    calendarDto.timeString = SimpleDateFormat(Constants.YY_MM_DD).format(cal.time)
                     calendarDto.listResource.clear()
                     calendarDto.listResource.addAll(resourcesI)
                     listCalendarDto.add(calendarDto)
@@ -90,7 +89,7 @@ class CalendarWeekViewModel : BaseViewModel() {
             }
 
 
-            val calendarWeek = CalendarWeek(localDate.format(DateTimeFormatter.ofPattern(Constants.YY_MM_DD)), listCalendarDto)
+            val calendarWeek = CalendarWeek(SimpleDateFormat(Constants.YY_MM_DD).format(calendar.time), listCalendarDto)
             repository.saveResourceList(calendarWeek)
         }
     }

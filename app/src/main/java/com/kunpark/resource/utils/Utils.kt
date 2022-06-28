@@ -6,7 +6,6 @@ import androidx.annotation.RequiresApi
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.time.DayOfWeek
-import java.time.LocalDate
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -75,36 +74,13 @@ object Utils {
         return SimpleDateFormat("dd/MM/yyyy").format(cal.time)
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun daysInWeekArray(selectedDate: LocalDate): ArrayList<LocalDate?>? {
-        val days = ArrayList<LocalDate?>()
-        var current = sundayForDate(selectedDate)
-        val endDate = current!!.plusWeeks(1)
-        while (current!!.isBefore(endDate)) {
-            days.add(current)
-            current = current.plusDays(1)
-        }
-        return days
-    }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun sundayForDate(current: LocalDate): LocalDate? {
-        var current = current
-        val nextWeek = current.plusDays(1)
-        while (current.isBefore(nextWeek)) {
-            if (current.dayOfWeek == DayOfWeek.SUNDAY) return current
-            current = current.plusDays(1)
-        }
-        return null
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun getDayOfSunday(current: LocalDate): LocalDate? {
+    fun getDayOfSunday(cal: Calendar): Calendar? {
         for(i in 1 until 7) {
-            if(current.dayOfWeek == DayOfWeek.SUNDAY)
-                return current
+            if(cal.get(Calendar.DATE) == Calendar.SUNDAY)
+                return cal
             else {
-                current.plusDays(1)
+                cal.add(Calendar.DAY_OF_MONTH, i)
             }
         }
 

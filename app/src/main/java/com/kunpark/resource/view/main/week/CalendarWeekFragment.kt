@@ -13,13 +13,12 @@ import com.kunpark.resource.event.Event
 import com.kunpark.resource.utils.Utils
 import com.kunpark.resource.view.main.CalendarWeekPagerAdapter
 import com.prabhat1707.verticalpager.VerticalViewPager
-import java.time.LocalDate
 import java.util.*
 
 @RequiresApi(Build.VERSION_CODES.O)
 class CalendarWeekFragment : BaseFragment() {
     private var vpCalendar: VerticalViewPager? = null
-    private lateinit var list: ArrayList<LocalDate>
+    private lateinit var list: ArrayList<Calendar>
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,33 +38,37 @@ class CalendarWeekFragment : BaseFragment() {
 
 
     private fun getDateOfWeek(root: View) {
-        val localDate = LocalDate.now()
+        val cal = Calendar.getInstance()
+        cal.time = Date(System.currentTimeMillis())
+        val currentYear = cal.get(Calendar.YEAR)
 
-        var startLocalDate: LocalDate = localDate.minusDays((localDate.dayOfMonth - 1).toLong())
-        startLocalDate = startLocalDate.minusMonths((localDate.month.value - 1).toLong())
-        startLocalDate = startLocalDate.minusYears(100)
+        val startCal = Calendar.getInstance()
+        startCal.set(Calendar.DAY_OF_MONTH, 1)
+        startCal.set(Calendar.MONTH, 1)
+        startCal.set(Calendar.YEAR, currentYear - 100)
 
-        Utils.getDayOfSunday(startLocalDate)?.let {
-            startLocalDate = startLocalDate.plusDays((it.dayOfMonth - 1).toLong())
+        val endCal = Calendar.getInstance()
+
+        endCal.set(Calendar.MONTH, 12)
+        endCal.set(Calendar.YEAR, currentYear + 100)
+        endCal.set(Calendar.DAY_OF_MONTH, endCal.getActualMaximum(Calendar.DAY_OF_MONTH))
+
+        Utils.getDayOfSunday(startCal)?.let {
+            startCal.set(Calendar.DAY_OF_MONTH, it.get(Calendar.DAY_OF_MONTH))
         }
 
+        val diff: Long = endCal.time.time - startCal.time.time
 
-        var totalDay = 0
-        for (i in 1 until 200) {
-            val currentLocalDate = LocalDate.now()
-            if (i < 100) {
-                currentLocalDate.minusYears(i.toLong())
-            } else {
-                currentLocalDate.plusYears(i.toLong())
-            }
+        val seconds = diff / 1000
+        val minutes = seconds / 60
+        val hours = minutes / 60
 
-            totalDay += currentLocalDate.lengthOfYear()
-        }
+        var totalDay = hours / 24
 
         list = arrayListOf()
         for (i in 0 until totalDay / 7) {
-            startLocalDate = startLocalDate.plusDays(if(i == 0) 0L else 7L)
-            list.add(startLocalDate)
+            startCal.add(Calendar.DAY_OF_MONTH, 7)
+            list.add(startCal)
         }
 
         // Get the number of days in that month
@@ -95,18 +98,19 @@ class CalendarWeekFragment : BaseFragment() {
             }
 
             override fun onPageSelected(position: Int) {
-                Event.onPageWeekChange(getStrFromLocalDate(list[position]))
+                Event.onPageWeekChange(getStrFromCalendar(list[position]))
             }
 
         })
 
     }
 
-    private fun getCurrentPosition(list: ArrayList<LocalDate>): Int  {
-        val localDate = LocalDate.now()
-        if(!list.filter { it.isBefore(localDate) }.isNullOrEmpty()) {
-            if(list.contains(list.filter { it.isBefore(localDate)}.max()!!)) {
-              return list.indexOf(list.filter { it.isBefore(localDate)}.max()!!)
+    private fun getCurrentPosition(list: ArrayList<Calendar>): Int  {
+        val cal = Calendar.getInstance()
+        cal.time = Date(System.currentTimeMillis())
+        if(!list.filter { it.time.before(cal.time) }.isNullOrEmpty()) {
+            if(list.contains(list.filter { it.time.before(cal.time) }.max()!!)) {
+              return list.indexOf(list.filter { it.time.before(cal.time) }.max()!!)
             }
         }
 
@@ -114,12 +118,12 @@ class CalendarWeekFragment : BaseFragment() {
         return 0
     }
 
-    private fun getStrFromLocalDate(localDate: LocalDate): String {
-        val month = if (localDate.month.value.toString().length == 1) {
-            "0" + localDate.month.value
-        } else localDate.month.value.toString()
+    private fun getStrFromCalendar(calendar: Calendar): String {
+        val month = if (calendar.get(Calendar.MONTH).toString().length == 1) {
+            "0" + calendar.get(Calendar.MONTH).toString()
+        } else calendar.get(Calendar.MONTH).toString()
 
-        return "$month-${localDate.year}"
+        return "$month-${calendar.get(Calendar.YEAR)}"
     }
 
     override fun onEventReceive(it: Map<String, Any?>) {
@@ -128,7 +132,7 @@ class CalendarWeekFragment : BaseFragment() {
         it[Event.MOVE_TODAY]?.let {
             if(isResumed && !list.isNullOrEmpty()) {
                 vpCalendar?.currentItem = getCurrentPosition(list)
-                Event.onPageWeekChange(getStrFromLocalDate(list[getCurrentPosition(list)]))
+                Event.onPageWeekChange(getStrFromCalendar(list[getCurrentPosition(list)]))
             }
         }
     }

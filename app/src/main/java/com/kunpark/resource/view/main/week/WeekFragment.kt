@@ -30,15 +30,12 @@ import com.kunpark.resource.utils.Constants
 import com.kunpark.resource.utils.DazoneApplication
 import com.kunpark.resource.utils.TimeUtils
 import com.kunpark.resource.view.detail_schedule.DetailScheduleActivity
-import com.kunpark.resource.view.main.day.CalendarDayViewModel
-import kotlinx.android.synthetic.main.fragment_daily.*
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-@RequiresApi(Build.VERSION_CODES.O)
-class WeekFragment(private val localDate: LocalDate): BaseFragment() {
+@SuppressLint("SimpleDateFormat")
+class WeekFragment(private val calendar: Calendar): BaseFragment() {
 
     private var llTime: LinearLayout?= null
     private var tv1: TextView?= null
@@ -109,43 +106,46 @@ class WeekFragment(private val localDate: LocalDate): BaseFragment() {
         }
 
         for(i in 0 until 7) {
-            var localDateItem : LocalDate = localDate
-            localDateItem = localDateItem.plusDays(i.toLong())
+
+            val cal = Calendar.getInstance()
+            cal.time = calendar.time
+            cal.add(Calendar.DAY_OF_MONTH, i)
             when(i) {
                 0 -> {
-                    tv1?.text = localDateItem.dayOfMonth.toString()
+                    tv1?.text = cal.get(Calendar.DAY_OF_MONTH).toString()
                 }
 
                 1 -> {
-                    tv2?.text = localDateItem.dayOfMonth.toString()
+                    tv2?.text = cal.get(Calendar.DAY_OF_MONTH).toString()
                 }
 
                 2 -> {
-                    tv3?.text = localDateItem.dayOfMonth.toString()
+                    tv3?.text = cal.get(Calendar.DAY_OF_MONTH).toString()
                 }
 
                 3 -> {
-                    tv4?.text = localDateItem.dayOfMonth.toString()
+                    tv4?.text = cal.get(Calendar.DAY_OF_MONTH).toString()
                 }
 
                 4 -> {
-                    tv5?.text = localDateItem.dayOfMonth.toString()
+                    tv5?.text = cal.get(Calendar.DAY_OF_MONTH).toString()
                 }
 
                 5 -> {
-                    tv6?.text = localDateItem.dayOfMonth.toString()
+                    tv6?.text = cal.get(Calendar.DAY_OF_MONTH).toString()
                 }
 
                 6 -> {
-                    tv7?.text = localDateItem.dayOfMonth.toString()
+                    tv7?.text = cal.get(Calendar.DAY_OF_MONTH).toString()
                 }
             }
         }
     }
 
     private var hasCallRefreshData = false
+    @SuppressLint("SimpleDateFormat")
     private fun initViewModel(context: Context) {
-        val firstDay = localDate.format(DateTimeFormatter.ofPattern(Constants.Format_api_datetime))
+        val firstDay = SimpleDateFormat(Constants.Format_api_datetime).format(calendar.time)
         viewModel.getResourceDB(firstDay)?.observe(requireActivity(), androidx.lifecycle.Observer {
             if(it != null) {
                 bindData(it, context)
@@ -158,12 +158,15 @@ class WeekFragment(private val localDate: LocalDate): BaseFragment() {
         })
     }
 
+
     private fun bindData(it: CalendarWeek, context: Context) {
         if(!it.list.isNullOrEmpty()) {
             for(i in 0 until 7) {
-                val localDateI: LocalDate = localDate.plusDays(i.toLong())
+                val cal = Calendar.getInstance()
+                cal.time = calendar.time
+                cal.add(Calendar.DAY_OF_MONTH, i)
                 for(calendarDto in it.list!!) {
-                    if(localDateI.format(DateTimeFormatter.ofPattern(Constants.YY_MM_DD)) == calendarDto.timeString) {
+                    if(SimpleDateFormat(Constants.YY_MM_DD).format(cal.time) == calendarDto.timeString) {
                         bindingDataChild(calendarDto, i + 1, context)
                         break
                     }
@@ -195,7 +198,7 @@ class WeekFragment(private val localDate: LocalDate): BaseFragment() {
                         )
 
                         tvContent.text = resource.title?: ""
-                        tvContent.setTextColor(context.getColor(R.color.colorWhite))
+                        tvContent.setTextColor(ContextCompat.getColor(context, R.color.colorWhite))
                         tvContent.setBackgroundColor(Color.parseColor(resource.backgroundColor))
 
                         view.layoutParams = param
@@ -222,11 +225,12 @@ class WeekFragment(private val localDate: LocalDate): BaseFragment() {
         }
     }
 
-    @SuppressLint("SimpleDateFormat")
     private fun getAllResource(conditionSearch: ConditionSearch?) {
-        val firstDay = localDate.format(DateTimeFormatter.ofPattern(Constants.Format_api_datetime))
-        val lastLocalDate: LocalDate = localDate.plusDays(7)
-        val lastDay = lastLocalDate.format(DateTimeFormatter.ofPattern(Constants.Format_api_datetime))
+        val firstDay = SimpleDateFormat(Constants.Format_api_datetime).format(calendar.time)
+        val lastCal: Calendar = Calendar.getInstance()
+        lastCal.time = calendar.time
+        lastCal.add(Calendar.DAY_OF_MONTH, 7)
+        val lastDay = SimpleDateFormat(Constants.Format_api_datetime).format(lastCal.time)
 
         val params = JsonObject()
         params.addProperty("sessionId", DazoneApplication.getInstance().mPref?.getString(Constants.ACCESS_TOKEN, ""))
@@ -235,6 +239,6 @@ class WeekFragment(private val localDate: LocalDate): BaseFragment() {
         params.addProperty("startDate", firstDay)
         params.addProperty("endDate", lastDay)
         params.addProperty("rsvnStatus", conditionSearch?.key?: "ALL")
-        viewModel.getAllResource(params, localDate)
+        viewModel.getAllResource(params, calendar)
     }
 }

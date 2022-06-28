@@ -17,8 +17,6 @@ import com.kunpark.resource.utils.Constants
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -31,7 +29,7 @@ class CalendarDayViewModel : BaseViewModel() {
         return repository.getResourceDBByDay(day)
     }
 
-    fun getAllResource(params: JsonObject, localDate: LocalDate) = viewModelScope.launch(Dispatchers.IO) {
+    fun getAllResource(params: JsonObject, calendar: Calendar) = viewModelScope.launch(Dispatchers.IO) {
         when (val result = repository.getResourceDataFromServer(params)) {
             is Result.Success -> {
                 val body: LinkedTreeMap<String, Any> =
@@ -49,7 +47,7 @@ class CalendarDayViewModel : BaseViewModel() {
                     )
 
                     if (!list.isNullOrEmpty()) {
-                        checkAddListResource(list, localDate)
+                        checkAddListResource(list, calendar)
                     }
                 } else {
                     val error: LinkedTreeMap<String, Any> =
@@ -68,7 +66,7 @@ class CalendarDayViewModel : BaseViewModel() {
 
 
     @SuppressLint("SimpleDateFormat")
-    private fun checkAddListResource(list: List<Resource>, localDate: LocalDate) {
+    private fun checkAddListResource(list: List<Resource>, calendar: Calendar) {
         uiScope.launch(Dispatchers.IO) {
 
             val listCalendarDto: ArrayList<CalendarDto> = arrayListOf()
@@ -106,7 +104,8 @@ class CalendarDayViewModel : BaseViewModel() {
                 }
             }
 
-            val calendarDay = CalendarDay(localDate.format(DateTimeFormatter.ofPattern(Constants.YY_MM_DD)), listCalendarDto)
+            val time = SimpleDateFormat(Constants.YY_MM_DD).format(calendar.time)
+            val calendarDay = CalendarDay(time, listCalendarDto)
             repository.saveResourceList(calendarDay)
         }
     }

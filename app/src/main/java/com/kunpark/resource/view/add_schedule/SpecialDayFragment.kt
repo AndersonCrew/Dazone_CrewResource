@@ -11,9 +11,7 @@ import com.kunpark.resource.R
 import com.kunpark.resource.base.BaseFragment
 import com.kunpark.resource.databinding.FragmentSpecialDayBinding
 import com.kunpark.resource.utils.Constants
-import kotlinx.android.synthetic.main.fragment_special_day.*
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
+import java.text.SimpleDateFormat
 import java.util.*
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -34,11 +32,12 @@ class SpecialDayFragment: BaseFragment() {
     }
 
 
-    @SuppressLint("SetTextI18n")
+    @SuppressLint("SetTextI18n", "SimpleDateFormat")
     private fun initView() {
-        val localDate = LocalDate.now()
-        binding.tvStartDay.text = localDate.format(DateTimeFormatter.ofPattern(Constants.YY_MM_DD_SHOW))
-        binding.tvEndDay.text = localDate.format(DateTimeFormatter.ofPattern(Constants.YY_MM_DD_SHOW))
+        val cal = Calendar.getInstance()
+        cal.time = Date(System.currentTimeMillis())
+        binding.tvStartDay.text = SimpleDateFormat(Constants.YY_MM_DD_SHOW).format(cal.time)
+        binding.tvEndDay.text = SimpleDateFormat(Constants.YY_MM_DD_SHOW).format(cal.time)
 
         val rightNow = Calendar.getInstance()
         val currentHourIn24Format: Int =rightNow.get(Calendar.HOUR_OF_DAY) // return the hour in 24 hrs format (ranging from 0-23)

@@ -27,14 +27,10 @@ import com.kunpark.resource.utils.Constants
 import com.kunpark.resource.utils.DazoneApplication
 import com.kunpark.resource.utils.TimeUtils
 import com.kunpark.resource.view.detail_schedule.DetailScheduleActivity
-import kotlinx.android.synthetic.main.fragment_day_resource.*
 import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 import java.util.*
 
-@RequiresApi(Build.VERSION_CODES.O)
-class DayFragment(private val localDate: LocalDate): BaseFragment() {
+class DayFragment(private val calendar: Calendar): BaseFragment() {
     private var llTime: LinearLayout?= null
     private val viewModel: CalendarDayViewModel by viewModels()
     private var hasCallRefreshData = false
@@ -60,7 +56,7 @@ class DayFragment(private val localDate: LocalDate): BaseFragment() {
     @SuppressLint("SimpleDateFormat")
     private fun initViewModel(context: Context) {
 
-        val day = localDate.format(DateTimeFormatter.ofPattern(Constants.Format_api_datetime))
+        val day = SimpleDateFormat(Constants.Format_api_datetime).format(calendar.time)
         viewModel.getResourceDB(day)?.observe(requireActivity(), androidx.lifecycle.Observer {
             if(it != null) {
                 bindData(it, context)
@@ -117,7 +113,7 @@ class DayFragment(private val localDate: LocalDate): BaseFragment() {
     @SuppressLint("SimpleDateFormat")
     private fun getAllResource(conditionSearch: ConditionSearch?) {
         val params = JsonObject()
-        val time =  localDate.format(DateTimeFormatter.ofPattern(Constants.Format_api_datetime))
+        val time = SimpleDateFormat(Constants.Format_api_datetime).format(calendar.time)
 
         params.addProperty("sessionId", DazoneApplication.getInstance().mPref?.getString(Constants.ACCESS_TOKEN, ""))
         params.addProperty("timeZoneOffset", TimeUtils.getTimezoneOffsetInMinutes().toString())
@@ -125,7 +121,7 @@ class DayFragment(private val localDate: LocalDate): BaseFragment() {
         params.addProperty("startDate", time)
         params.addProperty("endDate", time)
         params.addProperty("rsvnStatus", conditionSearch?.key?: "ALL")
-        viewModel.getAllResource(params, localDate)
+        viewModel.getAllResource(params, calendar)
     }
 
     @SuppressLint("SimpleDateFormat")

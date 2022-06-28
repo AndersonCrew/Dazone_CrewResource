@@ -11,7 +11,6 @@ import com.kunpark.resource.view.main.agenda.AgendaFragment
 import com.kunpark.resource.view.main.day.DayFragment
 import com.kunpark.resource.view.main.month.MonthFragment
 import com.kunpark.resource.view.main.week.WeekFragment
-import java.time.LocalDate
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -51,27 +50,22 @@ class CalendarMonthPagerAdapter(fragmentManager: FragmentManager): FragmentState
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
-class CalendarDayPagerAdapter(private val list: ArrayList<LocalDate>, fragmentManager: FragmentManager): FragmentStatePagerAdapter(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
+class CalendarDayPagerAdapter(private val list: ArrayList<Calendar>, fragmentManager: FragmentManager): FragmentStatePagerAdapter(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
     override fun getItem(position: Int): Fragment {
         return DayFragment(list[position])
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun getCount(): Int {
         return list.size
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
-class CalendarWeekPagerAdapter(private val list: ArrayList<LocalDate>, fragmentManager: FragmentManager): FragmentStatePagerAdapter(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
+class CalendarWeekPagerAdapter(private val list: ArrayList<Calendar>, fragmentManager: FragmentManager): FragmentStatePagerAdapter(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
     override fun getItem(position: Int): Fragment {
         return WeekFragment(list[position])
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun getCount(): Int {
-
         return list.size
     }
 }
