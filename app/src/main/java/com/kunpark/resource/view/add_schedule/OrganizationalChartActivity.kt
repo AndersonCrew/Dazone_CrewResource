@@ -41,10 +41,6 @@ class OrganizationalChartActivity: BaseActivity() {
                 viewModel.getOrganizationFromServer(params)
             }
         })
-
-        icCheck?.setOnClickListener {
-            val organization = adapter.getOrganizationChosen()
-        }
     }
 
     private fun setUpRecyclerView(list: List<Organization>) {

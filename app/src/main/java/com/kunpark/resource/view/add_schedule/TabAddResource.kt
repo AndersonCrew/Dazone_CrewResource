@@ -21,8 +21,12 @@ class TabAddResource(fr: FragmentManager): FragmentStatePagerAdapter(fr, BEHAVIO
                 fragment = WeeklyFragment()
             }
 
-            else -> {
+            3-> {
                 fragment = MonthlyFragment()
+            }
+
+            else -> {
+                fragment = AnnuallyFragment()
             }
         }
 
@@ -30,7 +34,7 @@ class TabAddResource(fr: FragmentManager): FragmentStatePagerAdapter(fr, BEHAVIO
     }
 
     override fun getCount(): Int {
-        return 4
+        return 5
     }
 
     override fun getPageTitle(position: Int): CharSequence? {
@@ -38,7 +42,8 @@ class TabAddResource(fr: FragmentManager): FragmentStatePagerAdapter(fr, BEHAVIO
             0 -> "Special Day"
             1 -> "Daily"
             2 -> "Weekly"
-            else -> "Monthly"
+            3 -> "Monthly"
+            else -> "Annually"
         }
         return null
     }

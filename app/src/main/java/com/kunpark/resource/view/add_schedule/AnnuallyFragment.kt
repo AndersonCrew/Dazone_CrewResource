@@ -6,23 +6,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.CompoundButton
 import com.kunpark.resource.R
 import com.kunpark.resource.base.BaseFragment
-import com.kunpark.resource.databinding.FragmentMonthlyBinding
-import com.kunpark.resource.databinding.FragmentSpecialDayBinding
+import com.kunpark.resource.databinding.FragmentAnnuallyBinding
 import com.kunpark.resource.utils.Constants
 import java.text.SimpleDateFormat
 import java.util.*
 
-class MonthlyFragment: BaseFragment() {
-    private lateinit var binding: FragmentMonthlyBinding
+class AnnuallyFragment: BaseFragment() {
+    private lateinit var binding: FragmentAnnuallyBinding
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentMonthlyBinding.inflate(inflater, container, false)
+        binding = FragmentAnnuallyBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -66,24 +64,6 @@ class MonthlyFragment: BaseFragment() {
         binding.tvStartTime.text = "$startHour:00"
         binding.tvEndTime.text = "$endHour:00"
 
-        val adapter: ArrayAdapter<String> = ArrayAdapter(
-            requireContext(),
-            R.layout.layout_spinner, resources.getStringArray(R.array.arr_monthly)
-        )
-
-        binding.spinnerFrequency.adapter = adapter
-
-
-        val adapter2: ArrayAdapter<String> = ArrayAdapter(
-            requireContext(),
-            R.layout.layout_spinner, resources.getStringArray(R.array.arr_monthly_day)
-        )
-
-        binding.spinnerFrequency.adapter = adapter2
-        val currentCal = Calendar.getInstance()
-        currentCal.time = Date(System.currentTimeMillis())
-        binding.spinnerFrequency.setSelection(currentCal.get(Calendar.DAY_OF_MONTH) - 1)
-
 
         binding.ckDay.setOnCheckedChangeListener { _, isChecked ->
             if(isChecked) {
@@ -106,6 +86,8 @@ class MonthlyFragment: BaseFragment() {
             }
         }
 
+        val currentCal = Calendar.getInstance()
+        currentCal.time = Date(System.currentTimeMillis())
         val strDate = when(currentCal.get(Calendar.DAY_OF_WEEK)) {
             Calendar.SUNDAY -> "Sun"
             Calendar.MONDAY -> "Mon"
@@ -118,5 +100,21 @@ class MonthlyFragment: BaseFragment() {
 
         binding.ck5Date.text = "5 $strDate Month"
         binding.ckLastDate.text = "Last $strDate Month"
+
+        val strFreFix = when(currentCal.get(Calendar.DAY_OF_MONTH)) {
+            1 -> "st"
+            2 -> "nd"
+            else -> "th"
+        }
+
+        binding.ckDay.text = "${SimpleDateFormat("MMM").format(currentCal.time)} ${currentCal.get(Calendar.DAY_OF_MONTH)} $strFreFix"
+
+        val adapter: ArrayAdapter<String> = ArrayAdapter(
+            requireContext(),
+            R.layout.layout_spinner, resources.getStringArray(R.array.arr_holiday)
+        )
+
+        binding.spHoliday.adapter = adapter
+
     }
 }

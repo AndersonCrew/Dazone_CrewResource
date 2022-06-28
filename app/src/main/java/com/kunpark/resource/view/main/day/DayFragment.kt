@@ -14,7 +14,6 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.annotation.RequiresApi
 import androidx.cardview.widget.CardView
 import androidx.core.view.children
 import androidx.fragment.app.viewModels

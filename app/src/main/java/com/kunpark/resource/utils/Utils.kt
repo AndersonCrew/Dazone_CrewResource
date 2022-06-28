@@ -1,11 +1,8 @@
 package com.kunpark.resource.utils
 
 import android.annotation.SuppressLint
-import android.os.Build
-import androidx.annotation.RequiresApi
 import java.text.ParseException
 import java.text.SimpleDateFormat
-import java.time.DayOfWeek
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -77,7 +74,7 @@ object Utils {
 
     fun getDayOfSunday(cal: Calendar): Calendar? {
         for(i in 1 until 7) {
-            if(cal.get(Calendar.DATE) == Calendar.SUNDAY)
+            if(cal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY)
                 return cal
             else {
                 cal.add(Calendar.DAY_OF_MONTH, i)

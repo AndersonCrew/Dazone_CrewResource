@@ -7,21 +7,17 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.RequiresApi
 import androidx.viewpager.widget.ViewPager
 import com.kunpark.resource.R
 import com.kunpark.resource.base.BaseFragment
 import com.kunpark.resource.event.Event
-import com.kunpark.resource.utils.Constants
 import com.kunpark.resource.utils.DialogUtil
 import com.kunpark.resource.utils.Utils
 import com.kunpark.resource.view.main.CalendarWeekPagerAdapter
 import com.prabhat1707.verticalpager.VerticalViewPager
 import kotlinx.coroutines.*
-import java.text.SimpleDateFormat
 import java.util.*
 
-@RequiresApi(Build.VERSION_CODES.O)
 class CalendarWeekFragment : BaseFragment() {
     private var vpCalendar: VerticalViewPager? = null
     private lateinit var list: ArrayList<Calendar>
@@ -45,7 +41,6 @@ class CalendarWeekFragment : BaseFragment() {
             DialogUtil.hideLoading()
         }
     }
-
 
     private fun getDateOfWeek(root: View) {
         val scope = CoroutineScope(Dispatchers.IO + Job())

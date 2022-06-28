@@ -1,8 +1,6 @@
 package com.kunpark.resource.view.main.day
 
 import android.annotation.SuppressLint
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson

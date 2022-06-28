@@ -8,11 +8,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.RequiresApi
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager.widget.ViewPager
-import com.bumptech.glide.util.Util
 import com.kunpark.resource.R
 import com.kunpark.resource.base.BaseFragment
 import com.kunpark.resource.event.Event

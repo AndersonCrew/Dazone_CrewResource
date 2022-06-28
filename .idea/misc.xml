@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="../../../Library/Android/sdk/platforms/android-31/data/res/layout/simple_spinner_item.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/drawable/bg_allday.xml" value="0.1535" />
         <entry key="app/src/main/res/drawable/bg_allday_week.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/bg_date_type_not_choosen.xml" value="0.285" />
@@ -15,11 +16,15 @@
         <entry key="app/src/main/res/layout/dialog_confirm.xml" value="2.5785714285714287" />
         <entry key="app/src/main/res/layout/dialog_multiple_resource.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/layout/fragment_agenda.xml" value="0.37604166666666666" />
+        <entry key="app/src/main/res/layout/fragment_annually.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/layout/fragment_calendar_agenda.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_calendar_week.xml" value="0.37604166666666666" />
+        <entry key="app/src/main/res/layout/fragment_daily.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/layout/fragment_day_resource.xml" value="0.25833333333333336" />
+        <entry key="app/src/main/res/layout/fragment_monthly.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/layout/fragment_special_day.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/layout/fragment_week_resource.xml" value="0.31773399014778325" />
+        <entry key="app/src/main/res/layout/fragment_weekly.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/layout/frgament_calendar_day.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/layout/frgament_calendar_month.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/layout/item_day.xml" value="0.37604166666666666" />
@@ -28,6 +33,7 @@
         <entry key="app/src/main/res/layout/item_resource_list.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/layout/layout_loading_dialog.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/layout/layout_notifications_setting.xml" value="0.37604166666666666" />
+        <entry key="app/src/main/res/layout/layout_spinner.xml" value="0.37604166666666666" />
       </map>
     </option>
   </component>

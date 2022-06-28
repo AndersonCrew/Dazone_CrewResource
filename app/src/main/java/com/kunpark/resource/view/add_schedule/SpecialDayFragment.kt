@@ -6,15 +6,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.RequiresApi
-import com.kunpark.resource.R
 import com.kunpark.resource.base.BaseFragment
 import com.kunpark.resource.databinding.FragmentSpecialDayBinding
 import com.kunpark.resource.utils.Constants
 import java.text.SimpleDateFormat
 import java.util.*
 
-@RequiresApi(Build.VERSION_CODES.O)
 class SpecialDayFragment: BaseFragment() {
     private lateinit var binding: FragmentSpecialDayBinding
     override fun onCreateView(

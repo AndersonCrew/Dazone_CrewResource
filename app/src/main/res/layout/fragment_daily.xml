@@ -7,10 +7,11 @@
 
     <TextView
         android:id="@+id/tvFrequency"
-        android:layout_margin="10dp"
         android:textSize="13sp"
         android:textStyle="bold"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginStart="10dp"
+        app:layout_constraintTop_toTopOf="@id/spFrequencyValue"
+        app:layout_constraintBottom_toBottomOf="@id/spFrequencyValue"
         app:layout_constraintStart_toStartOf="parent"
         android:text="@string/frequency"
         android:textColor="@color/colorBlack"
@@ -18,9 +19,10 @@
         android:layout_height="wrap_content"/>
 
     <Spinner
-        android:id="@+id/tvFrequencyValue"
+        android:id="@+id/spFrequencyValue"
         android:textSize="13sp"
-        app:layout_constraintTop_toTopOf="@id/tvFrequency"
+        android:layout_margin="10dp"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="@id/tvStartDay"
         tools:text="Daily"
         android:textColor="@color/colorBlack"

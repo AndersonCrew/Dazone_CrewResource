@@ -1,12 +1,9 @@
 package com.kunpark.resource.view.main
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import com.kunpark.resource.utils.Config
-import com.kunpark.resource.utils.checkNamNhuan
 import com.kunpark.resource.view.main.agenda.AgendaFragment
 import com.kunpark.resource.view.main.day.DayFragment
 import com.kunpark.resource.view.main.month.MonthFragment
