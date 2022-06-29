@@ -66,23 +66,20 @@ class MonthlyFragment: BaseFragment() {
         binding.tvStartTime.text = "$startHour:00"
         binding.tvEndTime.text = "$endHour:00"
 
-        val adapter: ArrayAdapter<String> = ArrayAdapter(
+        binding.spinnerFrequency.adapter = ArrayAdapter(
             requireContext(),
             R.layout.layout_spinner, resources.getStringArray(R.array.arr_monthly)
         )
 
-        binding.spinnerFrequency.adapter = adapter
 
-
-        val adapter2: ArrayAdapter<String> = ArrayAdapter(
+        binding.spDay.adapter = ArrayAdapter(
             requireContext(),
             R.layout.layout_spinner, resources.getStringArray(R.array.arr_monthly_day)
         )
 
-        binding.spinnerFrequency.adapter = adapter2
         val currentCal = Calendar.getInstance()
         currentCal.time = Date(System.currentTimeMillis())
-        binding.spinnerFrequency.setSelection(currentCal.get(Calendar.DAY_OF_MONTH) - 1)
+        binding.spDay.setSelection(currentCal.get(Calendar.DAY_OF_MONTH) - 1)
 
 
         binding.ckDay.setOnCheckedChangeListener { _, isChecked ->

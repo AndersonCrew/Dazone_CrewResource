@@ -52,12 +52,12 @@ class CalendarWeekFragment : BaseFragment() {
             val startCal = Calendar.getInstance()
             startCal.set(Calendar.DAY_OF_MONTH, 1)
             startCal.set(Calendar.MONTH, 0)
-            startCal.set(Calendar.YEAR, currentYear - 100)
+            startCal.set(Calendar.YEAR, currentYear - 6)
 
             val endCal = Calendar.getInstance()
 
             endCal.set(Calendar.MONTH, 11)
-            endCal.set(Calendar.YEAR, currentYear + 100)
+            endCal.set(Calendar.YEAR, currentYear + 2)
             endCal.set(Calendar.DAY_OF_MONTH, endCal.getActualMaximum(Calendar.DAY_OF_MONTH))
 
             Utils.getDayOfSunday(startCal)?.let {

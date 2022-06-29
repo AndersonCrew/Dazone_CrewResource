@@ -56,10 +56,10 @@ object Utils {
         return 0
     }
 
-    fun getStrDateFromPosition(position: Int): String {
-        val month = position % 12
-        val year = position / 12 + 1921
-        val day = if(Calendar.getInstance().get(Calendar.YEAR) == year && Calendar.getInstance().get(Calendar.MONTH) + 1 == month) Calendar.getInstance().get(Calendar.DAY_OF_MONTH) else 1
+    fun getStrDateFromPosition(calendar: Calendar): String {
+        val month = calendar.get(Calendar.MONTH + 1)
+        val year = calendar.get(Calendar.YEAR)
+        val day = calendar.get(Calendar.DAY_OF_MONTH)
         return "$day-$month-$year"
     }
 
@@ -77,7 +77,7 @@ object Utils {
             if(cal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY)
                 return cal
             else {
-                cal.add(Calendar.DAY_OF_MONTH, i)
+                cal.add(Calendar.DAY_OF_MONTH, 1)
             }
         }
 

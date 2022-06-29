@@ -15,6 +15,7 @@ import com.kunpark.resource.base.BaseFragment
 import com.kunpark.resource.event.Event
 import com.kunpark.resource.model.AgendaItemType
 import com.kunpark.resource.model.CalendarAgenda
+import com.kunpark.resource.model.CalendarDto
 import com.kunpark.resource.model.ConditionSearch
 import com.kunpark.resource.utils.Config
 import com.kunpark.resource.utils.Constants
@@ -22,14 +23,17 @@ import com.kunpark.resource.utils.DazoneApplication
 import com.kunpark.resource.utils.TimeUtils
 import com.kunpark.resource.view.add_schedule.AddScheduleActivity
 import com.kunpark.resource.view.detail_schedule.DetailScheduleActivity
+import kotlinx.coroutines.*
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 class AgendaFragment(private val calendar: Calendar) : BaseFragment() {
     private lateinit var adapter: AgendaAdapter
-    private val calendarAgendaViewModel: CalendarAgendaViewModel by viewModels ()
-    private var rvAgenda: RecyclerView?= null
-    private var calendarAgenda: CalendarAgenda?= null
+    private val calendarAgendaViewModel: CalendarAgendaViewModel by viewModels()
+    private var rvAgenda: RecyclerView? = null
+    private var calendarAgenda: CalendarAgenda? = null
+    private var list: ArrayList<CalendarDto>? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -48,46 +52,111 @@ class AgendaFragment(private val calendar: Calendar) : BaseFragment() {
 
     @SuppressLint("SimpleDateFormat")
     private fun initViewModel() {
-        adapter = AgendaAdapter(arrayListOf()) { type, resource ->
-            when(type) {
-                AgendaItemType.ITEM_RESOURCE -> {
-                    DetailScheduleActivity.start(requireActivity() as BaseActivity, resource!!)
-                }
+        val scope = CoroutineScope(Dispatchers.IO + Job())
 
-                else -> {
-                    callActivity(requireActivity() as BaseActivity, AddScheduleActivity::class.java)
+        scope.launch {
+            calendar.set(Calendar.DAY_OF_MONTH, 1)
+            val totalDay = calendar.getActualMaximum(Calendar.DAY_OF_MONTH)
+            list = arrayListOf()
+            for (i in 0 until totalDay) {
+                val calPosition = Calendar.getInstance()
+                calPosition.time = calendar.time
+                calPosition.set(Calendar.DAY_OF_MONTH, i + 1)
+                val calendarDto =
+                    CalendarDto(timeString = SimpleDateFormat(Constants.YY_MM_DD).format(calPosition.time))
+                list?.add(calendarDto)
+            }
+
+            //CHECK SUNDAY
+            for (i in 1 until 7) {
+                val calPreviousMonth = Calendar.getInstance()
+                calPreviousMonth.time = calendar.time
+
+                if (calPreviousMonth.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
+                    calPreviousMonth.add(Calendar.DAY_OF_MONTH, i * -1)
+                    val calendarDto = CalendarDto(
+                        timeString = SimpleDateFormat(Constants.YY_MM_DD).format(calPreviousMonth)
+                    )
+                    list?.add(calendarDto)
+
+                } else {
+                    break
                 }
             }
-        }
 
-        rvAgenda?.layoutManager = GridLayoutManager(requireContext(), Config.COLUMN_AGENDA)
-        rvAgenda?.adapter = adapter
+            //CHECK SATURDAY
+            for (i in 1 until 7) {
+                val calNextMonth = Calendar.getInstance()
+                calNextMonth.time = calendar.time
+                calNextMonth.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH))
 
-        val month = SimpleDateFormat(Constants.MM_YYYY).format(calendar.time)
-        calendarAgendaViewModel.getResourceBDByMonth(month)?.observe(requireActivity(), androidx.lifecycle.Observer {
-            if(it != null) {
-                calendarAgenda = it
-                if(!calendarAgenda?.list.isNullOrEmpty()) {
-                    adapter.updateList(it.list!!)
-                    if(!it.hasData) {
-                        calendarAgendaViewModel.setListCal(it.list!!)
-                        getAllResource(null)
+                if (calNextMonth.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY) {
+                    calNextMonth.add(Calendar.DAY_OF_MONTH, i)
+                    val calendarDto = CalendarDto(
+                        timeString = SimpleDateFormat(Constants.YY_MM_DD).format(calNextMonth)
+                    )
+                    list?.add(calendarDto)
+
+                } else {
+                    break
+                }
+            }
+
+            withContext(Dispatchers.Main) {
+                adapter = AgendaAdapter(list!!) { type, resource ->
+                    when (type) {
+                        AgendaItemType.ITEM_RESOURCE -> {
+                            DetailScheduleActivity.start(requireActivity() as BaseActivity, resource!!)
+                        }
+
+                        else -> {
+                            callActivity(requireActivity() as BaseActivity, AddScheduleActivity::class.java)
+                        }
                     }
                 }
-            } else {
-                calendarAgendaViewModel.getListDay(calendar)
+
+                rvAgenda?.layoutManager = GridLayoutManager(requireContext(), Config.COLUMN_AGENDA)
+                rvAgenda?.adapter = adapter
             }
-        })
+
+
+        }
+
+
+
+        /*val month = SimpleDateFormat(Constants.MM_YYYY).format(calendar.time)
+        calendarAgendaViewModel.getResourceBDByMonth(month)
+            ?.observe(requireActivity(), androidx.lifecycle.Observer {
+                if (it != null) {
+                    calendarAgenda = it
+                    if (!calendarAgenda?.list.isNullOrEmpty()) {
+                        adapter.updateList(it.list!!)
+                        if (!it.hasData) {
+                            calendarAgendaViewModel.setListCal(it.list!!)
+                            getAllResource(null)
+                        }
+                    }
+                }
+
+                calendarAgendaViewModel.getListDay(calendar)
+
+            })*/
     }
 
     private fun getAllResource(conditionSearch: ConditionSearch?) {
         val params = JsonObject()
-        params.addProperty("sessionId", DazoneApplication.getInstance().mPref?.getString(Constants.ACCESS_TOKEN, ""))
+        params.addProperty(
+            "sessionId",
+            DazoneApplication.getInstance().mPref?.getString(Constants.ACCESS_TOKEN, "")
+        )
         params.addProperty("timeZoneOffset", TimeUtils.getTimezoneOffsetInMinutes().toString())
         params.addProperty("languageCode", Locale.getDefault().language)
-        params.addProperty("startDate", adapter.listCalendarDto[0].timeString?: "")
-        params.addProperty("endDate", adapter.listCalendarDto[adapter.listCalendarDto.size - 1].timeString?: "")
-        params.addProperty("rsvnStatus", conditionSearch?.key?: "ALL")
+        params.addProperty("startDate", adapter.listCalendarDto[0].timeString ?: "")
+        params.addProperty(
+            "endDate",
+            adapter.listCalendarDto[adapter.listCalendarDto.size - 1].timeString ?: ""
+        )
+        params.addProperty("rsvnStatus", conditionSearch?.key ?: "ALL")
         calendarAgendaViewModel.getAllResource(params)
     }
 
