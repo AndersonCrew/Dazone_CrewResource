@@ -30,6 +30,7 @@
         <entry key="app/src/main/res/layout/fragment_weekly.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/layout/frgament_calendar_day.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/layout/frgament_calendar_month.xml" value="0.37604166666666666" />
+        <entry key="app/src/main/res/layout/item_calendar_day.xml" value="0.33" />
         <entry key="app/src/main/res/layout/item_day.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/layout/item_hour.xml" value="0.36235955056179775" />
         <entry key="app/src/main/res/layout/item_month_calendar.xml" value="0.37604166666666666" />

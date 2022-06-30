@@ -3,26 +3,22 @@ package com.kunpark.resource.view.add_schedule
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.view.ViewGroup
 import android.widget.LinearLayout
-import android.widget.TableLayout
-import androidx.activity.viewModels
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.lifecycle.ViewModelProviders
 import androidx.viewpager.widget.ViewPager
-import com.google.gson.JsonObject
 import com.kunpark.resource.R
 import com.kunpark.resource.base.BaseActivity
 import com.kunpark.resource.model.Organization
 import com.kunpark.resource.utils.Constants
-import com.kunpark.resource.utils.DazoneApplication
-import com.kunpark.resource.utils.TimeUtils
 import kotlinx.android.synthetic.main.activity_add_schedule.*
-import java.util.*
+
 
 class AddScheduleActivity : BaseActivity() {
-    private val viewModel: AddScheduleViewModel by viewModels()
+    private lateinit var viewModel : AddScheduleViewModel
     private var organization: Organization?= null
     override fun initEvent() {
+        viewModel = ViewModelProviders.of(this).get(AddScheduleViewModel::class.java)
         imgShowContent?.setOnClickListener {
             if(etContent?.visibility == View.GONE) {
                 etContent?.visibility = View.VISIBLE

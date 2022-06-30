@@ -7,6 +7,7 @@ import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -18,49 +19,50 @@ import androidx.cardview.widget.CardView
 import androidx.core.view.children
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.JsonObject
 import com.kunpark.resource.R
 import com.kunpark.resource.base.BaseFragment
 import com.kunpark.resource.model.CalendarDay
+import com.kunpark.resource.model.CalendarDto
 import com.kunpark.resource.model.ConditionSearch
 import com.kunpark.resource.utils.Constants
 import com.kunpark.resource.utils.DazoneApplication
 import com.kunpark.resource.utils.TimeUtils
 import com.kunpark.resource.view.detail_schedule.DetailScheduleActivity
+import kotlinx.coroutines.*
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.math.log
 
 class DayFragment(private val calendar: Calendar): BaseFragment() {
-    private var llTime: LinearLayout?= null
-    private var scrollView: NestedScrollView?= null
     private val viewModel: CalendarDayViewModel by viewModels()
     private var hasCallRefreshData = false
+    private var adapter: DayAdapter?= null
+    private var data: ArrayList<CalendarDto>?= null
+    private var rvDays: RecyclerView?= null
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val root = inflater.inflate(R.layout.fragment_day_resource, container, false)
-        initView(root)
+        rvDays = root.findViewById(R.id.rvDays)
+        initRecyclerView()
+        initViewModel()
         return root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        initViewModel(context)
-    }
     @SuppressLint("SimpleDateFormat")
-    private fun initViewModel(context: Context) {
-
+    private fun initViewModel() {
         val day = SimpleDateFormat(Constants.Format_api_datetime).format(calendar.time)
+        Log.d("CALENDAR_DAY", "initViewModel = $day")
         viewModel.getResourceDB(day)?.observe(requireActivity(), androidx.lifecycle.Observer {
-            if(it != null) {
-                bindData(it, context)
+            if(it != null && !it.list.isNullOrEmpty()) {
+                //TODO Update list
+                updateDataList(it.list!!)
+
             }
 
             if(!hasCallRefreshData) {
@@ -70,42 +72,53 @@ class DayFragment(private val calendar: Calendar): BaseFragment() {
         })
     }
 
-    private fun bindData(it: CalendarDay, context: Context) {
-        if(!it.list.isNullOrEmpty()) {
-            for(calendarDto in it.list!!) {
-                calendarDto.timeString?.let {
-                    val time = Integer.parseInt(it)
-                    val llChild = llTime?.children?.find { view -> view.id == time }
-                    if(llChild != null && !calendarDto.listResource.isNullOrEmpty()) {
-                        val llTimeCalendar: LinearLayout? = llChild.findViewById(R.id.llTime)
-                        llTimeCalendar?.removeAllViews()
-                        for(resource in calendarDto.listResource) {
-                            val view = CardView(context)
-                            val tvContent = TextView(context)
-                            tvContent.gravity = Gravity.CENTER
-                            tvContent.setPadding(10, 5, 10, 5)
-                            tvContent.textSize = 13f
-                            view.addView(tvContent)
-                            val param = FrameLayout.LayoutParams(
-                                FrameLayout.LayoutParams.WRAP_CONTENT,
-                                FrameLayout.LayoutParams.MATCH_PARENT
-                            )
-
-                            param.leftMargin = 10
-                            tvContent.text = resource.title?: ""
-                            tvContent.setBackgroundColor(Color.parseColor(resource.backgroundColor))
-
-                            view.layoutParams = param
-
-                            view.setOnClickListener {
-                                val intent = Intent(requireContext(), DetailScheduleActivity::class.java)
-                                intent.putExtra(Constants.RESOURCE, resource)
-                                requireActivity().startActivity(intent)
-                            }
-
-                            llTimeCalendar?.addView(view)
-                        }
+    @SuppressLint("NotifyDataSetChanged")
+    private fun updateDataList(list: List<CalendarDto>) {
+        Log.d("UPDATE", "${list.size}")
+        val scope = CoroutineScope(Dispatchers.IO + Job())
+        scope.launch {
+            data?.forEach { cal ->
+                cal.listResource.clear()
+                list.forEach { calNex ->
+                    if(cal.timeString == calNex.timeString) {
+                        cal.listResource.addAll(calNex.listResource)
+                        Log.d("UPDATE", " == ${calNex.timeString}")
                     }
+                }
+            }
+
+            withContext(Dispatchers.Main) {
+                adapter?.notifyDataSetChanged()
+            }
+        }
+
+    }
+
+    private fun initRecyclerView() {
+        val scope = CoroutineScope(Dispatchers.IO + Job())
+        scope.launch {
+            data = arrayListOf()
+            for(i in -1 until 24) {
+                val time = when(i) {
+                    -1 -> "All Day"
+
+                    0,1,2,3,4,5,6,7,8,9 -> {
+                        "0$i:00"
+                    }
+
+                    else -> "$i:00"
+                }
+
+                val calDto = CalendarDto(timeString = time)
+                data?.add(calDto)
+            }
+
+            adapter = DayAdapter(data!!)
+            Log.d("CALENDAR_DAY", "InitRecyclerView")
+            withContext(Dispatchers.Main) {
+                if(isAdded) {
+                    Log.d("CALENDAR_DAY", "SetAdapter")
+                    rvDays?.adapter = adapter
                 }
             }
         }
@@ -123,27 +136,5 @@ class DayFragment(private val calendar: Calendar): BaseFragment() {
         params.addProperty("endDate", time)
         params.addProperty("rsvnStatus", conditionSearch?.key?: "ALL")
         viewModel.getAllResource(params, calendar)
-    }
-
-    @SuppressLint("SimpleDateFormat")
-    private fun initView(root: View?) {
-        llTime = root?.findViewById(R.id.llTime)
-
-        for(i in -1 until 24) {
-            val view = LayoutInflater.from(requireContext()).inflate(R.layout.item_hour, null)
-            val tvTime: TextView? = view?.findViewById(R.id.tvTime)
-            val llTimeChild: LinearLayout? = view?.findViewById(R.id.llTime)
-            if(i == -1) {
-                tvTime?.text = getString(R.string.allday)
-                tvTime?.setBackgroundResource(R.color.colorGrayBackground)
-                llTimeChild?.setBackgroundResource(R.color.colorGrayBackground)
-            } else {
-                val time = if(i <  10) "0$i" else i
-                tvTime?.text = "$time:00"
-            }
-
-            view.id = i
-            llTime?.addView(view)
-        }
     }
 }

@@ -1,12 +1,14 @@
 package com.kunpark.resource.view.main.day
 
 import android.annotation.SuppressLint
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.google.gson.internal.LinkedTreeMap
 import com.google.gson.reflect.TypeToken
+import com.kunpark.resource.R
 import com.kunpark.resource.base.BaseViewModel
 import com.kunpark.resource.model.*
 import com.kunpark.resource.services.Result
@@ -17,6 +19,7 @@ import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 class CalendarDayViewModel : BaseViewModel() {
 
@@ -66,39 +69,30 @@ class CalendarDayViewModel : BaseViewModel() {
     private fun checkAddListResource(list: List<Resource>, calendar: Calendar) {
         uiScope.launch(Dispatchers.IO) {
 
+            val hashMap: HashMap<String, ArrayList<Resource>> = hashMapOf()
+           list.forEach { resource ->
+               val startTime = resource.startTime?.split(":")?.get(0)
+               val strTime = when {
+                   resource.allDay == true -> "All Day"
+                   startTime?.length == 1 -> "0$startTime:00"
+                   else -> "$startTime:00"
+               }
+
+               if(hashMap.containsKey(strTime)) {
+                   hashMap[strTime]?.add(resource)
+               } else {
+                   val listResource: ArrayList<Resource> = arrayListOf()
+                   listResource.add(resource)
+                   hashMap[strTime] = listResource
+               }
+           }
+
             val listCalendarDto: ArrayList<CalendarDto> = arrayListOf()
-            val listResourceCheck: ArrayList<Resource> = arrayListOf()
-            for(i in -1 until 24) {
-                val calendarDto = CalendarDto()
-                val resourceListI : ArrayList<Resource> = arrayListOf()
-                if(i == -1) {
-                    //TODO Don't need to check start and end time
-                    for(resource in list) {
-                        if(resource.allDay == true) {
-                            resourceListI.add(resource)
-                        }
-                    }
-                } else {
-                    //TODO Check start and end time
-                    for(resource in list) {
-                        if(resource.allDay == false) {
-                            var startTime = resource.startTime?.split(":")?.get(0)?.toInt()?: 0
-                            var endTime = resource.endTime?.split(":")?.get(0)?.toInt()?: 0
-                            if(i in startTime..endTime && !listResourceCheck.contains(resource)) {
-                                resourceListI.add(resource)
-                                listResourceCheck.add(resource)
-                            }
-
-                        }
-                    }
-                }
-
-                if(!resourceListI.isNullOrEmpty()) {
-                    calendarDto.timeString = i.toString()
-                    calendarDto.listResource.clear()
-                    calendarDto.listResource.addAll(resourceListI)
-                    listCalendarDto.add(calendarDto)
-                }
+            hashMap.forEach {
+                val calendarDto = CalendarDto(timeString = it.key)
+                calendarDto.listResource.clear()
+                calendarDto.listResource.addAll(it.value)
+                listCalendarDto.add(calendarDto)
             }
 
             val time = SimpleDateFormat(Constants.YY_MM_DD).format(calendar.time)

@@ -98,7 +98,7 @@ class CalendarDayFragment : BaseFragment() {
                     )
 
                 vpCalendar?.currentItem = todayPosition
-                vpCalendar?.offscreenPageLimit = 2
+                vpCalendar?.offscreenPageLimit = 1
                 if(isResumed) {
                     Event.onTitleDateChange(getStrCalendar(list[todayPosition]))
                 }
