@@ -42,6 +42,7 @@ class CalendarDayFragment : BaseFragment() {
         super.onResume()
         if (isResumed && todayPosition == 0) {
             DialogUtil.displayLoadingWithText(requireContext(), "Please wait...", false)
+            Event.onTitleDateChange(getStrCalendar(list[todayPosition]))
         } else {
             DialogUtil.hideLoading()
         }
@@ -101,7 +102,9 @@ class CalendarDayFragment : BaseFragment() {
 
                 vpCalendar?.currentItem = todayPosition
                 vpCalendar?.offscreenPageLimit = 2
-                Event.onPageDayChange(getStrCalendar(list[todayPosition]))
+                if(isResumed) {
+                    Event.onTitleDateChange(getStrCalendar(list[todayPosition]))
+                }
 
                 vpCalendar?.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
                     override fun onPageScrollStateChanged(state: Int) {
@@ -117,7 +120,7 @@ class CalendarDayFragment : BaseFragment() {
                     }
 
                     override fun onPageSelected(position: Int) {
-                        Event.onPageDayChange(getStrCalendar(list[position]))
+                        Event.onTitleDateChange(getStrCalendar(list[todayPosition]))
                     }
 
                 })
@@ -158,12 +161,11 @@ class CalendarDayFragment : BaseFragment() {
         it[Event.MOVE_TODAY]?.let {
             if (isResumed && !list.isNullOrEmpty()) {
                 vpCalendar?.currentItem = todayPosition
-                Event.onPageDayChange(getStrCalendar(list[todayPosition]))
             }
         }
 
         it[Event.ON_PAGE_MAIN_CHANGED]?.let {
-            Event.onPageDayChange(getStrCalendar(list[todayPosition]))
+            Event.onTitleDateChange(getStrCalendar(list[vpCalendar?.currentItem?: todayPosition]))
         }
     }
 }

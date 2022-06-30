@@ -38,23 +38,6 @@ object Utils {
         return (yearFocus - firstYear ) * 12 + monthFocus
     }
 
-    fun getPositionDayFromCalendar(calendar: Calendar): Int {
-        val cal = Calendar.getInstance()
-        val startCal = Calendar.getInstance()
-
-        startCal.set(cal.get(Calendar.YEAR) - 100, 1, 1)
-
-        try {
-            val date1: Date = startCal.time
-            val date2: Date = calendar.time
-            val diff = date2.time - date1.time
-            val count = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS)
-            return count.toInt()
-        } catch (e: ParseException) {
-            e.printStackTrace()
-        }
-        return 0
-    }
 
     fun getStrDateFromPosition(calendar: Calendar): String {
         val month = calendar.get(Calendar.MONTH + 1)

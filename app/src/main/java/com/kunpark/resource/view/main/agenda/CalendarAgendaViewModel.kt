@@ -23,90 +23,11 @@ class CalendarAgendaViewModel : BaseViewModel() {
     private val repository = CalendarAgendaRepository()
     private val listCal: ArrayList<CalendarDto> = arrayListOf()
 
-    fun setListCal(list: List<CalendarDto>) {
-        listCal.clear()
-        listCal.addAll(list)
-    }
-
-    @SuppressLint("SimpleDateFormat")
-    fun getListDay(cal: Calendar) = viewModelScope.launch(Dispatchers.IO) {
-        val listDay: ArrayList<CalendarDto> = arrayListOf()
-        val firstDayOfCurrentMonth: Int = cal.get(Calendar.DAY_OF_WEEK)
-        val totalDayInMonth: Int = cal.getActualMaximum(Calendar.DAY_OF_MONTH)
-        if (firstDayOfCurrentMonth != Calendar.SUNDAY) {
-            val priYear = Calendar.getInstance()
-            val year = cal.get(Calendar.YEAR)
-            val month = cal.get(Calendar.MONTH)
-            if (month == 0) {
-                priYear.set(year - 1, 11, 1)
-            } else {
-                priYear.set(year, month - 1, 1)
-            }
-
-            val totalDayInMonthPri: Int = priYear.getActualMaximum(Calendar.DAY_OF_MONTH)
-            for (i in firstDayOfCurrentMonth - 2 downTo 0) {
-                priYear.set(Calendar.DAY_OF_MONTH, totalDayInMonthPri - i)
-                listDay.add(
-                    CalendarDto(
-                        totalDayInMonthPri - i,
-                        priYear.get(Calendar.MONTH) + 1,
-                        priYear.get(Calendar.YEAR),
-                        SimpleDateFormat(Constants.Format_api_datetime).format(priYear.time)
-                    )
-                )
-            }
-        }
-
-        for (i in 1 until totalDayInMonth + 1) {
-            cal.set(Calendar.DAY_OF_MONTH, i)
-            listDay.add(
-                CalendarDto(
-                    i,
-                    cal.get(Calendar.MONTH) + 1,
-                    cal.get(Calendar.YEAR),
-                    SimpleDateFormat(Constants.Format_api_datetime).format(cal.time)
-                )
-            )
-        }
-
-        if (listDay.size < Config.COUNT_DAY_OF_AGENDA) {
-            val countLack = Config.COUNT_DAY_OF_AGENDA - listDay.size
-            val nextYear = Calendar.getInstance()
-            val year = cal.get(Calendar.YEAR)
-            val month = cal.get(Calendar.MONTH)
-            if (month == 12) {
-                nextYear.set(year + 1, 0, 1)
-            } else {
-                nextYear.set(year, month + 1, 1)
-            }
-
-            for (i in 1 until countLack + 1) {
-                nextYear.set(Calendar.DAY_OF_MONTH, i)
-                listDay.add(
-                    CalendarDto(
-                        i,
-                        nextYear.get(Calendar.MONTH) + 1,
-                        nextYear.get(Calendar.YEAR),
-                        SimpleDateFormat(Constants.Format_api_datetime).format(nextYear.time)
-                    )
-                )
-            }
-        }
-
-        repository.saveResourceList(
-            CalendarAgenda(
-                SimpleDateFormat(Constants.MM_YYYY).format(cal.time),
-                listDay
-            )
-        )
-    }
-
-
     fun getResourceBDByMonth(month: String): LiveData<CalendarAgenda>? {
         return repository.getResourceDBByMonth(month)
     }
 
-    fun getAllResource(params: JsonObject) = viewModelScope.launch(Dispatchers.IO) {
+    fun getAllResource(params: JsonObject, cal: Calendar) = viewModelScope.launch(Dispatchers.IO) {
         when (val result = repository.getResourceDataFromServer(params)) {
             is Result.Success -> {
                 val body: LinkedTreeMap<String, Any> =
@@ -123,7 +44,7 @@ class CalendarAgendaViewModel : BaseViewModel() {
                         object : TypeToken<List<Resource>>() {}.type
                     )
                     if (list != null) {
-                        checkAddListResource(list)
+                        checkAddListResource(list, cal)
                     }
                 } else {
                     val error: LinkedTreeMap<String, Any> =
@@ -141,36 +62,29 @@ class CalendarAgendaViewModel : BaseViewModel() {
     }
 
     @SuppressLint("SimpleDateFormat")
-    private fun checkAddListResource(list: List<Resource>) {
+    private fun checkAddListResource(list: List<Resource>, cal: Calendar) {
         uiScope.launch(Dispatchers.IO) {
 
-            val listTemp: ArrayList<CalendarDto> = arrayListOf()
-            listTemp.addAll(listCal)
-
-            val iterate = listTemp.listIterator()
-            while (iterate.hasNext()) {
-                val oldValue = iterate.next()
-                if (oldValue.listResource.size > 0) {
-                    oldValue.listResource = arrayListOf()
+            val hashMap: HashMap<String, ArrayList<Resource>> = hashMapOf()
+            for(resource in list) {
+                if(!hashMap.containsKey(resource.startStr)) {
+                    val resources: ArrayList<Resource> = arrayListOf()
+                    resources.add(resource)
+                    hashMap[resource.startStr!!] = resources
+                } else {
+                    hashMap[resource.startStr!!]?.add(resource)
                 }
             }
 
-            if (list.isNotEmpty()) {
-                for (listCalItem in listTemp) {
-                    val resources = list.filter { resource ->resource.startStr == listCalItem.timeString }
-
-                    if (!resources.isNullOrEmpty()) {
-                        listCalItem.listResource.addAll(resources)
-                    }
-                }
+            val listCalendarDto: ArrayList<CalendarDto> = arrayListOf()
+            for ((key, value) in hashMap) {
+                val calendarDto = CalendarDto(timeString = key)
+                calendarDto.listResource.clear()
+                calendarDto.listResource.addAll(value)
+                listCalendarDto.add(calendarDto)
             }
 
-            val dateTime = SimpleDateFormat(Constants.Format_api_datetime).parse(
-                listTemp[listTemp.size / 2].timeString ?: ""
-            )
-            val calendarList =
-                CalendarAgenda(SimpleDateFormat(Constants.MM_YYYY).format(dateTime), listTemp)
-            calendarList.hasData = true
+            val calendarList = CalendarAgenda(SimpleDateFormat(Constants.MM_YYYY).format(cal.time), listCalendarDto)
             repository.saveResourceList(calendarList)
         }
     }

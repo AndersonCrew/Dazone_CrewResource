@@ -8,6 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.kunpark.resource.R
 import com.kunpark.resource.dialog.DialogUtil
@@ -15,20 +17,39 @@ import com.kunpark.resource.model.AgendaItemType
 import com.kunpark.resource.model.CalendarDto
 import com.kunpark.resource.model.Resource
 import com.kunpark.resource.utils.Config
+import com.kunpark.resource.utils.Constants
 import com.kunpark.resource.view.add_schedule.AddScheduleActivity
+import java.text.SimpleDateFormat
+import java.util.*
 
+@Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class AgendaAdapter(var listCalendarDto: List<CalendarDto>, private val itemClick: (type: AgendaItemType, resource: Resource?) -> Unit): RecyclerView.Adapter<AgendaAdapter.AgendaViewHolder>() {
     class AgendaViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         private var tvDate: TextView?= null
         private var llResource: LinearLayout?= null
+        private var csItem: ConstraintLayout?= null
         init {
             tvDate = itemView.findViewById(R.id.tvDay)
             llResource = itemView.findViewById(R.id.llResource)
+            csItem = itemView.findViewById(R.id.csItem)
         }
 
         @SuppressLint("SimpleDateFormat")
         fun bindView(calendarDto: CalendarDto, itemClick: (type: AgendaItemType, resource: Resource?) -> Unit) {
-            tvDate?.text = calendarDto.day?.toString()
+            SimpleDateFormat("dd").format(SimpleDateFormat(Constants.YY_MM_DD).parse(calendarDto.timeString))
+            tvDate?.text = SimpleDateFormat("dd").format(SimpleDateFormat(Constants.YY_MM_DD).parse(calendarDto.timeString))
+            val srtToday = SimpleDateFormat(Constants.YY_MM_DD).format(Date(System.currentTimeMillis()))
+            csItem?.setBackgroundResource(if(srtToday == calendarDto.timeString) R.drawable.bg_today else R.drawable.bg_date_type_not_choosen)
+            val cal = Calendar.getInstance()
+            cal.time = SimpleDateFormat(Constants.YY_MM_DD).parse(calendarDto.timeString)
+            if(cal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+                tvDate?.setTextColor(ContextCompat.getColor(itemView.context, R.color.colorRed))
+            } else if(cal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
+                tvDate?.setTextColor(ContextCompat.getColor(itemView.context, R.color.colorAccent))
+            } else {
+                tvDate?.setTextColor(ContextCompat.getColor(itemView.context, R.color.colorText))
+            }
+
             llResource?.removeAllViews()
             if(!calendarDto.listResource.isNullOrEmpty()) {
                 for(src in calendarDto.listResource) {

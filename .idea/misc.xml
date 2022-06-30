@@ -4,13 +4,11 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="../../../Library/Android/sdk/platforms/android-31/data/res/layout/simple_spinner_item.xml" value="0.37604166666666666" />
-        <entry key="..\:/Users/admin/Documents/Anderson/Resource/app/src/main/res/layout/fragment_annually.xml" value="0.35052083333333334" />
-        <entry key="..\:/Users/admin/Documents/Anderson/Resource/app/src/main/res/layout/fragment_day_resource.xml" value="0.1" />
-        <entry key="..\:/Users/admin/Documents/Anderson/Resource/app/src/main/res/layout/fragment_monthly.xml" value="0.33" />
-        <entry key="..\:/Users/admin/Documents/Anderson/Resource/app/src/main/res/layout/fragment_week_resource.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/bg_allday.xml" value="0.1535" />
         <entry key="app/src/main/res/drawable/bg_allday_week.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/bg_date_type_not_choosen.xml" value="0.285" />
+        <entry key="app/src/main/res/drawable/bg_today.xml" value="0.285" />
+        <entry key="app/src/main/res/drawable/bg_today_agenda.xml" value="0.285" />
         <entry key="app/src/main/res/drawable/tab_color_selector.xml" value="0.285" />
         <entry key="app/src/main/res/layout/activity_add_schedule.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/layout/activity_detail_schedule.xml" value="0.37604166666666666" />

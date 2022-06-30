@@ -112,7 +112,7 @@ class CalendarWeekFragment : BaseFragment() {
                     }
 
                     override fun onPageSelected(position: Int) {
-                        Event.onPageWeekChange(getStrFromCalendar(list[position]))
+                        Event.onTitleDateChange(getStrFromCalendar(list[position]))
                     }
 
                 })
@@ -151,7 +151,7 @@ class CalendarWeekFragment : BaseFragment() {
         it[Event.MOVE_TODAY]?.let {
             if (isResumed && !list.isNullOrEmpty()) {
                 vpCalendar?.currentItem = todayPosition
-                Event.onPageWeekChange(getStrFromCalendar(list[todayPosition]))
+                Event.onTitleDateChange(getStrFromCalendar(list[todayPosition]))
             }
         }
     }

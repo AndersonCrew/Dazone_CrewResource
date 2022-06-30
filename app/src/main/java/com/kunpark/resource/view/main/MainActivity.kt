@@ -176,28 +176,7 @@ class MainActivity : BaseActivity() {
     override fun onEventReceive(it: Map<String, Any?>) {
         super.onEventReceive(it)
 
-        it[Event.PAGE_MONTH_CHANGE]?.let {
-            val strDay = (it as String).split("-")
-            if(strDay.size == 3) {
-                val day = Integer.parseInt(strDay[0])
-                val month = Integer.parseInt(strDay[1])
-                val year = Integer.parseInt(strDay[2])
-                val cal = Calendar.getInstance()
-                cal.set(Calendar.YEAR, year)
-                cal.set(Calendar.MONTH, month)
-                cal.set(Calendar.DAY_OF_MONTH, day)
-                tvTitle?.text = CalendarType.getStrDate(currentConditionType, cal?: Calendar.getInstance())
-            }
-        }
-
-        it[Event.PAGE_DAY_CHANGE]?.let {
-            val strDay = (it as String)
-            val cal = Calendar.getInstance()
-            cal.time = SimpleDateFormat("dd/MM/yyyy").parse(strDay)
-            tvTitle?.text = CalendarType.getStrDate(currentConditionType, cal?: Calendar.getInstance())
-        }
-
-        it[Event.PAGE_WEEK_CHANGE]?.let {
+        it[Event.PAGE_TITLE_DATE_CHANGE]?.let {
             tvTitle?.text = it.toString()
         }
     }

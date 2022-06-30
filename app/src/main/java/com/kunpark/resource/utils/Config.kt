@@ -17,6 +17,6 @@ object Config {
     const val VERSION_DB = 1
     const val COUNT_YEAR = 200
     const val COLUMN_AGENDA = 7
-    const val ROW = 6
+    const val ROW = 5
     const val COUNT_DAY_OF_AGENDA = 42
 }

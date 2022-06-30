@@ -2,6 +2,7 @@ package com.kunpark.resource.view.main.agenda
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +10,7 @@ import androidx.viewpager.widget.ViewPager
 import com.kunpark.resource.R
 import com.kunpark.resource.base.BaseFragment
 import com.kunpark.resource.event.Event
+import com.kunpark.resource.utils.Constants
 import com.kunpark.resource.utils.Utils
 import com.kunpark.resource.view.main.AgendaPagerAdapter
 import com.kunpark.resource.view.main.CalendarAgendaPagerAdapter
@@ -32,6 +34,13 @@ class CalendarAgendaFragment : BaseFragment() {
         return root
     }
 
+    override fun onResume() {
+        super.onResume()
+        if(isResumed && !list.isNullOrEmpty()) {
+            Event.onTitleDateChange(getStrCalendar(list[todayPosition]))
+        }
+    }
+
     private fun initView(rootView: View) {
 
         val scope = CoroutineScope(Dispatchers.IO + Job())
@@ -45,17 +54,12 @@ class CalendarAgendaFragment : BaseFragment() {
             startCal.set(Calendar.MONTH, 0)
             startCal.set(Calendar.YEAR, currentYear - 6)
 
-            val endCal = Calendar.getInstance()
-
-            endCal.set(Calendar.MONTH, 11)
-            endCal.set(Calendar.YEAR, currentYear + 2)
-            endCal.set(Calendar.DAY_OF_MONTH, endCal.getActualMaximum(Calendar.DAY_OF_MONTH))
 
             list = arrayListOf()
-            for (i in 0 until 12 * 8) {
-                val calPosition = Calendar.getInstance()
+            for (i in 0 until 12 * 10) {
+                val calPosition: Calendar = Calendar.getInstance()
                 calPosition.time = startCal.time
-                calPosition.add(Calendar.MONTH, 1)
+                calPosition.add(Calendar.MONTH, i)
                 list.add(calPosition)
 
                 if (todayPosition == 0) {
@@ -70,6 +74,9 @@ class CalendarAgendaFragment : BaseFragment() {
                 )
                 vpCalendar?.currentItem = todayPosition
                 vpCalendar?.offscreenPageLimit = 2
+                if(isResumed) {
+                    Event.onTitleDateChange(getStrCalendar(list[todayPosition]))
+                }
 
                 vpCalendar?.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
                     override fun onPageScrollStateChanged(state: Int) {
@@ -85,40 +92,17 @@ class CalendarAgendaFragment : BaseFragment() {
                     }
 
                     override fun onPageSelected(position: Int) {
-                        Event.onPageMonthChange(Utils.getStrDateFromPosition(list[position]))
+                        Event.onTitleDateChange(getStrCalendar(list[position]))
                     }
 
                 })
             }
         }
+    }
 
-
-        /*vpCalendar = rootView.findViewById(R.id.vpCalendar)
-        vpCalendar?.adapter = AgendaPagerAdapter(
-            parentFragmentManager
-        )
-        val cal = Calendar.getInstance()
-        vpCalendar?.currentItem = Utils.getPositionAgendaFromCalendar(cal)
-        vpCalendar?.offscreenPageLimit = 2
-
-        vpCalendar?.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-            override fun onPageScrollStateChanged(state: Int) {
-
-            }
-
-            override fun onPageScrolled(
-                position: Int,
-                positionOffset: Float,
-                positionOffsetPixels: Int
-            ) {
-
-            }
-
-            override fun onPageSelected(position: Int) {
-                Event.onPageMonthChange(Utils.getStrDateFromPosition(position))
-            }
-
-        })*/
+    @SuppressLint("SimpleDateFormat")
+    private fun getStrCalendar(calendar: Calendar): String {
+        return SimpleDateFormat("MM-yyyy").format(calendar.time)
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -131,14 +115,21 @@ class CalendarAgendaFragment : BaseFragment() {
         ) {
             todayPosition = i
             vpCalendar?.currentItem = i
+            Log.d("ANDERSON", "todayPosition = $todayPosition \n timeStr = ${SimpleDateFormat("MM/yyyy").format(calPosition.time)}")
         }
+
+        Log.d("ANDERSON", "CHECK position = ${SimpleDateFormat("MM/yyyy").format(calPosition.time)}")
     }
 
     override fun onEventReceive(it: Map<String, Any?>) {
         super.onEventReceive(it)
 
         it[Event.MOVE_TODAY]?.let {
-            vpCalendar?.currentItem = Utils.getPositionAgendaFromCalendar(Calendar.getInstance())
+            vpCalendar?.currentItem = todayPosition
+        }
+
+        it[Event.ON_PAGE_MAIN_CHANGED]?.let {
+            Event.onTitleDateChange(getStrCalendar(list[vpCalendar?.currentItem?: todayPosition]))
         }
     }
 }

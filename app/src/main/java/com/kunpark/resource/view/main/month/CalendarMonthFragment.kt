@@ -52,7 +52,7 @@ class CalendarMonthFragment : BaseFragment() {
             }
 
             override fun onPageSelected(position: Int) {
-                Event.onPageMonthChange(Utils.getStrDateFromPosition(cal))
+                Event.onTitleDateChange(Utils.getStrDateFromPosition(cal))
             }
 
         })
