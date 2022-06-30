@@ -3,9 +3,12 @@ package com.kunpark.resource.view.add_schedule
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TableLayout
 import androidx.activity.viewModels
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.viewpager.widget.ViewPager
 import com.google.gson.JsonObject
 import com.kunpark.resource.R
 import com.kunpark.resource.base.BaseActivity
@@ -40,8 +43,40 @@ class AddScheduleActivity : BaseActivity() {
             val intent = Intent(this, OrganizationalChartActivity::class.java)
             startActivityForResult(intent, Constants.REQUEST_CODE_ORGANIZATION)
         }
+        changeLayoutParams(0)
+
+        vpTab?.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+            override fun onPageScrolled(
+                position: Int,
+                positionOffset: Float,
+                positionOffsetPixels: Int
+            ) {
+
+            }
+
+            override fun onPageSelected(position: Int) {
+                changeLayoutParams(position)
+            }
+
+            override fun onPageScrollStateChanged(state: Int) {
+
+            }
+
+        })
 
 
+    }
+
+    private fun changeLayoutParams(position: Int) {
+        val height = when(position) {
+            0 -> 550
+            1 -> 650
+            2 -> 800
+            3 -> 800
+            else -> 850
+        }
+        val params = ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, height)
+        vpTab?.layoutParams = params
     }
 
     override fun initView() {

@@ -93,10 +93,7 @@ class CalendarWeekFragment : BaseFragment() {
                         parentFragmentManager
                     )
 
-                vpCalendar?.currentItem = todayPosition
                 vpCalendar?.offscreenPageLimit = 2
-
-
 
                 vpCalendar?.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
                     override fun onPageScrollStateChanged(state: Int) {
@@ -121,7 +118,6 @@ class CalendarWeekFragment : BaseFragment() {
             }
 
         }
-
     }
 
     @SuppressLint("SimpleDateFormat")

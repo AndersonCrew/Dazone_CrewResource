@@ -2,25 +2,14 @@ package com.kunpark.resource.custom_view
 
 import android.content.Context
 import android.util.AttributeSet
+import android.view.View
 import androidx.viewpager.widget.ViewPager
 
 class WrapContentViewPager : ViewPager {
-    constructor(context: Context?) : super(context!!) {
-        initPageChangeListener()
-    }
+    constructor(context: Context?) : super(context!!) {}
     constructor(context: Context?, attrs: AttributeSet?) : super(
-        context!!,
-        attrs
+        context!!, attrs
     ) {
-        initPageChangeListener()
-    }
-
-    private fun initPageChangeListener() {
-        addOnPageChangeListener(object : SimpleOnPageChangeListener() {
-            override fun onPageSelected(position: Int) {
-                requestLayout()
-            }
-        })
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -33,13 +22,15 @@ class WrapContentViewPager : ViewPager {
             super.onMeasure(widthMeasureSpec, heightMeasureSpec)
             var height = 0
             for (i in 0 until childCount) {
-                val child = getChildAt(i)
+                val child: View = getChildAt(i)
                 child.measure(
                     widthMeasureSpec,
                     MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
                 )
-                val h = child.measuredHeight
-                if (h > height) height = h
+                val childMeasuredHeight: Int = child.getMeasuredHeight()
+                if (childMeasuredHeight > height) {
+                    height = childMeasuredHeight
+                }
             }
             heightMeasureSpec = MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY)
         }
