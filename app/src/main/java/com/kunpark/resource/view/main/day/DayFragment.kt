@@ -16,6 +16,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.core.view.children
+import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.viewModels
 import com.google.gson.JsonObject
 import com.kunpark.resource.R
@@ -31,6 +32,7 @@ import java.util.*
 
 class DayFragment(private val calendar: Calendar): BaseFragment() {
     private var llTime: LinearLayout?= null
+    private var scrollView: NestedScrollView?= null
     private val viewModel: CalendarDayViewModel by viewModels()
     private var hasCallRefreshData = false
     override fun onCreateView(

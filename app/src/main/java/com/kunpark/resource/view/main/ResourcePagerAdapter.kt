@@ -30,20 +30,13 @@ class AgendaPagerAdapter(fragmentManager: FragmentManager): FragmentStatePagerAd
     }
 }
 
-class CalendarMonthPagerAdapter(fragmentManager: FragmentManager): FragmentStatePagerAdapter(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
+class CalendarMonthPagerAdapter(private val list: ArrayList<Calendar>, fragmentManager: FragmentManager): FragmentStatePagerAdapter(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
     override fun getItem(position: Int): Fragment {
-        val cal = Calendar.getInstance()
-        val currentYear = cal.get(Calendar.YEAR)
-        val lastFirst = currentYear - 100
-        val positionMonth = position % 12
-        val positionYear = position / 12
-
-        cal.set(positionYear + lastFirst, positionMonth, 1)
-        return MonthFragment(cal)
+        return MonthFragment(list[position])
     }
 
     override fun getCount(): Int {
-        return Config.COUNT_YEAR * 12
+        return list.size
     }
 }
 

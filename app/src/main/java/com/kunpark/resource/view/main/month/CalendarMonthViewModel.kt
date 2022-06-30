@@ -9,10 +9,7 @@ import com.google.gson.JsonObject
 import com.google.gson.internal.LinkedTreeMap
 import com.google.gson.reflect.TypeToken
 import com.kunpark.resource.base.BaseViewModel
-import com.kunpark.resource.model.CalendarDto
-import com.kunpark.resource.model.CalendarMonth
-import com.kunpark.resource.model.ConditionSearch
-import com.kunpark.resource.model.Resource
+import com.kunpark.resource.model.*
 import com.kunpark.resource.services.Result
 import com.kunpark.resource.utils.Constants
 import kotlinx.coroutines.Dispatchers
@@ -33,7 +30,7 @@ class CalendarMonthViewModel : BaseViewModel() {
         return repository.getResourceDB(month)
     }
 
-    fun getAllResource(params: JsonObject, month: String) =
+    fun getAllResource(params: JsonObject, cal: Calendar) =
         viewModelScope.launch(
             Dispatchers.IO
         ) {
@@ -50,7 +47,7 @@ class CalendarMonthViewModel : BaseViewModel() {
                             json,
                             object : TypeToken<List<Resource>>() {}.type
                         )
-                        list?.let { checkAddListResource(list, month) }
+                        list?.let { checkAddListResource(list, cal) }
                     } else {
                         val error: LinkedTreeMap<String, Any> =
                             body["error"] as LinkedTreeMap<String, Any>
@@ -66,30 +63,30 @@ class CalendarMonthViewModel : BaseViewModel() {
         }
 
     @SuppressLint("SimpleDateFormat")
-    private fun checkAddListResource(
-        list: List<Resource>,
-        month: String
-    ) {
+    private fun checkAddListResource(list: List<Resource>, cal: Calendar) {
         uiScope.launch(Dispatchers.IO) {
-            val cal = Calendar.getInstance()
-            cal.time = SimpleDateFormat(Constants.MM_YYYY).parse(month)
-            val countDay = cal.getActualMaximum(Calendar.DAY_OF_MONTH)
-            val listCalendarDto: ArrayList<CalendarDto> = arrayListOf()
-            for(i in 1 until countDay) {
-                cal.set(Calendar.DATE, 1)
-                cal.add(Calendar.DATE, i - 1)
-                val startDate = SimpleDateFormat(Constants.Format_api_datetime).format(cal.time)
-                val resources = list.filter { src -> src.startStr == startDate }
 
-                if(!resources.isNullOrEmpty()) {
-                    val calendarDto = CalendarDto(i, cal.get(Calendar.MONTH) + 1, cal.get(Calendar.YEAR), startDate)
-                    calendarDto.listResource.addAll(resources)
-                    listCalendarDto.add(calendarDto)
+            val hashMap: java.util.HashMap<String, ArrayList<Resource>> = hashMapOf()
+            for(resource in list) {
+                if(!hashMap.containsKey(resource.startStr)) {
+                    val resources: ArrayList<Resource> = arrayListOf()
+                    resources.add(resource)
+                    hashMap[resource.startStr!!] = resources
+                } else {
+                    hashMap[resource.startStr!!]?.add(resource)
                 }
             }
 
-            val calendarMonth = CalendarMonth(month, listCalendarDto)
-            repository.saveCalendarMonth(calendarMonth)
+            val listCalendarDto: ArrayList<CalendarDto> = arrayListOf()
+            for ((key, value) in hashMap) {
+                val calendarDto = CalendarDto(timeString = key)
+                calendarDto.listResource.clear()
+                calendarDto.listResource.addAll(value)
+                listCalendarDto.add(calendarDto)
+            }
+
+            val calendarList = CalendarMonth(SimpleDateFormat(Constants.MM_YYYY).format(cal.time), listCalendarDto)
+            repository.saveCalendarMonth(calendarList)
         }
     }
 }

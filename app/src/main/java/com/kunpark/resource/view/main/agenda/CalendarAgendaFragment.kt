@@ -5,19 +5,18 @@ import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.OnTouchListener
 import android.view.ViewGroup
 import androidx.viewpager.widget.ViewPager
 import com.kunpark.resource.R
 import com.kunpark.resource.base.BaseFragment
 import com.kunpark.resource.event.Event
-import com.kunpark.resource.utils.Constants
-import com.kunpark.resource.utils.Utils
-import com.kunpark.resource.view.main.AgendaPagerAdapter
 import com.kunpark.resource.view.main.CalendarAgendaPagerAdapter
 import com.prabhat1707.verticalpager.VerticalViewPager
 import kotlinx.coroutines.*
 import java.text.SimpleDateFormat
 import java.util.*
+
 
 class CalendarAgendaFragment : BaseFragment() {
 
@@ -41,6 +40,7 @@ class CalendarAgendaFragment : BaseFragment() {
         }
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private fun initView(rootView: View) {
 
         val scope = CoroutineScope(Dispatchers.IO + Job())
@@ -72,7 +72,10 @@ class CalendarAgendaFragment : BaseFragment() {
                 vpCalendar?.adapter = CalendarAgendaPagerAdapter(list,
                     parentFragmentManager
                 )
-                vpCalendar?.currentItem = todayPosition
+                if(todayPosition != 0) {
+                    vpCalendar?.currentItem = todayPosition
+                }
+
                 vpCalendar?.offscreenPageLimit = 2
                 if(isResumed) {
                     Event.onTitleDateChange(getStrCalendar(list[todayPosition]))
@@ -92,7 +95,9 @@ class CalendarAgendaFragment : BaseFragment() {
                     }
 
                     override fun onPageSelected(position: Int) {
-                        Event.onTitleDateChange(getStrCalendar(list[position]))
+                        if(isResumed) {
+                            Event.onTitleDateChange(getStrCalendar(list[position]))
+                        }
                     }
 
                 })
@@ -126,10 +131,6 @@ class CalendarAgendaFragment : BaseFragment() {
 
         it[Event.MOVE_TODAY]?.let {
             vpCalendar?.currentItem = todayPosition
-        }
-
-        it[Event.ON_PAGE_MAIN_CHANGED]?.let {
-            Event.onTitleDateChange(getStrCalendar(list[vpCalendar?.currentItem?: todayPosition]))
         }
     }
 }

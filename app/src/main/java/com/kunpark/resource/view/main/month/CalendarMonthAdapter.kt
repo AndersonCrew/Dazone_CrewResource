@@ -18,7 +18,8 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class CalendarMonthAdapter(var listResource: ArrayList<CalendarDto>, private val listener: (Resource) -> Unit): RecyclerView.Adapter<CalendarMonthAdapter.CalendarMonthViewHolder>() {
+@Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
+class CalendarMonthAdapter(private var listResource: List<CalendarDto>, private val listener: (Resource) -> Unit): RecyclerView.Adapter<CalendarMonthAdapter.CalendarMonthViewHolder>() {
 
     class CalendarMonthViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         private var tvDay: TextView?= null
@@ -33,9 +34,7 @@ class CalendarMonthAdapter(var listResource: ArrayList<CalendarDto>, private val
 
         @SuppressLint("SetTextI18n", "SimpleDateFormat")
         fun bind(calendarDTO: CalendarDto, listener: (Resource) -> Unit) {
-            val day = if(calendarDTO.day?: 0 < 10) "0${calendarDTO.day?:0}" else calendarDTO.day?: 0
-            tvDay?.text = day.toString()
-            tvStrDay?.text = "Thu"
+            tvDay?.text = SimpleDateFormat("dd").format(SimpleDateFormat(Constants.YY_MM_DD).parse(calendarDTO.timeString))
 
             if(!calendarDTO.listResource.isNullOrEmpty()) {
                 val date = SimpleDateFormat(Constants.Format_api_datetime).parse(calendarDTO.listResource[0].startStr)
@@ -71,12 +70,6 @@ class CalendarMonthAdapter(var listResource: ArrayList<CalendarDto>, private val
                 llListResource?.addView(view)
             }
         }
-    }
-
-    fun updateList(list: List<CalendarDto>) {
-        listResource = arrayListOf()
-        listResource.addAll(list)
-        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CalendarMonthViewHolder {

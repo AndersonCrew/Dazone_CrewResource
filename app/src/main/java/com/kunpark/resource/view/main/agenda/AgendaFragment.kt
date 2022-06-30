@@ -52,7 +52,7 @@ class AgendaFragment(private val calendar: Calendar) : BaseFragment() {
     override fun onResume() {
         super.onResume()
 
-        if(!list.isNullOrEmpty()) {
+        if(!list.isNullOrEmpty() && ::adapter.isInitialized) {
             val monthYear = SimpleDateFormat(Constants.MM_YYYY).format(calendar.time)
             viewModel.getResourceBDByMonth(monthYear)
                 ?.observe(requireActivity(), androidx.lifecycle.Observer {

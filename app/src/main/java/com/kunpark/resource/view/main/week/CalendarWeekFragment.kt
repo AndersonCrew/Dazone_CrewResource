@@ -11,11 +11,13 @@ import androidx.viewpager.widget.ViewPager
 import com.kunpark.resource.R
 import com.kunpark.resource.base.BaseFragment
 import com.kunpark.resource.event.Event
+import com.kunpark.resource.utils.Constants
 import com.kunpark.resource.utils.DialogUtil
 import com.kunpark.resource.utils.Utils
 import com.kunpark.resource.view.main.CalendarWeekPagerAdapter
 import com.prabhat1707.verticalpager.VerticalViewPager
 import kotlinx.coroutines.*
+import java.text.SimpleDateFormat
 import java.util.*
 
 class CalendarWeekFragment : BaseFragment() {
@@ -35,10 +37,8 @@ class CalendarWeekFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-        if (isResumed && todayPosition == 0) {
-            DialogUtil.displayLoadingWithText(requireContext(), "Please wait...", false)
-        } else {
-            DialogUtil.hideLoading()
+        if(isResumed && !list.isNullOrEmpty()) {
+            Event.onTitleDateChange(getStrFromCalendar(list[todayPosition]))
         }
     }
 
@@ -112,7 +112,9 @@ class CalendarWeekFragment : BaseFragment() {
                     }
 
                     override fun onPageSelected(position: Int) {
-                        Event.onTitleDateChange(getStrFromCalendar(list[position]))
+                        if(isResumed) {
+                            Event.onTitleDateChange(getStrFromCalendar(list[position]))
+                        }
                     }
 
                 })
@@ -137,22 +139,16 @@ class CalendarWeekFragment : BaseFragment() {
         }
     }
 
+    @SuppressLint("SimpleDateFormat")
     private fun getStrFromCalendar(calendar: Calendar): String {
-        val month = if (calendar.get(Calendar.MONTH).toString().length == 1) {
-            "0" + calendar.get(Calendar.MONTH).toString()
-        } else calendar.get(Calendar.MONTH).toString()
-
-        return "$month-${calendar.get(Calendar.YEAR)}"
+        return SimpleDateFormat(Constants.MM_YYYY).format(calendar.time)
     }
 
     override fun onEventReceive(it: Map<String, Any?>) {
         super.onEventReceive(it)
 
         it[Event.MOVE_TODAY]?.let {
-            if (isResumed && !list.isNullOrEmpty()) {
-                vpCalendar?.currentItem = todayPosition
-                Event.onTitleDateChange(getStrFromCalendar(list[todayPosition]))
-            }
+            vpCalendar?.currentItem = todayPosition
         }
     }
 }

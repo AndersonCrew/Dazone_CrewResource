@@ -40,11 +40,8 @@ class CalendarDayFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-        if (isResumed && todayPosition == 0) {
-            DialogUtil.displayLoadingWithText(requireContext(), "Please wait...", false)
+        if(isResumed && !list.isNullOrEmpty()) {
             Event.onTitleDateChange(getStrCalendar(list[todayPosition]))
-        } else {
-            DialogUtil.hideLoading()
         }
     }
 
@@ -120,7 +117,9 @@ class CalendarDayFragment : BaseFragment() {
                     }
 
                     override fun onPageSelected(position: Int) {
-                        Event.onTitleDateChange(getStrCalendar(list[todayPosition]))
+                        if(isResumed) {
+                            Event.onTitleDateChange(getStrCalendar(list[position]))
+                        }
                     }
 
                 })
@@ -159,13 +158,7 @@ class CalendarDayFragment : BaseFragment() {
         super.onEventReceive(it)
 
         it[Event.MOVE_TODAY]?.let {
-            if (isResumed && !list.isNullOrEmpty()) {
-                vpCalendar?.currentItem = todayPosition
-            }
-        }
-
-        it[Event.ON_PAGE_MAIN_CHANGED]?.let {
-            Event.onTitleDateChange(getStrCalendar(list[vpCalendar?.currentItem?: todayPosition]))
+            vpCalendar?.currentItem = todayPosition
         }
     }
 }
