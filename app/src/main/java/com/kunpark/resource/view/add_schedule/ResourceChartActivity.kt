@@ -7,18 +7,16 @@ import com.google.gson.JsonObject
 import com.kunpark.resource.R
 import com.kunpark.resource.base.BaseActivity
 import com.kunpark.resource.model.Organization
-import com.kunpark.resource.model.Resource
 import com.kunpark.resource.utils.Constants
 import com.kunpark.resource.utils.DazoneApplication
 import com.kunpark.resource.utils.TimeUtils
 import com.kunpark.resource.utils.UtilsViewModel
 import kotlinx.android.synthetic.main.activity_organizaion.*
 import java.util.*
-import kotlin.collections.ArrayList
 
-class OrganizationalChartActivity: BaseActivity() {
+class ResourceChartActivity: BaseActivity() {
     private val viewModel: UtilsViewModel by viewModels()
-    private lateinit var adapter: OrganizationAdapter
+    private lateinit var adapter: ResourceChartAdapter
     override fun initView() {
 
     }
@@ -44,7 +42,7 @@ class OrganizationalChartActivity: BaseActivity() {
     }
 
     private fun setUpRecyclerView(list: List<Organization>) {
-        adapter = OrganizationAdapter(list) {
+        adapter = ResourceChartAdapter(list) {
                 val intent = Intent()
                 intent.putExtra(Constants.ORGANIZATION, it)
                 setResult(Constants.REQUEST_CODE_ORGANIZATION, intent)

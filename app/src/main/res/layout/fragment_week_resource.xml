@@ -161,19 +161,12 @@
     </LinearLayout>
 
 
-    <ScrollView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvWeek"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:fillViewport="true"
-        android:scrollbars="none"
+        android:orientation="vertical"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/llDay">
-
-        <LinearLayout
-            android:id="@+id/llTime"
-            android:orientation="horizontal"
-            android:weightSum="8"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-    </ScrollView>
+        app:layout_constraintTop_toBottomOf="@id/llDay"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

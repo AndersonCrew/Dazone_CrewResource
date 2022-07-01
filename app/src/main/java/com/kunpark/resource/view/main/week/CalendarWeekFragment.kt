@@ -124,8 +124,8 @@ class CalendarWeekFragment : BaseFragment() {
     private fun checkCurrentPosition() {
         val scope = CoroutineScope(Dispatchers.IO + Job())
         scope.launch {
-            list.filter { it.time.before(Date(System.currentTimeMillis())) }.max()?.let {
-                todayPosition = list.indexOf(it)
+            list.filter { it.time.before(Date(System.currentTimeMillis())) }.maxByOrNull { it.time }?.let {
+                todayPosition = list.indexOf(it) 
                 withContext(Dispatchers.Main) {
                     DialogUtil.hideLoading()
                     vpCalendar?.currentItem = todayPosition

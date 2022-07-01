@@ -1,6 +1,7 @@
 package com.kunpark.resource.view.main.week
 
 import android.annotation.SuppressLint
+import androidx.core.graphics.scaleMatrix
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
@@ -16,6 +17,7 @@ import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 class CalendarWeekViewModel : BaseViewModel() {
 
@@ -65,27 +67,24 @@ class CalendarWeekViewModel : BaseViewModel() {
     private fun checkAddListResource(list: List<Resource>, calendar: Calendar) {
         uiScope.launch(Dispatchers.IO) {
             val listCalendarDto: ArrayList<CalendarDto> = arrayListOf()
-            for(i in 0 until 7) {
-                val calendarDto = CalendarDto()
-                val resourcesI: ArrayList<Resource> = arrayListOf()
-                val cal = Calendar.getInstance()
-                cal.time = calendar.time
-                cal.add(Calendar.DAY_OF_MONTH, i)
-
-                for(resource in list) {
-                    if(resource.startStr == SimpleDateFormat(Constants.YY_MM_DD).format(cal.time) && !resourcesI.contains(resource)) {
-                        resourcesI.add(resource)
+            for(i in -1 until 25) {
+                if(i == -1) {
+                    val calendarDto = CalendarDto(timeString = "All Day")
+                    calendarDto.listResource = ArrayList(list.filter { it.allDay == true })
+                    listCalendarDto.add(calendarDto)
+                } else {
+                    val time = if(i < 10) {
+                        "0$i:00"
+                    } else {
+                        "$i:00"
                     }
-                }
-
-                if(!resourcesI.isNullOrEmpty()) {
-                    calendarDto.timeString = SimpleDateFormat(Constants.YY_MM_DD).format(cal.time)
-                    calendarDto.listResource.clear()
-                    calendarDto.listResource.addAll(resourcesI)
+                    val calendarDto = CalendarDto(timeString = time)
+                    calendarDto.listResource = ArrayList(list.filter {
+                        it.startTime?.split(":")?.get(0)?.toInt() ==  i
+                    })
                     listCalendarDto.add(calendarDto)
                 }
             }
-
 
             val calendarWeek = CalendarWeek(SimpleDateFormat(Constants.YY_MM_DD).format(calendar.time), listCalendarDto)
             repository.saveResourceList(calendarWeek)

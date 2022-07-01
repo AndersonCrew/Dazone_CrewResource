@@ -10,10 +10,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.kunpark.resource.R
 import com.kunpark.resource.model.Organization
 
-class OrganizationAdapter(
+class ResourceChartAdapter(
     private val list: List<Organization>,
     private val onChosen: (Organization) -> Unit
-) : RecyclerView.Adapter<OrganizationAdapter.OrganizationViewHolder>() {
+) : RecyclerView.Adapter<ResourceChartAdapter.OrganizationViewHolder>() {
 
     class OrganizationViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
          var llParent: ConstraintLayout? = null
@@ -45,7 +45,7 @@ class OrganizationAdapter(
         if (!list.isNullOrEmpty()) {
             val organization = list[position]
             if (!organization.resourceTrees.isNullOrEmpty()) {
-                holder.rvChild?.adapter = OrganizationAdapter(organization.resourceTrees) {
+                holder.rvChild?.adapter = ResourceChartAdapter(organization.resourceTrees) {
                     onChosen.invoke(it)
                 }
             }

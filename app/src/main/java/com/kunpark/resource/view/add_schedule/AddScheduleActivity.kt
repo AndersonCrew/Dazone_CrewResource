@@ -36,7 +36,7 @@ class AddScheduleActivity : BaseActivity() {
         tabLayout?.setupWithViewPager(vpTab)
 
         tvResource?.setOnClickListener {
-            val intent = Intent(this, OrganizationalChartActivity::class.java)
+            val intent = Intent(this, ResourceChartActivity::class.java)
             startActivityForResult(intent, Constants.REQUEST_CODE_ORGANIZATION)
         }
         changeLayoutParams(0)
