@@ -49,6 +49,10 @@ abstract class BaseActivity: AppCompatActivity() {
             .subscribe { onEventReceive(it) }
             .addTo(eventDisposable)
 
+        initView()
+        initEvent()
+        initViewModel()
+
     }
 
     open fun onEventReceive(it: Map<String, Any?>) {
@@ -65,14 +69,6 @@ abstract class BaseActivity: AppCompatActivity() {
     override fun onDestroy() {
         dismissProgressDialog()
         super.onDestroy()
-    }
-
-
-    override fun onResume() {
-        super.onResume()
-        initView()
-        initEvent()
-        initViewModel()
     }
 
     abstract fun initView()

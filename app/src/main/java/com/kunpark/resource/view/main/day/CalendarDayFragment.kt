@@ -40,7 +40,7 @@ class CalendarDayFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-        if(isResumed && !list.isNullOrEmpty()) {
+        if(isAdded && ::list.isInitialized && !list.isNullOrEmpty()) {
             Event.onTitleDateChange(getStrCalendar(list[todayPosition]))
         }
     }
@@ -56,7 +56,7 @@ class CalendarDayFragment : BaseFragment() {
             val startCal = Calendar.getInstance()
             startCal.set(Calendar.DAY_OF_MONTH, 1)
             startCal.set(Calendar.MONTH, 0)
-            startCal.set(Calendar.YEAR, currentYear - 6)
+            startCal.set(Calendar.YEAR, currentYear - 3)
 
             val endCal = Calendar.getInstance()
 

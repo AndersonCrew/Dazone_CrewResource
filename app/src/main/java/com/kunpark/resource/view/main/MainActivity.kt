@@ -17,6 +17,7 @@ import com.bumptech.glide.Glide
 import com.google.gson.JsonObject
 import com.kunpark.resource.R
 import com.kunpark.resource.base.BaseActivity
+import com.kunpark.resource.databinding.ActivityMainBinding
 import com.kunpark.resource.event.Event
 import com.kunpark.resource.model.CalendarType
 import com.kunpark.resource.model.ConditionSearch
@@ -48,14 +49,19 @@ class MainActivity : BaseActivity() {
     private var currentConditionType = CalendarType.AGENDA
     private var currentCal = Calendar.getInstance()
     private var adapter: ConditionSearchAdapter?= null
+    private var binding: ActivityMainBinding?= null
 
     @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding?.root)
+        initViewControl()
+        initEventControl()
+        initViewModelControl()
     }
 
-    override fun initEvent() {
+    private fun initEventControl() {
         imgSetting?.setOnClickListener {
             callActivity(SettingActivity::class.java)
         }
@@ -84,7 +90,7 @@ class MainActivity : BaseActivity() {
     }
 
     @SuppressLint("SimpleDateFormat")
-    override fun initView() {
+    private fun initViewControl() {
         imgAvatar = findViewById(R.id.imgAvatar)
         tvFullName = findViewById(R.id.tvName)
         tvKoreanName = findViewById(R.id.tvKoreanName)
@@ -94,11 +100,11 @@ class MainActivity : BaseActivity() {
         icDropDown = findViewById(R.id.icDropDown)
 
         tvTitle?.text = SimpleDateFormat(Constants.MM_YYYY).format(Calendar.getInstance().time)
-        vpMain?.adapter = MainAdapter(supportFragmentManager)
-        vpMain?.offscreenPageLimit = 4
+        vpMain?.adapter = MainAdapter(this)
+        vpMain?.offscreenPageLimit = 1
     }
 
-    override fun initViewModel() {
+    private fun initViewModelControl() {
         homeViewModel.getUser()?.observe(this, Observer {
             it?.let {
                 bindData(it)
@@ -161,5 +167,17 @@ class MainActivity : BaseActivity() {
         it[Event.PAGE_TITLE_DATE_CHANGE]?.let {
             tvTitle?.text = it.toString()
         }
+    }
+
+    override fun initView() {
+
+    }
+
+    override fun initEvent() {
+
+    }
+
+    override fun initViewModel() {
+
     }
 }

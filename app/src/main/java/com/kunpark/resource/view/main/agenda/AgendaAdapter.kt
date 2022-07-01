@@ -45,7 +45,7 @@ class AgendaAdapter(var listCalendarDto: List<CalendarDto>, private val itemClic
             if(cal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
                 tvDate?.setTextColor(ContextCompat.getColor(itemView.context, R.color.colorRed))
             } else if(cal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
-                tvDate?.setTextColor(ContextCompat.getColor(itemView.context, R.color.colorAccent))
+                tvDate?.setTextColor(ContextCompat.getColor(itemView.context, R.color.colorPrimary))
             } else {
                 tvDate?.setTextColor(ContextCompat.getColor(itemView.context, R.color.colorText))
             }

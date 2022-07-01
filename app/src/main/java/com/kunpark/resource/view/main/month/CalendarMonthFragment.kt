@@ -36,7 +36,7 @@ class CalendarMonthFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-        if(isResumed && !list.isNullOrEmpty()) {
+        if(isAdded && ::list.isInitialized && !list.isNullOrEmpty()) {
             Event.onTitleDateChange(getStrCalendar(list[todayPosition]))
         }
     }
@@ -52,11 +52,11 @@ class CalendarMonthFragment : BaseFragment() {
             val startCal = Calendar.getInstance()
             startCal.set(Calendar.DAY_OF_MONTH, 1)
             startCal.set(Calendar.MONTH, 0)
-            startCal.set(Calendar.YEAR, currentYear - 6)
+            startCal.set(Calendar.YEAR, currentYear - 3)
 
 
             list = arrayListOf()
-            for (i in 0 until 12 * 10) {
+            for (i in 0 until 12 * 5) {
                 val calPosition: Calendar = Calendar.getInstance()
                 calPosition.time = startCal.time
                 calPosition.add(Calendar.MONTH, i)
@@ -76,7 +76,7 @@ class CalendarMonthFragment : BaseFragment() {
                     vpCalendar?.currentItem = todayPosition
                 }
 
-                vpCalendar?.offscreenPageLimit = 2
+                vpCalendar?.offscreenPageLimit = 1
                 if(isResumed) {
                     Event.onTitleDateChange(getStrCalendar(list[todayPosition]))
                 }

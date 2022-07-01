@@ -19,7 +19,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
-class CalendarMonthAdapter(private var listResource: List<CalendarDto>, private val listener: (Resource) -> Unit): RecyclerView.Adapter<CalendarMonthAdapter.CalendarMonthViewHolder>() {
+class CalendarMonthAdapter(private var listResource: ArrayList<CalendarDto>, private val listener: (Resource) -> Unit): RecyclerView.Adapter<CalendarMonthAdapter.CalendarMonthViewHolder>() {
 
     class CalendarMonthViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         private var tvDay: TextView?= null
@@ -68,6 +68,15 @@ class CalendarMonthAdapter(private var listResource: List<CalendarDto>, private 
                     listener.invoke(resource)
                 }
                 llListResource?.addView(view)
+            }
+        }
+    }
+
+    fun updateList(listNew: ArrayList<CalendarDto>) {
+        listNew.forEach { calDTO ->
+            if(listResource.find { it.timeString ==  calDTO.timeString} == null) {
+                listResource.add(calDTO)
+                notifyItemChanged(listResource.indexOf(calDTO))
             }
         }
     }

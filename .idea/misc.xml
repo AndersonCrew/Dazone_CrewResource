@@ -12,6 +12,8 @@
         <entry key="app/src/main/res/drawable/tab_color_selector.xml" value="0.285" />
         <entry key="app/src/main/res/layout/activity_add_schedule.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/layout/activity_detail_schedule.xml" value="0.37604166666666666" />
+        <entry key="app/src/main/res/layout/activity_login.xml" value="0.37604166666666666" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/layout/activity_organizaion.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/layout/activity_setting.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/layout/app_bar_main.xml" value="0.1" />
@@ -35,9 +37,12 @@
         <entry key="app/src/main/res/layout/item_hour.xml" value="0.36235955056179775" />
         <entry key="app/src/main/res/layout/item_month_calendar.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/layout/item_resource_list.xml" value="0.37604166666666666" />
+        <entry key="app/src/main/res/layout/item_week.xml" value="0.37604166666666666" />
+        <entry key="app/src/main/res/layout/item_week_resource.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/layout/layout_loading_dialog.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/layout/layout_notifications_setting.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/layout/layout_spinner.xml" value="0.37604166666666666" />
+        <entry key="app/src/main/res/layout/nav_header_main.xml" value="0.37604166666666666" />
       </map>
     </option>
   </component>

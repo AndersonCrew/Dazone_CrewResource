@@ -31,26 +31,18 @@ import kotlin.collections.ArrayList
 class MonthFragment(private val calendar: Calendar): BaseFragment(){
 
     private var rvCalendarMonth: RecyclerView?= null
-    private var tvNoData: TextView?= null
     private val viewModel: CalendarMonthViewModel by viewModels()
     private var hasCallAPI = false
+    private lateinit var adapter: CalendarMonthAdapter
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val root = inflater.inflate(R.layout.fragment_month_resource, container, false)
-        initView(root)
+        initRecyclerView(root)
+        initView()
         return root
-    }
-
-    @SuppressLint("SimpleDateFormat")
-    override fun onResume() {
-        super.onResume()
-        if(isResumed && !hasCallAPI) {
-            hasCallAPI = true
-            getAllResource(null)
-        }
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -71,26 +63,30 @@ class MonthFragment(private val calendar: Calendar): BaseFragment(){
         viewModel.getAllResource(params, calendar)
     }
 
-    @SuppressLint("SimpleDateFormat")
-    private fun initView(root: View?) {
+    private fun initRecyclerView(root: View?) {
         rvCalendarMonth = root?.findViewById(R.id.rvCalendarMonth)
-        tvNoData = root?.findViewById(R.id.tvNoData)
 
+        adapter = CalendarMonthAdapter(arrayListOf()) {
+            val intent = Intent(requireContext(), DetailScheduleActivity::class.java)
+            intent.putExtra(Constants.RESOURCE, it)
+            requireActivity().startActivity(intent)
+        }
+
+        rvCalendarMonth?.adapter = adapter
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    private fun initView() {
         val month = SimpleDateFormat(Constants.MM_YYYY).format(calendar.time)
         viewModel.getResourceDB(month)?.observe(requireActivity(), androidx.lifecycle.Observer {
-            if(it != null) {
-                if(!it.list.isNullOrEmpty()) {
-                    tvNoData?.visibility = View.GONE
-                    rvCalendarMonth?.adapter = CalendarMonthAdapter(it.list!!) {
-                        val intent = Intent(context, DetailScheduleActivity::class.java)
-                        intent.putExtra(Constants.RESOURCE, it)
-                        requireActivity().startActivity(intent)
-                    }
+            if(it != null && !it.list.isNullOrEmpty()) {
+               //TODO Update list
+                adapter.updateList(ArrayList(it.list!!))
+            }
 
-                    rvCalendarMonth?.visibility = View.VISIBLE
-                } else {
-                    tvNoData?.visibility = View.VISIBLE
-                }
+            if(!hasCallAPI) {
+                hasCallAPI = true
+                getAllResource(null)
             }
         })
     }
