@@ -19,9 +19,6 @@ class SpecialDayFragment: BaseFragment() {
     private var calStartChosen = Calendar.getInstance()
     private var calEndChosen = Calendar.getInstance()
 
-    private var dayEndChosen = 0
-    private var monthEndChosen = 0
-    private var yearEndChosen = 0
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

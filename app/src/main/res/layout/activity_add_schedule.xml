@@ -66,7 +66,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="@id/etTitle"
                 app:layout_constraintStart_toEndOf="@id/etTitle"
-                android:src="@drawable/ic_drop_down"
+                android:src="@drawable/ic_drop_up"
                 android:layout_width="30dp"
                 android:scrollbarSize="14sp"
                 android:layout_height="0dp"
@@ -74,9 +74,9 @@
 
             <EditText
                 android:id="@+id/etContent"
-                android:visibility="gone"
                 style="@style/EditTextNormalSize"
                 android:layout_marginTop="10dp"
+                android:textSize="14sp"
                 app:layout_constraintTop_toBottomOf="@id/etTitle"
                 android:hint="@string/enter_content"
                 android:layout_marginLeft="20dp"
@@ -138,7 +138,7 @@
                     android:id="@+id/vpTab"
                     android:paddingHorizontal="20dp"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
+                    android:layout_height="wrap_content"/>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -200,6 +200,15 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"/>
 
+            <View
+                android:layout_marginTop="7dp"
+                android:background="@color/colorGray"
+                app:layout_constraintStart_toStartOf="@id/tvResource"
+                app:layout_constraintEnd_toEndOf="@id/tvResource"
+                app:layout_constraintTop_toBottomOf="@id/tvResource"
+                android:layout_width="0dp"
+                android:layout_height="1dp"/>
+
             <ImageView
                 android:src="@drawable/ic_drop_down"
                 app:layout_constraintBottom_toBottomOf="@id/tvResource"
@@ -238,6 +247,8 @@
                 android:layout_marginEnd="20dp"
                 android:layout_marginRight="20dp"
                 android:layout_marginTop="10dp"
+                android:text="@string/no"
+                android:textColor="@color/colorText"
                 android:hint="@string/please_choose_share"
                 app:layout_constraintStart_toStartOf="@id/tvShare"
                 app:layout_constraintTop_toBottomOf="@id/tvShare"
@@ -245,6 +256,15 @@
                 android:layout_width="0dp"
                 android:textSize="14sp"
                 android:layout_height="wrap_content"/>
+
+            <View
+                android:layout_marginTop="7dp"
+                android:background="@color/colorGray"
+                app:layout_constraintStart_toStartOf="@id/tvShareValue"
+                app:layout_constraintEnd_toEndOf="@id/tvShareValue"
+                app:layout_constraintTop_toBottomOf="@id/tvShareValue"
+                android:layout_width="0dp"
+                android:layout_height="1dp"/>
 
             <ImageView
                 android:src="@drawable/ic_drop_down"

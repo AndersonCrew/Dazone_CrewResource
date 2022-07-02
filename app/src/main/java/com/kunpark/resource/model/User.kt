@@ -22,7 +22,7 @@ class User {
 
     @ColumnInfo(name = "FullName")
     @SerializedName("FullName")
-    var name: String?= null
+    var fullName: String?= null
 
     @ColumnInfo(name = "session")
     @SerializedName("session")
@@ -39,4 +39,19 @@ class User {
     @ColumnInfo(name = "NameCompany")
     @SerializedName("NameCompany")
     var companyName: String?= null
+
+    @ColumnInfo(name = "avatarUrl")
+    @SerializedName("AvatarUrl")
+    var avatarUrl: String?= null
+
+    @ColumnInfo(name = "name")
+    @SerializedName("Name")
+    var name: String?= null
+
+    @ColumnInfo(name = "positionName")
+    @SerializedName("PositionName")
+    var positionName: String?= null
+
+    @ColumnInfo(name = "isChosen")
+    var isChosen: Boolean = false
 }

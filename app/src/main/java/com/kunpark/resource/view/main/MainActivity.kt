@@ -126,7 +126,7 @@ class MainActivity : BaseActivity() {
             Glide.with(this).load(urlAvatar).into(it)
         }
 
-        tvFullName?.text = userInfo.name?: "-"
+        tvFullName?.text = userInfo.fullName?: "-"
         tvKoreanName?.text = userInfo.companyName?: "-"
     }
 

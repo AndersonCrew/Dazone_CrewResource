@@ -4,19 +4,25 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.LinearLayout
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.ViewModelProviders
 import androidx.viewpager.widget.ViewPager
 import com.kunpark.resource.R
 import com.kunpark.resource.base.BaseActivity
+import com.kunpark.resource.databinding.ActivityAddScheduleBinding
 import com.kunpark.resource.model.Organization
+import com.kunpark.resource.model.OrganizationChart
 import com.kunpark.resource.utils.Constants
 import kotlinx.android.synthetic.main.activity_add_schedule.*
 
 
 class AddScheduleActivity : BaseActivity() {
     private lateinit var viewModel : AddScheduleViewModel
+    private var binding: ActivityAddScheduleBinding?= null
     private var organization: Organization?= null
+    private var REQUEST_CODE_RESOURCE = 111
+    private var REQUEST_CODE_ORGANIZATION = 111
     override fun initEvent() {
         viewModel = ViewModelProviders.of(this).get(AddScheduleViewModel::class.java)
         imgShowContent?.setOnClickListener {
@@ -29,19 +35,31 @@ class AddScheduleActivity : BaseActivity() {
             }
         }
 
-        imgBack?.setOnClickListener { onBackPressed() }
-        vpTab?.adapter = TabAddResource(supportFragmentManager)
-        vpTab?.measure(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-        tabLayout?.addTab(tabLayout.newTab())
-        tabLayout?.setupWithViewPager(vpTab)
+        binding?.imgBack?.setOnClickListener { onBackPressed() }
+        binding?.vpTab?.adapter = TabAddResource(supportFragmentManager)
+        binding?.vpTab?.measure(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+        binding?.tabLayout?.addTab(tabLayout.newTab())
+        binding?.tabLayout?.setupWithViewPager(vpTab)
 
-        tvResource?.setOnClickListener {
+        binding?.tvResource?.setOnClickListener {
             val intent = Intent(this, ResourceChartActivity::class.java)
-            startActivityForResult(intent, Constants.REQUEST_CODE_ORGANIZATION)
+            //startActivityForResult(intent, REQUEST_CODE_RESOURCE)
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+                if(it.resultCode == RESULT_OK) {
+                    organization = it?.data?.getSerializableExtra(Constants.ORGANIZATION) as Organization?
+                    tvResource?.text = organization?.title?: ""
+                }
+            }.launch(intent)
         }
+
+        binding?.tvShareValue?.setOnClickListener {
+            val intent = Intent(this, OrganizationActivity::class.java)
+            startActivityForResult(intent, REQUEST_CODE_ORGANIZATION)
+        }
+
         changeLayoutParams(0)
 
-        vpTab?.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+        binding?.vpTab?.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrolled(
                 position: Int,
                 positionOffset: Float,
@@ -72,7 +90,7 @@ class AddScheduleActivity : BaseActivity() {
             else -> 850
         }
         val params = ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, height)
-        vpTab?.layoutParams = params
+        binding?.vpTab?.layoutParams = params
     }
 
     override fun initView() {
@@ -84,16 +102,20 @@ class AddScheduleActivity : BaseActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_add_schedule)
+        binding = ActivityAddScheduleBinding.inflate(layoutInflater)
+        setContentView(binding?.root)
         lifecycle.addObserver(notificationSetting)
+        super.onCreate(savedInstanceState)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if(resultCode == Constants.REQUEST_CODE_ORGANIZATION) {
+        if(requestCode == REQUEST_CODE_RESOURCE) {
             organization = data?.getSerializableExtra(Constants.ORGANIZATION) as Organization?
-            tvResource?.text = organization?.title?: ""
+                    tvResource?.text = organization?.title?: ""
+        } else if(requestCode == REQUEST_CODE_ORGANIZATION) {
+            organization = data?.getSerializableExtra(Constants.ORGANIZATION) as Organization?
+            tvShareValue?.text = organization?.title?: ""
         }
     }
 }

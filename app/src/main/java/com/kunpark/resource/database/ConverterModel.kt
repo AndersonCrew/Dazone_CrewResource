@@ -139,3 +139,21 @@ object ConverterCondition {
         return Gson().toJson(listOfString)
     }
 }
+
+
+object ConverterMembers {
+    @TypeConverter
+    @JvmStatic
+    fun restoreMembers(listOfString: String): ArrayList<User>? {
+        return Gson().fromJson(listOfString, object : TypeToken<ArrayList<User>>() {
+        }.type)
+    }
+
+    @TypeConverter
+    @JvmStatic
+    fun saveMembers(listOfString: ArrayList<User>?): String {
+        if (listOfString.isNullOrEmpty())
+            return ""
+        return Gson().toJson(listOfString)
+    }
+}

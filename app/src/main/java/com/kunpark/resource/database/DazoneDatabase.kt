@@ -11,7 +11,7 @@ import com.kunpark.resource.utils.Config
 @Database(
     entities = [User::class, ConditionSearch::class, CalendarDto::class, CalendarAgenda::class,
         Resource::class, DevicesNotification::class, TimesNotification::class,
-        Organization::class, CalendarMonth::class, CalendarDay::class, Participant::class, Notification::class, CalendarWeek::class],
+        Organization::class, CalendarMonth::class, CalendarDay::class, Participant::class, Notification::class, CalendarWeek::class, OrganizationChart::class],
     version = Config.VERSION_DB,
     exportSchema = false
 )
@@ -19,7 +19,7 @@ import com.kunpark.resource.utils.Config
 @TypeConverters(
     value = [ConverterConditionSearch::class, ConverterConditionResource::class, ConverterConditionResourceList::class,
         ConverterConditionCalendar::class, ConverterDeviceNotification::class, ConverterTimeNotification::class,
-        ConverterOrganization::class, ConverterCondition::class]
+        ConverterOrganization::class, ConverterCondition::class, ConverterMembers::class]
 )
 
 abstract class DazoneDatabase : RoomDatabase() {

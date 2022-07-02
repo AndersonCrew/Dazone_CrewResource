@@ -35,6 +35,12 @@ interface DazoneService {
     @POST(Config.GET_DETAIL_RESOURCE)
     suspend fun getDetailResource(@Body param: JsonObject): Response<BaseResponse>
 
+    @POST(Config.GET_DEPARTMENTS)
+    suspend fun getDepartments(@Body param: JsonObject): Response<BaseResponse>
+
+    @POST(Config.GET_USER_BY_DEPARTMENT)
+    suspend fun getUserByDepartmentNo(@Body param: JsonObject): Response<BaseResponse>
+
 
 
 }

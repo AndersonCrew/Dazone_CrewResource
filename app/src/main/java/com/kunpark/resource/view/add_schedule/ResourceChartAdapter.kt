@@ -13,9 +13,9 @@ import com.kunpark.resource.model.Organization
 class ResourceChartAdapter(
     private val list: List<Organization>,
     private val onChosen: (Organization) -> Unit
-) : RecyclerView.Adapter<ResourceChartAdapter.OrganizationViewHolder>() {
+) : RecyclerView.Adapter<ResourceChartAdapter.ResourceChartViewHolder>() {
 
-    class OrganizationViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class ResourceChartViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
          var llParent: ConstraintLayout? = null
          var tvTitle: TextView? = null
          var rvChild: RecyclerView? = null
@@ -31,8 +31,8 @@ class ResourceChartAdapter(
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OrganizationViewHolder {
-        return OrganizationViewHolder(
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ResourceChartViewHolder {
+        return ResourceChartViewHolder(
             LayoutInflater.from(parent.context).inflate(R.layout.item_resource_list, parent, false)
         )
     }
@@ -41,7 +41,7 @@ class ResourceChartAdapter(
         return list.size
     }
 
-    override fun onBindViewHolder(holder: OrganizationViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ResourceChartViewHolder, position: Int) {
         if (!list.isNullOrEmpty()) {
             val organization = list[position]
             if (!organization.resourceTrees.isNullOrEmpty()) {

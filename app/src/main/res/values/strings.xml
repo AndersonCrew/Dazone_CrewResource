@@ -75,6 +75,7 @@
     <string name="cancel">Cancel</string>
     <string name="str_logout">Do you want to logout?</string>
     <string name="if_holiday">If Holiday</string>
+    <string name="no">No</string>
     <string-array name="arr_daily">
         <item>Daily</item>
         <item>2 Days</item>

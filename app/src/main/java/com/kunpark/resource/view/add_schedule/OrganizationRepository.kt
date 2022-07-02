@@ -4,13 +4,12 @@ import androidx.lifecycle.LiveData
 import com.google.gson.JsonObject
 import com.kunpark.resource.base.BaseRepository
 import com.kunpark.resource.base.BaseResponse
-import com.kunpark.resource.model.CalendarWeek
 import com.kunpark.resource.model.Organization
 import com.kunpark.resource.model.OrganizationChart
 import com.kunpark.resource.services.Result
 import com.kunpark.resource.services.RetrofitFactory
 
-class AddScheduleRepository: BaseRepository() {
+class OrganizationRepository: BaseRepository() {
     suspend fun getDepartments(param: JsonObject): Result<BaseResponse> {
         return safeApiCall(call = { RetrofitFactory.getApiService().getDepartments(param)}, errorMessage =  "Cannot get Departments data from server!")
     }
@@ -26,6 +25,5 @@ class AddScheduleRepository: BaseRepository() {
     fun saveOrganization(organizationChart: OrganizationChart) {
         db?.getResourceDao()?.saveOrganization(organizationChart)
     }
-
 
 }
