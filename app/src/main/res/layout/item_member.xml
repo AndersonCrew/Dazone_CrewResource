@@ -41,8 +41,11 @@
 
     <CheckBox
         android:id="@+id/ckChoose"
-        app:layout_constraintTop_toTopOf="@id/imgAvatar"
-        app:layout_constraintBottom_toBottomOf="@id/imgAvatar"
+        android:text=""
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="5dp"
+        android:button="@drawable/cb_selector"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>

@@ -9,9 +9,13 @@
         <entry key="app/src/main/res/drawable/bg_date_type_not_choosen.xml" value="0.285" />
         <entry key="app/src/main/res/drawable/bg_today.xml" value="0.285" />
         <entry key="app/src/main/res/drawable/bg_today_agenda.xml" value="0.285" />
+        <entry key="app/src/main/res/drawable/cb_selector.xml" value="0.2565" />
+        <entry key="app/src/main/res/drawable/ic_checked.xml" value="0.2565" />
+        <entry key="app/src/main/res/drawable/ic_circle_checkbox_checked.xml" value="0.2565" />
         <entry key="app/src/main/res/drawable/ic_date.xml" value="0.2565" />
         <entry key="app/src/main/res/drawable/ic_drop_down.xml" value="0.2565" />
         <entry key="app/src/main/res/drawable/ic_drop_up.xml" value="0.2565" />
+        <entry key="app/src/main/res/drawable/ic_noncheck.xml" value="0.2565" />
         <entry key="app/src/main/res/drawable/tab_color_selector.xml" value="0.285" />
         <entry key="app/src/main/res/layout/activity_add_schedule.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/layout/activity_detail_schedule.xml" value="0.37604166666666666" />

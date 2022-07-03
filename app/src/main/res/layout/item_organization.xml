@@ -17,7 +17,7 @@
 
     <TextView
         android:id="@+id/tvTitle"
-        android:text="Anderson"
+        tools:text="Anderson"
         android:textColor="@color/colorText"
         android:textSize="14sp"
         android:gravity="center"
@@ -32,6 +32,9 @@
     <CheckBox
         android:id="@+id/icCheck"
         android:text=""
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="5dp"
+        android:button="@drawable/cb_selector"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_width="wrap_content"

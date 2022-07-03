@@ -43,7 +43,8 @@ class Organization(
     @ColumnInfo(name = "childMembers")
     var childMembers: ArrayList<User> = arrayListOf(),
 
-    var isChosen: Boolean = false
+    var isChosen: Boolean = false,
+    var isChanging: Boolean = false
 
 
 ): Serializable {

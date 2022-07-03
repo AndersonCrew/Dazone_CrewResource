@@ -54,4 +54,9 @@
         <item name="android:textColor">@color/colorText</item>
     </style>
 
+    <style name="checkBoxStyle" parent="Base.Theme.AppCompat">
+        <item name="colorAccent">@color/colorPrimaryDark</item>
+        <item name="android:textColorSecondary">@color/colorGray</item>
+    </style>
+
 </resources>

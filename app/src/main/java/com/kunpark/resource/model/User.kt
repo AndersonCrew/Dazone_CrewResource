@@ -4,10 +4,11 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 
 @Entity(tableName = "USER")
-class User {
+class User: Serializable {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
     var id: Int?= null
@@ -54,4 +55,5 @@ class User {
 
     @ColumnInfo(name = "isChosen")
     var isChosen: Boolean = false
+    var isChanging: Boolean = false
 }

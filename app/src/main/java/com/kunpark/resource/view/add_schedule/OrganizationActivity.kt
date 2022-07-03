@@ -26,7 +26,7 @@ class OrganizationActivity : BaseActivity() {
     }
 
     override fun initView() {
-        adapter = OrganizationAdapter(arrayListOf())
+        adapter = OrganizationAdapter()
         binding?.rvOrganization?.adapter = adapter
     }
 
@@ -37,7 +37,7 @@ class OrganizationActivity : BaseActivity() {
     override fun initViewModel() {
         viewModel.getOrganization()?.observe(this) {
             if(it != null && !it.list.isNullOrEmpty()) {
-                adapter.updateList(it.list!!)
+                adapter.submitList(it.list!!)
             }
 
             if(!hasCallAPI) {
