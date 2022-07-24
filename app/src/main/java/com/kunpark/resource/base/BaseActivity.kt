@@ -1,13 +1,15 @@
 package com.kunpark.resource.base
 
+import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
-import android.view.ViewGroup
-import android.widget.ProgressBar
+import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import com.kunpark.resource.R
+import androidx.lifecycle.Observer
 import com.kunpark.resource.utils.DazoneApplication
+import com.kunpark.resource.dialog.DialogUtil
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.kotlin.addTo
@@ -16,32 +18,26 @@ import io.reactivex.rxjava3.schedulers.Schedulers
 
 abstract class BaseActivity: AppCompatActivity() {
     var eventDisposable: CompositeDisposable = CompositeDisposable()
-    private var mProgressDialog: Dialog? = null
+    private var progressBar: Dialog? = null
+
     open fun showProgressDialog() {
-        if (null == mProgressDialog || !mProgressDialog!!.isShowing) {
-            mProgressDialog = Dialog(this, R.style.ProgressCircleDialog)
-            mProgressDialog!!.setTitle(getString(R.string.loading_content))
-            mProgressDialog!!.setCancelable(false)
-            mProgressDialog!!.setOnCancelListener(null)
-            mProgressDialog!!.addContentView(
-                ProgressBar(this),
-                ViewGroup.LayoutParams(
-                    ViewGroup.LayoutParams.WRAP_CONTENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT
-                )
-            )
-            mProgressDialog!!.show()
+        if(progressBar == null) {
+            progressBar = DialogUtil(this).getProgressDialog()
         }
+        progressBar?.show()
     }
 
     open fun dismissProgressDialog() {
-        if (null != mProgressDialog && mProgressDialog!!.isShowing) {
-            mProgressDialog!!.dismiss()
+        if(progressBar?.isShowing == true) {
+            progressBar?.dismiss()
         }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if(progressBar == null) {
+            progressBar = DialogUtil(this).getProgressDialog()
+        }
 
         DazoneApplication.eventBus
             .subscribeOn(Schedulers.newThread())
@@ -52,7 +48,6 @@ abstract class BaseActivity: AppCompatActivity() {
         initView()
         initEvent()
         initViewModel()
-
     }
 
     open fun onEventReceive(it: Map<String, Any?>) {

@@ -19,6 +19,7 @@ import com.google.gson.JsonObject
 import com.kunpark.resource.R
 import com.kunpark.resource.model.DevicesNotification
 import com.kunpark.resource.model.Notification
+import com.kunpark.resource.model.ResourceNotification
 import com.kunpark.resource.model.TimesNotification
 import com.kunpark.resource.utils.Constants
 import com.kunpark.resource.utils.DazoneApplication
@@ -170,7 +171,7 @@ class NotificationSettings : ConstraintLayout, LifecycleObserver {
             times?.let {
                 spinnerNotificationTimes?.adapter = NotificationSettingAdapter(context, R.layout.item_notification_settings, it)
                 spinnerNotificationTimes?.isEnabled = false
-                val time = it.find { ti -> ti.alarmTimeNo == notification.notificationNo}
+                val time = it.find { ti -> ti.alarmTimeNo == notification.alarmTime}
                 time?.let { _ ->
                     spinnerNotificationTimes?.setSelection(it.indexOf(time))
                 }
@@ -179,4 +180,20 @@ class NotificationSettings : ConstraintLayout, LifecycleObserver {
             llNotificationSettings.addView(itemView)
         }
     }
+
+    fun getListNotificationsSetting(): List<ResourceNotification>? {
+        var listSchedule: ArrayList<ResourceNotification>? = ArrayList()
+        for (i in 0 until llNotificationSettings.childCount) {
+            val spinnerDevice = llNotificationSettings.getChildAt(i).findViewById<Spinner>(R.id.spinnerNotificationDevices)
+            val spinnerTimes = llNotificationSettings.getChildAt(i).findViewById<Spinner>(R.id.spinnerNotificationTimes)
+
+            devices?.let { device ->
+                times?.let { time ->
+                    listSchedule?.add(ResourceNotification(notificationType = device[spinnerDevice.selectedItemPosition].notificationTypeNo, alarmTime =  time[spinnerTimes.selectedItemPosition].alarmTimeNo))
+                }
+            }
+        }
+        return listSchedule
+    }
+
 }

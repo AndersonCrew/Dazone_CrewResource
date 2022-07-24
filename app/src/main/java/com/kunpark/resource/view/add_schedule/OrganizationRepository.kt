@@ -10,6 +10,7 @@ import com.kunpark.resource.services.Result
 import com.kunpark.resource.services.RetrofitFactory
 
 class OrganizationRepository: BaseRepository() {
+
     suspend fun getDepartments(param: JsonObject): Result<BaseResponse> {
         return safeApiCall(call = { RetrofitFactory.getApiService().getDepartments(param)}, errorMessage =  "Cannot get Departments data from server!")
     }
@@ -18,12 +19,12 @@ class OrganizationRepository: BaseRepository() {
         return safeApiCall(call = { RetrofitFactory.getApiService().getUserByDepartmentNo(param)}, errorMessage =  "Cannot get User by departmentNo data from server!")
     }
 
-    fun getOrganization(): LiveData<OrganizationChart>? {
-        return db?.getResourceDao()?.getOrganization()
+    suspend fun getDepartmentMod(param: JsonObject): Result<BaseResponse> {
+        return safeApiCall(call = { RetrofitFactory.getApiService().getDepartmentMod(param)}, errorMessage =  "Cannot get Department Mod from server!")
     }
 
-    fun saveOrganization(organizationChart: OrganizationChart) {
-        db?.getResourceDao()?.saveOrganization(organizationChart)
+    suspend fun getMemberMod(param: JsonObject): Result<BaseResponse> {
+        return safeApiCall(call = { RetrofitFactory.getApiService().getMemberMod(param)}, errorMessage =  "Cannot User Mod data from server!")
     }
 
 }

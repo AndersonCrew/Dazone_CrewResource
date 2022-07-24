@@ -44,7 +44,7 @@ class CalendarWeekViewModel : BaseViewModel() {
                         object : TypeToken<List<Resource>>() {}.type
                     )
 
-                    if (!list.isNullOrEmpty()) {
+                    if (list != null) {
                         checkAddListResource(list, calendar)
                     }
                 } else {

@@ -8,6 +8,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.ViewModelProviders
+import com.kunpark.resource.R
 import com.kunpark.resource.base.BaseFragment
 import com.kunpark.resource.databinding.FragmentSpecialDayBinding
 import com.kunpark.resource.utils.Constants
@@ -18,6 +20,7 @@ class SpecialDayFragment: BaseFragment() {
     private lateinit var binding: FragmentSpecialDayBinding
     private var calStartChosen = Calendar.getInstance()
     private var calEndChosen = Calendar.getInstance()
+    private lateinit var viewModel : AddScheduleViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -44,7 +47,8 @@ class SpecialDayFragment: BaseFragment() {
                 calStartChosen.set(Calendar.DAY_OF_MONTH, day)
                 calStartChosen.set(Calendar.MONTH, month)
                 calStartChosen.set(Calendar.YEAR, year)
-                binding.tvStartDay.text = SimpleDateFormat(Constants.YY_MM_DD_SHOW).format(calStartChosen.time)
+                binding.tvStartDay.text = SimpleDateFormat(Constants.Format_api_datetime).format(calStartChosen.time)
+                viewModel.requestSpecial.StartDate = binding.tvStartDay.text.toString()
             }, currentYear, currentMonth, currentDay)
 
             datePicker.show()
@@ -55,7 +59,9 @@ class SpecialDayFragment: BaseFragment() {
                 calEndChosen.set(Calendar.DAY_OF_MONTH, day)
                 calEndChosen.set(Calendar.MONTH, month)
                 calEndChosen.set(Calendar.YEAR, year)
-                binding.tvEndDay.text = SimpleDateFormat(Constants.YY_MM_DD_SHOW).format(calEndChosen.time)
+                binding.tvEndDay.text = SimpleDateFormat(Constants.Format_api_datetime).format(calEndChosen.time)
+
+                viewModel.requestSpecial.EndDate = binding.tvEndDay.text.toString()
             }, calStartChosen.get(Calendar.YEAR), calStartChosen.get(Calendar.MONTH), calStartChosen.get(Calendar.DAY_OF_MONTH))
 
 
@@ -67,7 +73,8 @@ class SpecialDayFragment: BaseFragment() {
             val timePickerDialog = TimePickerDialog(requireContext(), { view, hour, minute ->
                 calStartChosen.set(Calendar.HOUR, hour)
                 calStartChosen.set(Calendar.MINUTE, minute)
-                binding.tvStartTime.text = SimpleDateFormat("hh:mm").format(calStartChosen.time)
+                binding.tvStartTime.text = SimpleDateFormat("HH:mm").format(calStartChosen.time)
+                viewModel.requestSpecial.StartTime = binding.tvStartTime.text.toString()
             }, calStartChosen.get(Calendar.HOUR), calStartChosen.get(Calendar.MINUTE), true)
             timePickerDialog.show()
         }
@@ -76,10 +83,41 @@ class SpecialDayFragment: BaseFragment() {
             val timePickerDialog = TimePickerDialog(requireContext(), { view, hour, minute ->
                 calEndChosen.set(Calendar.HOUR, hour)
                 calEndChosen.set(Calendar.MINUTE, minute)
-                binding.tvStartTime.text = SimpleDateFormat("hh:mm").format(calStartChosen.time)
+                binding.tvStartTime.text = SimpleDateFormat("HH:mm").format(calStartChosen.time)
+                viewModel.requestSpecial.EndTime = binding.tvEndTime.text.toString()
             }, calStartChosen.get(Calendar.HOUR), calStartChosen.get(Calendar.MINUTE), true)
 
             timePickerDialog.show()
+        }
+
+        binding.rgSpecialDay.setOnCheckedChangeListener { group, checkedId ->
+            if(checkedId == R.id.radio_b) {
+                viewModel.requestSpecial.IsLunar = "1"
+            } else {
+                viewModel.requestSpecial.IsLunar = "0"
+            }
+        }
+
+        binding.ckAllDay.setOnCheckedChangeListener { buttonView, isChecked ->
+            viewModel.requestSpecial.IsAllDay = isChecked
+
+            if(isChecked) {
+                binding.tvStartTime.isEnabled = false
+                binding.tvEndTime.isEnabled = false
+
+                binding.tvStartTime.alpha = 0.5f
+                binding.tvEndTime.alpha = 0.5f
+                viewModel.requestSpecial.StartTime = "00:00"
+                viewModel.requestSpecial.EndTime = "00:00"
+            } else {
+                binding.tvStartTime.isEnabled = true
+                binding.tvEndTime.isEnabled = true
+
+                binding.tvStartTime.alpha = 1f
+                binding.tvEndTime.alpha = 1f
+                viewModel.requestSpecial.StartTime = binding.tvStartTime.text.toString()
+                viewModel.requestSpecial.EndTime = binding.tvEndTime.text.toString()
+            }
         }
     }
 
@@ -87,8 +125,8 @@ class SpecialDayFragment: BaseFragment() {
     private fun initView() {
         val cal = Calendar.getInstance()
         cal.time = Date(System.currentTimeMillis())
-        binding.tvStartDay.text = SimpleDateFormat(Constants.YY_MM_DD_SHOW).format(cal.time)
-        binding.tvEndDay.text = SimpleDateFormat(Constants.YY_MM_DD_SHOW).format(cal.time)
+        binding.tvStartDay.text = SimpleDateFormat(Constants.Format_api_datetime).format(cal.time)
+        binding.tvEndDay.text = SimpleDateFormat(Constants.Format_api_datetime).format(cal.time)
 
         val rightNow = Calendar.getInstance()
         val currentHourIn24Format: Int =rightNow.get(Calendar.HOUR_OF_DAY) // return the hour in 24 hrs format (ranging from 0-23)
@@ -115,6 +153,14 @@ class SpecialDayFragment: BaseFragment() {
 
 
         binding.tvStartTime.text = "$startHour:00"
-        binding.tvEndTime.text = "$endHour:00"
+        binding.tvEndTime.text= "$endHour:00"
+
+        viewModel = ViewModelProviders.of(requireActivity()).get(AddScheduleViewModel::class.java)
+        viewModel.requestSpecial.StartDate = binding.tvStartDay.text.toString()
+        viewModel.requestSpecial.EndDate = binding.tvEndDay.text.toString()
+        viewModel.requestSpecial.StartTime = binding.tvStartTime.text.toString()
+        viewModel.requestSpecial.EndTime = binding.tvEndTime.text.toString()
+        viewModel.requestSpecial.RepeatType = 0
+        viewModel.requestSpecial.IsLunar = "0"
     }
 }

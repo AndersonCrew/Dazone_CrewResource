@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 
 class DetailScheduleViewModel: BaseViewModel() {
     private val repository = DetailScheduleRepository()
-    var resourceLiveDate: MutableLiveData<Resource> = MutableLiveData()
+    var resourceLiveDate: MutableLiveData<DetailResource> = MutableLiveData()
     var participantLiveDate: MutableLiveData<List<Participant>> = MutableLiveData()
     var notificationLiveDate: MutableLiveData<List<Notification>> = MutableLiveData()
 
@@ -37,9 +37,11 @@ class DetailScheduleViewModel: BaseViewModel() {
                     val resourceLinkTree = data["Detail"]
                     val participantsLinkTree = data["ResourceParticipants"]
                     val notificationLinkTree = data["ResourceNotifications"]
+                    val repeatInfo = data["RepeatInfo"]
                     val gSon = Gson()
 
-                    val resource = gSon.fromJson(gSon.toJson(resourceLinkTree), Resource::class.java)
+                    val resource = gSon.fromJson(gSon.toJson(resourceLinkTree), DetailResource::class.java)
+                    resource.RepeatInfo = repeatInfo as String
                     val participants = gSon.fromJson<List<Participant>>(gSon.toJson(participantsLinkTree), object : TypeToken<List<Participant>>() {}.type)
                     val notifications = gSon.fromJson<List<Notification>>(gSon.toJson(notificationLinkTree), object : TypeToken<List<Notification>>() {}.type)
                     resourceLiveDate.postValue(resource)

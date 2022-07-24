@@ -143,6 +143,7 @@
         android:layout_height="wrap_content"/>
 
     <CheckBox
+        android:id="@+id/ckAllDay"
         android:layout_marginTop="20dp"
         android:textSize="13sp"
         android:textColor="@color/colorText"

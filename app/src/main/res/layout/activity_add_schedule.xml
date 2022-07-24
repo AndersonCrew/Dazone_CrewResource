@@ -30,6 +30,7 @@
             android:layout_height="match_parent"/>
 
         <ImageButton
+            android:id="@+id/imgDone"
             android:src="@drawable/ic_check"
             android:background="@android:color/transparent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -132,7 +133,6 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/csVP"
                 android:layout_width="match_parent"
-                android:visibility="gone"
                 app:layout_constraintTop_toBottomOf="@id/tabLayout"
                 android:layout_height="wrap_content">
                 <androidx.viewpager.widget.ViewPager
@@ -242,7 +242,7 @@
                 android:textSize="14sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
-           
+
             <TextView
                 android:id="@+id/tvShareValue"
                 android:layout_marginEnd="20dp"

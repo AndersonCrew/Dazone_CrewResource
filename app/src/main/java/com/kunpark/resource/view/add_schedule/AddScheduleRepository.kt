@@ -11,21 +11,8 @@ import com.kunpark.resource.services.Result
 import com.kunpark.resource.services.RetrofitFactory
 
 class AddScheduleRepository: BaseRepository() {
-    suspend fun getDepartments(param: JsonObject): Result<BaseResponse> {
-        return safeApiCall(call = { RetrofitFactory.getApiService().getDepartments(param)}, errorMessage =  "Cannot get Departments data from server!")
+    suspend fun insertResource(param: JsonObject): Result<BaseResponse> {
+        return safeApiCall(call = { RetrofitFactory.getApiService().insertResource(param)}, errorMessage =  "Cannot insert new resource!")
     }
-
-    suspend fun getUserByDepartmentNo(param: JsonObject): Result<BaseResponse> {
-        return safeApiCall(call = { RetrofitFactory.getApiService().getUserByDepartmentNo(param)}, errorMessage =  "Cannot get User by departmentNo data from server!")
-    }
-
-    fun getOrganization(): LiveData<OrganizationChart>? {
-        return db?.getResourceDao()?.getOrganization()
-    }
-
-    fun saveOrganization(organizationChart: OrganizationChart) {
-        db?.getResourceDao()?.saveOrganization(organizationChart)
-    }
-
 
 }

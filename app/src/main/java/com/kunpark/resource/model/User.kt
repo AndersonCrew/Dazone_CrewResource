@@ -14,8 +14,12 @@ class User: Serializable {
     var id: Int?= null
 
     @ColumnInfo(name = "userID")
-    @SerializedName("userID")
+    @SerializedName("UserID")
     var userID: String?= null
+
+    @ColumnInfo(name = "userNo")
+    @SerializedName("UserNo")
+    var userNo: Int?= null
 
     @ColumnInfo(name = "MailAddress")
     @SerializedName("MailAddress")

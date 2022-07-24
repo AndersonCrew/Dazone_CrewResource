@@ -157,3 +157,20 @@ object ConverterMembers {
         return Gson().toJson(listOfString)
     }
 }
+
+object ConverterResourceTree {
+    @TypeConverter
+    @JvmStatic
+    fun restoreResourceTree(listOfString: String): ArrayList<ResourceTree>? {
+        return Gson().fromJson(listOfString, object : TypeToken<ArrayList<ResourceTree>>() {
+        }.type)
+    }
+
+    @TypeConverter
+    @JvmStatic
+    fun saveResourceTree(listOfString: ArrayList<ResourceTree>?): String {
+        if (listOfString.isNullOrEmpty())
+            return ""
+        return Gson().toJson(listOfString)
+    }
+}

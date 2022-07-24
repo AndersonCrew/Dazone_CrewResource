@@ -34,4 +34,12 @@ abstract class BaseFragment: Fragment() {
         startActivity(newIntent)
     }
 
+    fun dismissProgressDialog() {
+        (requireActivity() as (BaseActivity)).dismissProgressDialog()
+    }
+
+    fun showProgressDialog() {
+        (requireActivity() as (BaseActivity)).showProgressDialog()
+    }
+
 }

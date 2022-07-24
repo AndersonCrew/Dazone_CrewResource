@@ -79,21 +79,22 @@ class UtilsViewModel: BaseViewModel() {
         }
     }
 
-    fun getOrganizations(): LiveData<List<Organization>>? {
-        return repository.getOrganizationDB()
+    fun getResourceDB(): LiveData<ResourceTree>? {
+        return repository.getResourceTreeDB()
     }
 
-    fun getOrganizationFromServer(params: JsonObject) = uiScope.launch {
+    fun getResourceChartFromServer(params: JsonObject) = uiScope.launch {
         when (val result = repository.getOrganization(params)) {
             is Result.Success -> {
                 val body: LinkedTreeMap<String, Any> = result.data.response as LinkedTreeMap<String, Any>
                 val success = body["success"] as Double
                 if(success == 1.0) {
-                    val organizations: java.util.ArrayList<Organization> = body["data"] as java.util.ArrayList<Organization>
-                    val gSon = Gson()
-                    val json = gSon.toJson(organizations)
-                    val list = gSon.fromJson<List<Organization>>(json, object : TypeToken<List<Organization>>() {}.type)
-                    repository.saveOrganization(list)
+                    val data: ArrayList<ResourceTree> = body["data"] as ArrayList<ResourceTree>
+                    val gson = Gson()
+                    val json = gson.toJson(data)
+
+                    val list = gson.fromJson<ArrayList<ResourceTree>>(json, object : TypeToken<ArrayList<ResourceTree>>() {}.type)
+                    repository.saveResourceTreeDB(list[0])
                 } else {
                     val error: LinkedTreeMap<String, Any> = body["error"] as LinkedTreeMap<String, Any>
                     val message = error["message"] as String

@@ -6,71 +6,67 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.kunpark.resource.R
+import com.kunpark.resource.databinding.ItemResourceListBinding
 import com.kunpark.resource.model.Organization
+import com.kunpark.resource.model.ResourceTree
+import com.kunpark.resource.model.User
 
 class ResourceChartAdapter(
-    private val list: List<Organization>,
-    private val onChosen: (Organization) -> Unit
-) : RecyclerView.Adapter<ResourceChartAdapter.ResourceChartViewHolder>() {
+    private val onChosen: (ResourceTree) -> Unit
+) : ListAdapter<ResourceTree, ResourceChartAdapter.ResourceChartViewHolder>(
+    object : DiffUtil.ItemCallback<ResourceTree>() {
+        override fun areItemsTheSame(oldItem: ResourceTree, newItem: ResourceTree): Boolean {
+            return oldItem.resourceNo == newItem.resourceNo
+        }
 
-    class ResourceChartViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-         var llParent: ConstraintLayout? = null
-         var tvTitle: TextView? = null
-         var rvChild: RecyclerView? = null
-         var imgIcon: ImageView? = null
-         var ckChoose: CheckBox? = null
-
-        init {
-            llParent = itemView.findViewById(R.id.llParent)
-            tvTitle = itemView.findViewById(R.id.tvTitle)
-            rvChild = itemView.findViewById(R.id.rvChild)
-            imgIcon = itemView.findViewById(R.id.imgIcon)
-            ckChoose = itemView.findViewById(R.id.ckChoose)
+        override fun areContentsTheSame(oldItem: ResourceTree, newItem: ResourceTree): Boolean {
+            return oldItem.isChosen == newItem.isChosen
         }
     }
+) {
+
+    class ResourceChartViewHolder(var binding: ItemResourceListBinding) : RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ResourceChartViewHolder {
         return ResourceChartViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.item_resource_list, parent, false)
+            ItemResourceListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         )
     }
 
-    override fun getItemCount(): Int {
-        return list.size
-    }
-
     override fun onBindViewHolder(holder: ResourceChartViewHolder, position: Int) {
-        if (!list.isNullOrEmpty()) {
-            val organization = list[position]
-            if (!organization.resourceTrees.isNullOrEmpty()) {
-                holder.rvChild?.adapter = ResourceChartAdapter(organization.resourceTrees) {
+            val resourceTree = getItem(position)
+            if (!resourceTree.resourceTrees.isNullOrEmpty()) {
+                val childAdapter = ResourceChartAdapter() {
                     onChosen.invoke(it)
                 }
+                holder.binding.rvChild.adapter = childAdapter
+                childAdapter.submitList(resourceTree.resourceTrees)
             }
 
-            //holder.ckChoose?.visibility = if(organization.resourceTrees.isNullOrEmpty() && organization.parentID?: "" != "#") View.VISIBLE else View.GONE
-            holder.ckChoose?.visibility = View.GONE
+            holder.binding.ckChoose.visibility = View.GONE
 
-            holder.tvTitle?.text = organization.title ?: "-"
+            holder.binding.tvTitle.text = resourceTree.title ?: "-"
 
             holder.itemView.setOnClickListener {
-                if(organization.resourceTrees.isNullOrEmpty() && organization.parentID?: "" != "#") {
-                    onChosen.invoke(organization)
+                if(resourceTree.resourceTrees.isNullOrEmpty() && resourceTree.parentID?: "" != "#") {
+                    onChosen.invoke(resourceTree)
                 }
             }
 
             var icon: Int?
             var colorIcon: Int?
-            when (organization.resourceNo) {
+            when (resourceTree.resourceNo) {
                 0 -> {
                     icon = R.drawable.ic_baseline_computer_24
                     colorIcon = R.color.colorPrimaryDark
                 }
 
                 else -> {
-                    if (organization.parentID ?: "" == "#") {
+                    if (resourceTree.parentID ?: "" == "#") {
                         icon = R.drawable.ic_folder
                         colorIcon = R.color.colorPrimaryDark
                     } else {
@@ -80,12 +76,7 @@ class ResourceChartAdapter(
                 }
             }
 
-            holder.imgIcon?.setImageResource(icon)
-            holder.imgIcon?.setColorFilter(ContextCompat.getColor( holder.itemView.context, colorIcon), android.graphics.PorterDuff.Mode.MULTIPLY)
-        }
-    }
-
-    fun getOrganizationChosen(): Organization? {
-        return list.findLast { it.isChosen }
+            holder.binding.imgIcon.setImageResource(icon)
+            holder.binding.imgIcon.setColorFilter(ContextCompat.getColor( holder.itemView.context, colorIcon), android.graphics.PorterDuff.Mode.MULTIPLY)
     }
 }

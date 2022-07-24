@@ -181,9 +181,50 @@
                     android:layout_marginBottom="20dp"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/imgRepeat"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginTop="20dp"
+                        android:src="@drawable/ic_repeat"
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        app:tint="@color/colorPrimary" />
+
+                    <TextView
+                        android:id="@+id/tvRepeatTitle"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginStart="10dp"
+                        android:textColor="@color/colorBlack"
+                        app:layout_constraintBottom_toBottomOf="@id/imgRepeat"
+                        app:layout_constraintStart_toEndOf="@id/imgRepeat"
+                        android:text="@string/repeat"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                    <TextView
+                        android:id="@+id/tvRepeat"
+                        tools:text="1 Day"
+                        android:layout_marginTop="10dp"
+                        android:textColor="@color/colorText"
+                        app:layout_constraintStart_toStartOf="@id/tvRepeatTitle"
+                        app:layout_constraintTop_toBottomOf="@id/tvRepeatTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                    <View
+                        android:id="@+id/vLineRepeat"
+                        app:layout_constraintTop_toBottomOf="@id/tvRepeat"
+                        android:layout_marginTop="10dp"
+                        android:background="@color/colorGrayBackground"
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"/>
+
                     <ImageView
                         android:id="@+id/imgResource"
-                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/vLineRepeat"
                         app:layout_constraintStart_toStartOf="parent"
                         android:layout_marginLeft="20dp"
                         android:layout_marginTop="20dp"
@@ -212,6 +253,7 @@
                         app:layout_constraintTop_toBottomOf="@id/tvResourceTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
+
                     <View
                         android:id="@+id/vLineResource"
                         app:layout_constraintTop_toBottomOf="@id/tvResource"

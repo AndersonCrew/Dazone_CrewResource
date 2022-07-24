@@ -70,6 +70,7 @@ class AgendaFragment(private val calendar: Calendar) : BaseFragment() {
     }
 
     private fun initView(rootView: View) {
+        showProgressDialog()
         rvAgenda = rootView.findViewById(R.id.rvAgenda)
     }
 
@@ -150,6 +151,7 @@ class AgendaFragment(private val calendar: Calendar) : BaseFragment() {
                 //Fetch Data Resource
                 //Get Data Resource
                 if(isResumed) {
+                    dismissProgressDialog()
                     val monthYear = SimpleDateFormat(Constants.MM_YYYY).format(calendar.time)
                     viewModel.getResourceBDByMonth(monthYear)
                         ?.observe(requireActivity(), androidx.lifecycle.Observer {

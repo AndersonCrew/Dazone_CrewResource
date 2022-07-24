@@ -33,38 +33,58 @@ class DetailScheduleActivity: BaseActivity(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail_schedule)
+        imgBack?.setOnClickListener { onBackPressed() }
         lifecycle.addObserver(notificationSetting)
     }
 
     @SuppressLint("SetTextI18n")
     override fun initView() {
         intent?.let {
+            showProgressDialog()
             resource = it.getSerializableExtra(Constants.RESOURCE) as Resource
-
             tvTitle?.text = resource?.title?: "-"
             tvStartDate?.text = resource?.startStr
             tvTimeValue?.text = "${resource?.startTime} - ${resource?.endTime}"
-        }
 
+            val params = JsonObject()
+            params.addProperty("sessionId", DazoneApplication.getInstance().mPref?.getString(Constants.ACCESS_TOKEN, ""))
+            params.addProperty("timeZoneOffset", TimeUtils.getTimezoneOffsetInMinutes().toString())
+            params.addProperty("languageCode", Locale.getDefault().language)
+            params.addProperty("RsvnNo", resource?.id?: 0)
+            viewModel.getDetailViewModel(params)
+        }
     }
 
     override fun initEvent() {
-        imgBack?.setOnClickListener { onBackPressed() }
+
     }
 
     override fun initViewModel() {
         viewModel.resourceLiveDate.observe(this, Observer {
             if(it != null){
-                tvContent?.text = it.content?: ""
-                tvWriter?.text = it.rsvnUserName?: ""
-                tvResource?.text = resource?.resourceName?: ""
-            } else {
-                val params = JsonObject()
-                params.addProperty("sessionId", DazoneApplication.getInstance().mPref?.getString(Constants.ACCESS_TOKEN, ""))
-                params.addProperty("timeZoneOffset", TimeUtils.getTimezoneOffsetInMinutes().toString())
-                params.addProperty("languageCode", Locale.getDefault().language)
-                params.addProperty("RsvnNo", resource?.id?: 0)
-                viewModel.getDetailViewModel(params)
+                dismissProgressDialog()
+                tvTitle?.text = it.Title?: ""
+                tvContent?.text = it.Content?: ""
+                tvWriter?.text = it.RsvnUserName?: ""
+                tvResource?.text = it.ResourceName?: ""
+                if(it.EndDateToString?.split("-")?.get(0) != null && it.EndDateToString?.split("-")?.get(0) == "9999") {
+                    tvStartDate?.text = it.StartDateToString + " ~ " + getString(R.string.infiniti_str)
+                } else {
+                    tvStartDate?.text = it.StartDateToString + " ~ " + it.EndDateToString
+                }
+
+                if(it.StartTime == "00:00:00" &&it.EndTime == "00:00:00") {
+                    tvTimeValue?.text = getString(R.string.allday)
+                } else {
+                    tvTimeValue?.text = it.StartTime + " ~ " + it.EndTime
+                }
+
+                if(it.RepeatInfo.isNullOrEmpty()) {
+                    tvRepeat?.text = getString(R.string.none)
+                } else {
+                    tvRepeat?.text = it.RepeatInfo
+                }
+
             }
         })
 

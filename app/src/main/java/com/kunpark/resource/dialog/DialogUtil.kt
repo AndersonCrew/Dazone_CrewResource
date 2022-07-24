@@ -11,6 +11,7 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.kunpark.resource.R
 import com.kunpark.resource.base.BaseActivity
+import com.kunpark.resource.databinding.DialogProgressBinding
 import com.kunpark.resource.model.CalendarDto
 import com.kunpark.resource.view.detail_schedule.DetailScheduleActivity
 
@@ -53,6 +54,18 @@ class DialogUtil (private val context: Context){
 
             llResource.addView(view)
         }
+
+        return dialog
+    }
+
+    fun getProgressDialog(): Dialog {
+        val dialog = Dialog(context)
+        val binding = DialogProgressBinding.inflate(LayoutInflater.from(context))
+        dialog.setContentView(binding.root)
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        dialog.window?.setLayout(ConstraintLayout.LayoutParams.WRAP_CONTENT, ConstraintLayout.LayoutParams.WRAP_CONTENT)
+        dialog.setCanceledOnTouchOutside(false)
+        dialog.setCancelable(false)
 
         return dialog
     }

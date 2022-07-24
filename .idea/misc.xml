@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="../../../../../layout/custom_preview.xml" value="0.3611111111111111" />
         <entry key="../../../Library/Android/sdk/platforms/android-31/data/res/layout/simple_spinner_item.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/drawable/bg_allday.xml" value="0.1535" />
         <entry key="app/src/main/res/drawable/bg_allday_week.xml" value="0.1" />
@@ -22,11 +23,13 @@
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/layout/activity_organizaion.xml" value="0.37604166666666666" />
-        <entry key="app/src/main/res/layout/activity_organization.xml" value="0.37604166666666666" />
+        <entry key="app/src/main/res/layout/activity_organization.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/activity_resource_list.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/layout/activity_setting.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/layout/app_bar_main.xml" value="0.25" />
         <entry key="app/src/main/res/layout/dialog_confirm.xml" value="2.5785714285714287" />
         <entry key="app/src/main/res/layout/dialog_multiple_resource.xml" value="0.37604166666666666" />
+        <entry key="app/src/main/res/layout/dialog_progress.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/layout/fragment_agenda.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/layout/fragment_annually.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/layout/fragment_calendar_agenda.xml" value="0.1" />
@@ -44,8 +47,10 @@
         <entry key="app/src/main/res/layout/item_day.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/layout/item_hour.xml" value="0.36235955056179775" />
         <entry key="app/src/main/res/layout/item_member.xml" value="0.37604166666666666" />
+        <entry key="app/src/main/res/layout/item_member_new.xml" value="0.33" />
         <entry key="app/src/main/res/layout/item_month_calendar.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/layout/item_organization.xml" value="0.37604166666666666" />
+        <entry key="app/src/main/res/layout/item_organization_new.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/layout/item_resource_list.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/layout/item_week.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/layout/item_week_resource.xml" value="0.37604166666666666" />

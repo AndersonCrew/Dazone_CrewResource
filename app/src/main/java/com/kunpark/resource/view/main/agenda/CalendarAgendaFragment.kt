@@ -42,7 +42,6 @@ class CalendarAgendaFragment : BaseFragment() {
 
     @SuppressLint("ClickableViewAccessibility")
     private fun initView(rootView: View) {
-
         val scope = CoroutineScope(Dispatchers.IO + Job())
         scope.launch {
             val cal = Calendar.getInstance()

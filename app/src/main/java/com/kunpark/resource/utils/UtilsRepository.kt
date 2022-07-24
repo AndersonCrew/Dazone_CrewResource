@@ -37,11 +37,11 @@ class UtilsRepository: BaseRepository() {
         return safeApiCall(call = { RetrofitFactory.getApiService().getOrganization(params)}, errorMessage =  "Cannot get Organization!")
     }
 
-    fun getOrganizationDB(): LiveData<List<Organization>>? {
-        return db?.getUtilsDao()?.getOrganizations()
+    fun getResourceTreeDB(): LiveData<ResourceTree>? {
+        return db?.getUtilsDao()?.getResourceTree()
     }
 
-    fun saveOrganization(organizations: List<Organization>) {
-        db?.getUtilsDao()?.addMoreOrganizations(organizations)
+    fun saveResourceTreeDB(resourceTree: ResourceTree) {
+        db?.getUtilsDao()?.addResourceTree(resourceTree)
     }
 }

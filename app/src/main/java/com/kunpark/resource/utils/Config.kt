@@ -16,6 +16,8 @@ object Config {
     const val GET_DETAIL_RESOURCE = "UI/MobileResourceSchedule/ResourceMobileDataService.asmx/GetMyReservationDetail"
     const val GET_DEPARTMENTS = "UI/WebService/WebServiceCenter.asmx/GetDepartments"
     const val GET_USER_BY_DEPARTMENT = "UI/WebService/WebServiceCenter.asmx/GetUsersByDepartment"
+    const val URL_GET_DEPARTMENT_MOD = "/UI/WebService/WebServiceCenter.asmx/GetDepartments_Mod"
+    const val URL_GET_USER_MOD = "/UI/WebService/WebServiceCenter.asmx/GetAllUsersWithBelongs_Mod"
     const val VERSION_DB = 1
     const val COUNT_YEAR = 200
     const val COLUMN_AGENDA = 7

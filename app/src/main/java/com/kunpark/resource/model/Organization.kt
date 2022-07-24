@@ -8,17 +8,6 @@ import java.io.Serializable
 
 @Entity(tableName = "ORGANIZATION")
 class Organization(
-    @SerializedName("ResourceNo")
-    @ColumnInfo(name = "resourceNo")
-    var resourceNo: Int? = null,
-
-    @SerializedName("Title")
-    @ColumnInfo(name = "title")
-    var title: String? = null,
-
-    @SerializedName("ParentID")
-    @ColumnInfo(name = "parentID")
-    var parentID: String? = null,
 
     @SerializedName("Name")
     @ColumnInfo(name = "name")
@@ -31,10 +20,6 @@ class Organization(
     @SerializedName("ParentNo")
     @ColumnInfo(name = "ParentNo")
     var parentNo: Int? = null,
-
-    @SerializedName("ResourceTrees")
-    @ColumnInfo(name = "resourceTrees")
-    var resourceTrees: ArrayList<Organization> = arrayListOf(),
 
     @SerializedName("ChildDepartments")
     @ColumnInfo(name = "childDepartments")

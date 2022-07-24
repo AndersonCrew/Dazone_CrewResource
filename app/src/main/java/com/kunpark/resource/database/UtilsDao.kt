@@ -13,8 +13,8 @@ interface UtilsDao {
     @Query("SELECT * FROM TIME_NOTIFICATION")
     fun getTimeNotificationSetting(): LiveData<List<TimesNotification>>
 
-    @Query("SELECT * FROM ORGANIZATION")
-    fun getOrganizations(): LiveData<List<Organization>>
+    @Query("SELECT * FROM RESOURCE_TREE")
+    fun getResourceTree(): LiveData<ResourceTree>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun addMoreDataDeviceNotifications(conditionSearch: List<DevicesNotification>)
@@ -23,5 +23,5 @@ interface UtilsDao {
     fun addMoreTimeNotifications(conditionSearch: List<TimesNotification>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun addMoreOrganizations (conditionSearch: List<Organization>)
+    fun addResourceTree (resourceTree: ResourceTree)
 }
